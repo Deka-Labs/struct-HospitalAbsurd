@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Список направлений</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
@@ -22,7 +22,7 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QPushButton" name="pushButton__remove">
+    <widget class="QPushButton" name="pushButton_remove">
      <property name="text">
       <string>Возврат</string>
      </property>
