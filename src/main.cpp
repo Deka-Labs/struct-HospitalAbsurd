@@ -1,5 +1,13 @@
 
+#include "Windows/MainWindow.hpp"
+#include <QApplication>
+
 int main(int argc, char** argv)
 {
-    return 0;
+    QApplication app(argc, argv);
+
+    MainWindow wnd;
+    wnd.show();
+
+    return app.exec();
 }
