@@ -10,10 +10,11 @@ find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 
-file(SRCS GLOB_RECURSE src/*.cpp)
-file(HDRS GLOB_RECURSE src/*.hpp)
+file(GLOB_RECURSE SRCS src/*.cpp)
+file(GLOB_RECURSE HDRS src/*.hpp)
+file(GLOB_RECURSE FORMS forms/*.ui)
 
-add_executable(hospital ${HDRS} ${SRCS})
+add_executable(hospital ${HDRS} ${SRCS} ${FORMS})
 target_link_libraries(hospital PUBLIC ${Qt5Core_QTMAIN_LIBRARIES} ${Qt5Widgets_LIBRARIES})
 target_compile_features(hospital PUBLIC cxx_std_17)
 
