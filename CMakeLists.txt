@@ -8,7 +8,7 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS forms)
 
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 
-include_directories(${Qt5Widgets_INCLUDE_DIRS})
+include_directories(${Qt5Widgets_INCLUDE_DIRS} src)
 
 file(GLOB_RECURSE SRCS src/*.cpp)
 file(GLOB_RECURSE HDRS src/*.hpp)
@@ -18,6 +18,11 @@ add_executable(hospital ${HDRS} ${SRCS} ${FORMS})
 target_link_libraries(hospital PUBLIC ${Qt5Core_QTMAIN_LIBRARIES} ${Qt5Widgets_LIBRARIES})
 target_compile_features(hospital PUBLIC cxx_std_17)
 
-if(WIN32 AND MINGW)
-	list(APPEND NOTELIST_LINK_OPTIONS "-mwindows")
-endif()
+file(GLOB_RECURSE TEST_SRCS test/*.cpp src/data/*.cpp src/file/*.cpp)
+
+enable_testing()
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+add_executable(hospital-test ${TEST_SRCS})
+target_link_libraries(hospital-test GTest::GTest GTest::Main ${Qt5Core_QTMAIN_LIBRARIES} ${Qt5Widgets_LIBRARIES})
+add_test(AllTestsInFoo hospital-test)
