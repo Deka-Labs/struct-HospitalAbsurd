@@ -33,7 +33,7 @@ bool Patient::setRegID(const QString& regID)
     if (regID.size() > MAX_PATIENT_REGID_STRING_SIZE)
         return false;
 
-    QString templ = "dd-dddddd";
+    QString templ = PATIENT_REGID_TEMPLATE;
     if (templ.size() != regID.size())
         return false;
     for (int i = 0; i < templ.size(); i++) {
