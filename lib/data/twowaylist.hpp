@@ -27,8 +27,10 @@ public:
     void insert(unsigned pos, const T& data);
 
     void remove(unsigned pos);
+    void removeAll(const T& value);
 
     void sort();
+    bool search(const T& search, unsigned* outPos = nullptr);
 
     void swap(unsigned pos1, unsigned pos2);
 
@@ -44,8 +46,6 @@ private:
     bool findMedIndex(unsigned& out, unsigned begin, unsigned end);
     unsigned splitPosition(unsigned medPos, unsigned begin, unsigned end);
 };
-
-#endif // TWOWAYLIST_HPP
 
 template <typename T>
 TwoWayList<T>::TwoWayList()
@@ -162,6 +162,15 @@ void TwoWayList<T>::remove(unsigned pos)
 }
 
 template <typename T>
+void TwoWayList<T>::removeAll(const T& value)
+{
+    unsigned pos = 0;
+    while (search(value, &pos)) {
+        remove(pos);
+    }
+}
+
+template <typename T>
 void TwoWayList<T>::sort()
 {
     Stack<unsigned> beginStack;
@@ -188,6 +197,23 @@ void TwoWayList<T>::sort()
             endStack.push(end);
         }
     }
+}
+
+template <typename T>
+bool TwoWayList<T>::search(const T& search, unsigned* outPos)
+{
+    auto currentNode = m_first;
+    unsigned pos = 0;
+    while (currentNode) {
+        if (search == currentNode->data) {
+            if (outPos)
+                *outPos = pos;
+            return true;
+        }
+        pos++;
+        currentNode = currentNode->next;
+    }
+    return false;
 }
 
 template <typename T>
@@ -289,3 +315,5 @@ unsigned TwoWayList<T>::splitPosition(unsigned medPos, unsigned begin, unsigned 
         }
     }
 }
+
+#endif // TWOWAYLIST_HPP

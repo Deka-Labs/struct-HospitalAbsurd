@@ -175,3 +175,47 @@ TEST(TwoWayList, Sorting)
         ASSERT_LE(list.at(i - 1), list.at(i));
     }
 }
+
+TEST(TwoWayList, Searching)
+{
+    srand(time(nullptr));
+    TwoWayList<int> list;
+    const unsigned count = 1000;
+
+    for (unsigned i = 0; i < count; i++) {
+        list.push_back(rand());
+        ASSERT_EQ(list.size(), i + 1);
+    }
+
+    list[0] = -1;
+    list[rand() % (count - 2) + 1] = -2;
+    list[count - 1] = -3;
+
+    ASSERT_TRUE(list.search(-1));
+    ASSERT_TRUE(list.search(-2));
+    ASSERT_TRUE(list.search(-3));
+    ASSERT_FALSE(list.search(-rand() % count));
+}
+
+TEST(TwoWayList, RemoveAll)
+{
+    srand(time(nullptr));
+    TwoWayList<int> list;
+    const unsigned count = 1000;
+    const int maxValue = 10;
+
+    for (unsigned i = 0; i < count; i++) {
+        list.push_back(rand() % maxValue);
+        ASSERT_EQ(list.size(), i + 1);
+    }
+
+    auto testValue = rand() % maxValue;
+
+    while (!list.search(testValue)) {
+        testValue = rand() % maxValue;
+    }
+
+    list.removeAll(testValue);
+
+    ASSERT_FALSE(list.search(testValue));
+}

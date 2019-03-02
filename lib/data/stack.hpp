@@ -24,8 +24,6 @@ public:
     bool isEmpty() const;
 };
 
-#endif // STACK_HPP
-
 template <class T>
 Stack<T>::Stack()
     : m_top(nullptr)
@@ -75,3 +73,5 @@ bool Stack<T>::isEmpty() const
 {
     return !m_top;
 }
+
+#endif // STACK_HPP
