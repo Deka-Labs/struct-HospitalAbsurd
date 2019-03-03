@@ -77,7 +77,7 @@ TEST(Patient, toDataObject)
     ASSERT_EQ(out, pat.fullName());
 
     ASSERT_TRUE(data.getValue("year", out));
-    ASSERT_EQ(out, QString("{1}").arg(pat.yearOfBirth()));
+    ASSERT_EQ(out, QString("%1").arg(pat.yearOfBirth()));
 
     ASSERT_TRUE(data.getValue("address", out));
     ASSERT_EQ(out, pat.address());
@@ -134,7 +134,7 @@ TEST(Patient, fromDataObject)
     ASSERT_FALSE(fromData.fromDataObject(data));
     resetData(data);
 
-    data.setValue("year", QString("{1}").arg(MAX_PATIENT_YEAR + 1));
+    data.setValue("year", QString("%1").arg(MAX_PATIENT_YEAR + 1));
     ASSERT_FALSE(fromData.fromDataObject(data));
     resetData(data);
 

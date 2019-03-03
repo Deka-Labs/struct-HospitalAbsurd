@@ -1,44 +1,161 @@
 #include "file/datafile.hpp"
+#include <fstream>
 #include <gtest/gtest.h>
 
-TEST(DataFile, OpenClose)
+TEST(DataFile, ReadingNormal)
 {
+    const char* testFile = "testReading.file";
+    std::fstream file;
     DataFile df;
-    df.open("test.data", false);
+
+    file.open(testFile, std::ios_base::out | std::ios_base::trunc);
+    ASSERT_TRUE(file.is_open());
+
+    const int count = 1000;
+
+    for (int i = 0; i < count; i++) {
+        file << "<object id=\"" << i << "\" nid=\"" << count - i << "\">\n";
+    }
+    file.close();
+
+    ASSERT_TRUE(df.open(testFile, true));
+
+    for (int i = 0; i < count; i++) {
+        DataObject obj;
+        ASSERT_TRUE(df.ReadNextObject(obj));
+        ASSERT_EQ(obj.getType(), "object");
+        QString id;
+        ASSERT_TRUE(obj.getValue("id", id));
+        ASSERT_EQ(id, QString("%1").arg(i));
+        ASSERT_TRUE(obj.getValue("nid", id));
+        ASSERT_EQ(id, QString("%1").arg(count - i));
+    }
+}
+
+TEST(DataFile, ReadingEmpty)
+{
+    std::fstream file;
+    DataFile df;
+    const char* testFile = "testReadingEmpty.file";
+
+    //Testing empty file
+    file.open(testFile, std::ios_base::out | std::ios_base::trunc);
+    ASSERT_TRUE(file.is_open());
+    file.close();
+
+    ASSERT_FALSE(df.open(testFile, true));
+}
+
+TEST(DataFile, ReadingBrokenStructure)
+{
+    std::fstream file;
+    DataFile df;
+    const char* testFile = "testReadingBrokenStructure.file";
+
+    //Testing file with broken '<' '>' structure
+    //1 obj, opening
+    file.open(testFile, std::ios_base::out | std::ios_base::trunc);
+    ASSERT_TRUE(file.is_open());
+    file << "object att=\"1\">\n";
+    file.close();
+
+    ASSERT_FALSE(df.open(testFile, true));
+    df.close();
+
+    //1 obj, closing
+    file.open(testFile, std::ios_base::out | std::ios_base::trunc);
+    ASSERT_TRUE(file.is_open());
+    file << "<object att=\"1\"\n";
+    file.close();
+
+    ASSERT_FALSE(df.open(testFile, true));
+    df.close();
+
+    //3 obj
+    file.open(testFile, std::ios_base::out | std::ios_base::trunc);
+    ASSERT_TRUE(file.is_open());
+    file << "<object att=\"1\">\n"
+            "<object att=\"1\"\n"
+            "<object att=\"1\">\n";
+    file.close();
+
+    ASSERT_FALSE(df.open(testFile, true));
+    df.close();
+}
+
+TEST(DataFile, ReadingPlainText)
+{
+    std::fstream file;
+    DataFile df;
+    const char* testFile = "testReadingPlainText.file";
+
+    //Testing file with plain text
+    file.open(testFile, std::ios_base::out | std::ios_base::trunc);
+    ASSERT_TRUE(file.is_open());
+    file << "The quick brown fox jumps over the lazy dog\n"
+            "Широкая электрификация южных губерний даст мощный толчок подъёму сельского хозяйства.\n"
+            "В чащах юга жил бы цитрус? Да, но фальшивый экземпляр!\n"
+            "The five boxing wizards jump quickly.";
+
+    ASSERT_FALSE(df.open(testFile, true));
+    df.close();
+}
+
+TEST(DataFile, ReadingBrokenObject)
+{
+    std::fstream file;
+    DataFile df;
+    const char* testFile = "testReadingBrokenObject.file";
+
+    //Testing file with plain text
+    file.open(testFile, std::ios_base::out | std::ios_base::trunc);
+    ASSERT_TRUE(file.is_open());
+    file << "<object att=\"1\">\n"
+            "<Trust me! I'm object>\n"
+            "<object att=\"2\">\n";
+    file.close();
+
+    ASSERT_TRUE(df.open(testFile, true));
 
     DataObject obj;
-    obj.setType("Test");
-    obj.setValue("number", "0");
-    obj.setValue("color", "The white");
 
-    ASSERT_NO_THROW(df.insertObject(obj));
+    ASSERT_TRUE(df.ReadNextObject(obj));
+    ASSERT_FALSE(df.ReadNextObject(obj));
+    ASSERT_TRUE(df.ReadNextObject(obj));
 
-    obj.setType("Another");
-    obj.delAttribute("number");
-    obj.setValue("float", "1.65");
+    df.close();
+}
 
-    ASSERT_NO_THROW(df.insertObject(obj));
+TEST(DataFile, Writing)
+{
+    const char* testFile = "testWriting.file";
+    DataFile df;
+
+    ASSERT_TRUE(df.open(testFile, false));
+
+    const int count = 1000;
+
+    for (int i = 0; i < count; i++) {
+        DataObject obj;
+        obj.setType("object");
+        obj.setValue("id", QString("%1").arg(i));
+        obj.setValue("nid", QString("%1").arg(count - i));
+
+        ASSERT_TRUE(df.insertObject(obj));
+    }
 
     df.close();
 
-    df.open("test.data", true);
+    ASSERT_TRUE(df.open(testFile, true));
 
-    obj = DataObject();
-
-    ASSERT_TRUE(df.ReadNextObject(obj));
-
-    QString out;
-    ASSERT_TRUE(obj.getValue("number", out));
-    ASSERT_EQ(out, "0");
-    ASSERT_TRUE(obj.getValue("color", out));
-    ASSERT_EQ(out, "The white");
-
-    obj = DataObject();
-
-    ASSERT_TRUE(df.ReadNextObject(obj));
-
-    ASSERT_TRUE(obj.getValue("float", out));
-    ASSERT_EQ(out, "1.65");
-    ASSERT_TRUE(obj.getValue("color", out));
-    ASSERT_EQ(out, "The white");
+    for (int i = 0; i < count; i++) {
+        DataObject obj;
+        ASSERT_TRUE(df.ReadNextObject(obj));
+        ASSERT_EQ(obj.getType(), "object");
+        QString id;
+        ASSERT_TRUE(obj.getValue("id", id));
+        ASSERT_EQ(id, QString("%1").arg(i));
+        ASSERT_TRUE(obj.getValue("nid", id));
+        ASSERT_EQ(id, QString("%1").arg(count - i));
+    }
 }

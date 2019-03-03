@@ -27,9 +27,10 @@ bool DataFile::open(const char* filename, bool forRead)
     m_file.seek(0);
 
     if (m_file.isOpen()) {
-        if (validateFileStructure())
+        if (!m_forRead || validateFileStructure())
             return true;
     }
+    close();
     return false;
 }
 
@@ -152,21 +153,29 @@ bool DataFile::validateFileStructure()
         return false;
     startOver();
     //Просто считаем некоторые характеристики без подробного анализа.
-    qint64 code = 0;
+    qint64 code = 1;
+    char prevChar = '\0';
     char currentChar = '\0';
 
     unsigned countOfOpen = 0, countOfClose = 0;
 
-    while (code == 0) {
+    while (code > 0) {
+        prevChar = currentChar;
         code = m_file.read(&currentChar, sizeof(char));
         if (currentChar == '<')
             countOfOpen++;
         if (currentChar == '>')
             countOfClose++;
+        if (prevChar == '=' && currentChar != '"')
+            return false;
+        if (prevChar == '<' && !isalnum(currentChar))
+            return false;
     }
 
     startOver();
 
+    if (countOfOpen == 0 || countOfClose == 0)
+        return false;
     if (countOfOpen != countOfClose)
         return false;
     return true;

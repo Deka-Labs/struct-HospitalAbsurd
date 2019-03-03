@@ -121,7 +121,7 @@ DataObject Patient::toDataObject() const
     out.setType("patient");
     out.setValue("regid", m_regID);
     out.setValue("fullname", m_fullName);
-    out.setValue("year", QString("{1}").arg(m_yearOfBirth));
+    out.setValue("year", QString("%1").arg(m_yearOfBirth));
     out.setValue("address", m_address);
     out.setValue("workplace", m_workPlace);
     return out;
