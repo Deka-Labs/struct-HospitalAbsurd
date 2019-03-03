@@ -164,8 +164,9 @@ void TwoWayList<T>::remove(unsigned pos)
 template <typename T>
 void TwoWayList<T>::removeAll(const T& value)
 {
+    T val = T(value);
     unsigned pos = 0;
-    while (search(value, &pos)) {
+    while (search(val, &pos)) {
         remove(pos);
     }
 }

@@ -1,5 +1,6 @@
 #include "patienthashtable.hpp"
 #include "../utils.hpp"
+#include <string>
 
 PatientHashTable::PatientHashTable(QObject* parent)
     : QAbstractTableModel(parent)
@@ -12,6 +13,9 @@ PatientHashTable::PatientHashTable(QObject* parent)
 
 PatientHashTable::~PatientHashTable()
 {
+    while (m_registredKeys.size() != 0) {
+        delPatient(m_registredKeys[0]);
+    }
 }
 
 QVariant PatientHashTable::headerData(int section, Qt::Orientation orientation, int role) const
@@ -80,16 +84,15 @@ bool PatientHashTable::addPatient(const Patient& newPatient)
     if (m_registredKeys.search(newPatient.regID()))
         return false;
 
-    Patient* copy = new Patient(newPatient);
-
-    int cell = getEmptyCellFor(copy->regID());
+    int cell = getEmptyCellFor(newPatient.regID());
 
     if (cell != -1) {
+        Patient* copy = new Patient(newPatient);
         m_hashTable[cell] = copy;
         m_registredKeys.push_back(copy->regID());
-    } else {
-        return false;
+        return true;
     }
+    return false;
 }
 
 bool PatientHashTable::getPatient(const QString& regid, Patient& structToFill) const
@@ -114,6 +117,7 @@ void PatientHashTable::delPatient(const QString& regid)
 {
     int cell = getPatientCell(regid);
     if (cell != -1) {
+        delete m_hashTable[cell];
         m_hashTable[cell] = nullptr;
         m_registredKeys.removeAll(regid);
     }
@@ -123,7 +127,9 @@ int PatientHashTable::hash(const QString& regid) const
 {
     if (!validateKey(regid))
         return -1;
+
     std::string str = regid.toStdString();
+
     int hash = 0;
     //From XX-[there]XXXXXX
     for (int i = 3; i < MAX_PATIENT_REGID_STRING_SIZE; i++) {
@@ -146,7 +152,8 @@ int PatientHashTable::dopHash(const QString& regid) const
     int hash = 0;
     hash += (str[0] - '0');
     hash += (str[1] - '0') * 10;
-    hash %= 5;
+    hash %= 4;
+    hash += 1;
 
     return hash;
 }
