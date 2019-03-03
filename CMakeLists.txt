@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 
+set(gtest_force_shared_crt ON)
+set(BUILD_GMOCK OFF)
+
+add_subdirectory(gtest)
+
 project(hospital)
 
 set(CMAKE_AUTOMOC ON)
@@ -28,16 +33,14 @@ target_compile_features(hospital PUBLIC cxx_std_17)
 
 # test
 
-find_package(GTest MODULE)
 
-if(GTEST_FOUND)
-    enable_testing()
-    include_directories(${GTEST_INCLUDE_DIRS})
-    file(GLOB_RECURSE TEST_SRCS test/*.cpp)
-    add_executable(hospital-test ${TEST_SRCS})
-    target_link_libraries(hospital-test PRIVATE hospital-lib GTest::GTest GTest::Main ${Qt5Core_QTMAIN_LIBRARIES} ${Qt5Widgets_LIBRARIES})
-    add_test(AllTestsIn hospital-test)
-endif(GTEST_FOUND)
+enable_testing()
+include_directories(${GTEST_INCLUDE_DIRS})
+file(GLOB_RECURSE TEST_SRCS test/*.cpp)
+add_executable(hospital-test ${TEST_SRCS})
+target_link_libraries(hospital-test PRIVATE hospital-lib gtest gtest_main ${Qt5Core_QTMAIN_LIBRARIES} ${Qt5Widgets_LIBRARIES})
+add_test(AllTestsIn hospital-test)
+
 
 
 
