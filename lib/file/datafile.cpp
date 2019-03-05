@@ -44,10 +44,10 @@ bool DataFile::ReadNextObject(DataObject& obj)
 {
     if (!m_forRead)
         return false;
-    //Ищем первый символ '<'
+    //Ищем первый символ открытия объекта
     char currentSymbol = '\0';
     m_file.read(&currentSymbol, sizeof(char));
-    while (currentSymbol != '<') {
+    while (currentSymbol != DATA_CHAR_OPEN_OBJ) {
         auto code = m_file.read(&currentSymbol, sizeof(char));
         if (code <= 0)
             return false;
@@ -55,11 +55,11 @@ bool DataFile::ReadNextObject(DataObject& obj)
 
     //Читаем тип. Находим первый пробел между ним и < - название типа
     QString type;
-    while (currentSymbol != ' ') {
+    while (currentSymbol != DATA_CHAR_SPACE) {
         auto code = m_file.read(&currentSymbol, sizeof(char));
         if (code <= 0)
             return false;
-        if (!isspace(currentSymbol))
+        if (!QChar(currentSymbol).isSpace())
             type += currentSymbol;
     }
 
@@ -73,9 +73,9 @@ bool DataFile::ReadNextObject(DataObject& obj)
             auto code = m_file.read(&currentSymbol, sizeof(char));
             if (code <= 0)
                 return false;
-        } while (isspace(currentSymbol));
+        } while (QChar(currentSymbol).isSpace());
 
-        if (currentSymbol == '>') //Конец
+        if (currentSymbol == DATA_CHAR_CLOSE_OBJ) //Конец
             break;
 
         //Читаем атрибуты
@@ -84,24 +84,24 @@ bool DataFile::ReadNextObject(DataObject& obj)
             QString value;
 
             //Сначало имя
-            while (currentSymbol != '=') {
+            while (currentSymbol != DATA_CHAR_EQUAL) {
                 name += currentSymbol; //Обязательно вначале. 1 символ уже считан.
                 auto code = m_file.read(&currentSymbol, sizeof(char));
-                if (code <= 0 || currentSymbol == ' ')
+                if (code <= 0 || currentSymbol == DATA_CHAR_SPACE)
                     return false;
             }
-            //Читаем "
+            //Читаем разделитель
             auto code = m_file.read(&currentSymbol, sizeof(char));
-            if (code <= 0 || currentSymbol != '"')
+            if (code <= 0 || currentSymbol != DATA_CHAR_DIVIDER_ARG)
                 return false;
 
-            //Читаем первый символ после "
+            //Читаем первый символ после разделителя
             code = m_file.read(&currentSymbol, sizeof(char));
             if (code <= 0)
                 return false;
 
-            //Читаем значения до "
-            while (currentSymbol != '"') {
+            //Читаем значения до разделителя
+            while (currentSymbol != DATA_CHAR_DIVIDER_ARG) {
                 value += currentSymbol; //Обязательно вначале. 1 символ уже считан.
                 auto code = m_file.read(&currentSymbol, sizeof(char));
                 if (code <= 0)
@@ -126,19 +126,27 @@ bool DataFile::insertObject(const DataObject& obj)
     if (m_forRead)
         return false;
 
-    m_file.write("<");
-    m_file.write(obj.getType().toUtf8());
-    m_file.write(" ");
+    QByteArray toWrite;
+
+    toWrite.append(DATA_CHAR_OPEN_OBJ);
+    toWrite.append(obj.getType());
+    toWrite.append(DATA_CHAR_SPACE);
 
     for (unsigned i = 0; i < obj.m_attributes.size(); i++) {
         auto att = obj.m_attributes.at(i);
-        m_file.write(att.name.toUtf8());
-        m_file.write("=\"");
-        m_file.write(att.value.toUtf8());
-        m_file.write("\" ");
+        toWrite.append(att.name);
+        toWrite.append(DATA_CHAR_EQUAL);
+        toWrite.append(DATA_CHAR_DIVIDER_ARG);
+        toWrite.append(att.value);
+        toWrite.append(DATA_CHAR_DIVIDER_ARG);
+        toWrite.append(DATA_CHAR_SPACE);
     }
 
-    m_file.write(">\n");
+    toWrite.append(DATA_CHAR_CLOSE_OBJ);
+    toWrite.append(DATA_CHAR_NEWLINE);
+
+    m_file.write(toWrite);
+
     return true;
 }
 
@@ -155,23 +163,25 @@ bool DataFile::validateFileStructure()
         return false;
     startOver();
     //Просто считаем некоторые характеристики без подробного анализа.
-    qint64 code = 1;
+
     char prevChar = '\0';
     char currentChar = '\0';
+    qint64 code = m_file.read(&currentChar, sizeof(char));
 
     unsigned countOfOpen = 0, countOfClose = 0;
 
     while (code > 0) {
+        if (currentChar == DATA_CHAR_OPEN_OBJ)
+            countOfOpen++;
+        if (currentChar == DATA_CHAR_CLOSE_OBJ)
+            countOfClose++;
+        if (prevChar == DATA_CHAR_EQUAL && currentChar != DATA_CHAR_DIVIDER_ARG)
+            return false;
+        if (prevChar == DATA_CHAR_OPEN_OBJ && !QChar(currentChar).isLetterOrNumber())
+            return false;
+
         prevChar = currentChar;
         code = m_file.read(&currentChar, sizeof(char));
-        if (currentChar == '<')
-            countOfOpen++;
-        if (currentChar == '>')
-            countOfClose++;
-        if (prevChar == '=' && currentChar != '"')
-            return false;
-        if (prevChar == '<' && !isalnum(currentChar))
-            return false;
     }
 
     startOver();

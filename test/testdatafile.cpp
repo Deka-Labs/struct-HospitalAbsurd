@@ -14,7 +14,10 @@ TEST(DataFile, ReadingNormal)
     const int count = 1000;
 
     for (int i = 0; i < count; i++) {
-        file << "<object id=\"" << i << "\" nid=\"" << count - i << "\">\n";
+        file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE;
+        file << "id" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << i << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_SPACE;
+        file << "nid" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << count - i << DATA_CHAR_DIVIDER_ARG;
+        file << DATA_CHAR_CLOSE_OBJ;
     }
     file.close();
 
@@ -56,7 +59,7 @@ TEST(DataFile, ReadingBrokenStructure)
     //1 obj, opening
     file.open(testFile, std::ios_base::out | std::ios_base::trunc);
     ASSERT_TRUE(file.is_open());
-    file << "object att=\"1\">\n";
+    file << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
     file.close();
 
     ASSERT_FALSE(df.open(testFile, true));
@@ -65,7 +68,7 @@ TEST(DataFile, ReadingBrokenStructure)
     //1 obj, closing
     file.open(testFile, std::ios_base::out | std::ios_base::trunc);
     ASSERT_TRUE(file.is_open());
-    file << "<object att=\"1\"\n";
+    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG;
     file.close();
 
     ASSERT_FALSE(df.open(testFile, true));
@@ -74,9 +77,9 @@ TEST(DataFile, ReadingBrokenStructure)
     //3 obj
     file.open(testFile, std::ios_base::out | std::ios_base::trunc);
     ASSERT_TRUE(file.is_open());
-    file << "<object att=\"1\">\n"
-            "<object att=\"1\"\n"
-            "<object att=\"1\">\n";
+    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
+    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG;
+    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
     file.close();
 
     ASSERT_FALSE(df.open(testFile, true));
@@ -110,9 +113,10 @@ TEST(DataFile, ReadingBrokenObject)
     //Testing file with plain text
     file.open(testFile, std::ios_base::out | std::ios_base::trunc);
     ASSERT_TRUE(file.is_open());
-    file << "<object att=\"1\">\n"
-            "<Trust me! I'm object>\n"
-            "<object att=\"2\">\n";
+    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
+    file << DATA_CHAR_OPEN_OBJ << "Trust me! I'm object" << DATA_CHAR_CLOSE_OBJ;
+    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
+
     file.close();
 
     ASSERT_TRUE(df.open(testFile, true));

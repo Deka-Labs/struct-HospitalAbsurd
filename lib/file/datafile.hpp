@@ -5,6 +5,13 @@
 #include <QFile>
 #include <QString>
 
+#define DATA_CHAR_EQUAL '='
+#define DATA_CHAR_DIVIDER_ARG '"'
+#define DATA_CHAR_OPEN_OBJ '<'
+#define DATA_CHAR_CLOSE_OBJ '>'
+#define DATA_CHAR_SPACE ' '
+#define DATA_CHAR_NEWLINE '\n'
+
 /*
 File template:
 
