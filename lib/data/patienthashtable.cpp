@@ -163,19 +163,8 @@ bool PatientHashTable::validateKey(const QString& regid) const
     if (regid.size() > MAX_PATIENT_REGID_STRING_SIZE)
         return false;
 
-    QString templ = PATIENT_REGID_TEMPLATE;
-    if (templ.size() != regid.size())
+    if (!TemplateValidate(PATIENT_REGID_TEMPLATE, regid))
         return false;
-    for (int i = 0; i < templ.size(); i++) {
-        QChar current = regid[i];
-        if (templ[i] == 'd') {
-            if (!isdigit(current.toLatin1()))
-                return false;
-        } else {
-            if (current != templ[i])
-                return false;
-        }
-    }
     return true;
 }
 
@@ -186,6 +175,9 @@ int PatientHashTable::getEmptyCellFor(const QString& regid) const
 
     int first = hash(regid);
     int delta = dopHash(regid);
+
+    if (first == -1 || delta == -1)
+        return -1;
 
     int i = 0;
     for (i = first; i < MAX_PATIENTS; i += delta) {
@@ -210,6 +202,9 @@ int PatientHashTable::getPatientCell(const QString& regid) const
 
     int first = hash(regid);
     int delta = dopHash(regid);
+
+    if (first == -1 || delta == -1)
+        return -1;
 
     int i = 0;
     for (i = first; i < MAX_PATIENTS; i += delta) {

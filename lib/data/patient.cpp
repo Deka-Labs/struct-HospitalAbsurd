@@ -1,4 +1,5 @@
 #include "patient.hpp"
+#include "utils.hpp"
 #include <stdexcept>
 
 Patient::Patient()
@@ -33,19 +34,9 @@ bool Patient::setRegID(const QString& regID)
     if (regID.size() > MAX_PATIENT_REGID_STRING_SIZE)
         return false;
 
-    QString templ = PATIENT_REGID_TEMPLATE;
-    if (templ.size() != regID.size())
+    if (!TemplateValidate(PATIENT_REGID_TEMPLATE, regID))
         return false;
-    for (int i = 0; i < templ.size(); i++) {
-        QChar current = regID[i];
-        if (templ[i] == 'd') {
-            if (!isdigit(current.toLatin1()))
-                return false;
-        } else {
-            if (current != templ[i])
-                return false;
-        }
-    }
+
     m_regID = regID;
     return true;
 }

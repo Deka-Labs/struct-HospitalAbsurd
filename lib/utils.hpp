@@ -3,6 +3,8 @@
 
 #include <QString>
 
-bool QStringSearch(const QString& left, const QString& right);
+bool QStringSearch(const QString& request, const QString& string);
+
+bool TemplateValidate(const QString& templ, const QString& str);
 
 #endif // UTILS_HPP
