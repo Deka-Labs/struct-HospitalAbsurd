@@ -38,7 +38,7 @@ public:
 
     bool insertObject(const DataObject& obj);
 
-    bool isNull();
+    bool atEOF() const;
 
 private:
     bool validateFileStructure();

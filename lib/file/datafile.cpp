@@ -142,9 +142,11 @@ bool DataFile::insertObject(const DataObject& obj)
     return true;
 }
 
-bool DataFile::isNull()
+bool DataFile::atEOF() const
 {
-    return !m_file.isOpen() || !validateFileStructure();
+    if (!m_file.isOpen())
+        return true;
+    return m_file.atEnd();
 }
 
 bool DataFile::validateFileStructure()
