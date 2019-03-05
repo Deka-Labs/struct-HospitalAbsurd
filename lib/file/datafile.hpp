@@ -4,6 +4,7 @@
 #include "dataobject.hpp"
 #include <QFile>
 #include <QString>
+#include <QTextStream>
 
 #define DATA_CHAR_EQUAL '='
 #define DATA_CHAR_DIVIDER_ARG '"'
@@ -11,6 +12,7 @@
 #define DATA_CHAR_CLOSE_OBJ '>'
 #define DATA_CHAR_SPACE ' '
 #define DATA_CHAR_NEWLINE '\n'
+#define DATA_ENCODING "UTF-16"
 
 /*
 File template:
@@ -31,6 +33,7 @@ File template:
 class DataFile {
 private:
     QFile m_file;
+    QTextStream m_stream;
     bool m_forRead;
 
 public:
@@ -50,6 +53,8 @@ public:
 
 private:
     bool validateFileStructure();
+
+    bool readNext(QChar* ch);
 };
 
 #endif // DATAFILE_HPP
