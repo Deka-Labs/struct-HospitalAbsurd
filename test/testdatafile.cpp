@@ -163,3 +163,30 @@ TEST(DataFile, Writing)
         ASSERT_EQ(id, QString("%1").arg(count - i));
     }
 }
+
+TEST(DataFile, RussianLoc)
+{
+    const char* testFile = "testRussian.file";
+    DataFile df;
+
+    ASSERT_TRUE(df.open(testFile, false));
+
+    DataObject obj;
+    obj.setType("объект");
+    obj.setValue("имя", "Ад букв я");
+    obj.setValue("псевдоним", "яЯя");
+
+    ASSERT_TRUE(df.insertObject(obj));
+
+    df.close();
+
+    ASSERT_TRUE(df.open(testFile, true));
+
+    ASSERT_TRUE(df.ReadNextObject(obj));
+    ASSERT_EQ(obj.getType(), "объект");
+    QString id;
+    ASSERT_TRUE(obj.getValue("имя", id));
+    ASSERT_EQ(id, "Ад букв я");
+    ASSERT_TRUE(obj.getValue("псевдоним", id));
+    ASSERT_EQ(id, "яЯя");
+}
