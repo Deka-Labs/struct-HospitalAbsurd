@@ -123,27 +123,58 @@ void PatientHashTable::delPatient(const QString& regid)
     }
 }
 
-int PatientHashTable::hash(const QString& regid) const
+void PatientHashTable::testHashFunctions(QFile& first, QFile& second)
+{
+    const unsigned count = 1000;
+    TwoWayList<QString> m_keys;
+    unsigned m_firstHashes[MAX_PATIENTS] = { 0 };
+    unsigned m_secondHashes[MAX_PATIENT_HASH_STEP + 1] = { 0 };
+
+    for (unsigned i = 0; i < count; i++) {
+        QString str;
+        do {
+            QString first = QString("%1").arg(rand() % 100);
+            QString second = QString("%1").arg(rand() % 1000000);
+            str = QString("%1-%2").arg(first, 2, '0').arg(second, 6, '0');
+        } while (m_keys.search(str));
+
+        m_keys.push_back(str);
+        auto h1 = hash(str);
+        auto h2 = dopHash(str);
+
+        m_firstHashes[h1]++;
+        m_secondHashes[h2]++;
+    }
+
+    if (first.isWritable()) {
+        for (unsigned i = 0; i < MAX_PATIENTS; i++) {
+            first.write(QString("%1, ").arg(m_firstHashes[i]).toUtf8());
+        }
+    }
+
+    if (second.isWritable()) {
+        for (unsigned i = 0; i < MAX_PATIENT_HASH_STEP; i++) {
+            second.write(QString("%1, ").arg(m_secondHashes[i]).toUtf8());
+        }
+    }
+}
+
+int PatientHashTable::hash(const QString& regid)
 {
     if (!validateKey(regid))
         return -1;
 
     std::string str = regid.toStdString();
 
-    int hash = 0;
-    //From XX-[there]XXXXXX
-    for (int i = 3; i < MAX_PATIENT_REGID_STRING_SIZE; i++) {
-        hash += (str[i] - '0') * i;
-    }
+    str = str.substr(3, 6);
 
-    static const int max = 297;
+    int hash = std::stoi(str);
+    hash %= MAX_PATIENTS;
 
-    hash *= hash;
-    hash *= MAX_PATIENTS / max;
     return hash;
 }
 
-int PatientHashTable::dopHash(const QString& regid) const
+int PatientHashTable::dopHash(const QString& regid)
 {
     if (!validateKey(regid))
         return -1;
@@ -152,13 +183,13 @@ int PatientHashTable::dopHash(const QString& regid) const
     int hash = 0;
     hash += (str[0] - '0');
     hash += (str[1] - '0') * 10;
-    hash %= 4;
+    hash %= MAX_PATIENT_HASH_STEP;
     hash += 1;
 
     return hash;
 }
 
-bool PatientHashTable::validateKey(const QString& regid) const
+bool PatientHashTable::validateKey(const QString& regid)
 {
     if (regid.size() > MAX_PATIENT_REGID_STRING_SIZE)
         return false;

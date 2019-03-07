@@ -1,4 +1,5 @@
 #include "data/patienthashtable.hpp"
+#include <QFile>
 #include <gtest/gtest.h>
 #include <iomanip>
 #include <sstream>
@@ -129,4 +130,18 @@ TEST(PatientHashTable, Deleting)
     }
 
     ASSERT_EQ(hashTable.rowCount(), 0);
+}
+
+TEST(PatientHashTable, HashFunction)
+{
+    QFile first;
+    QFile second;
+
+    first.setFileName("testHashFun1.txt");
+    second.setFileName("testHashFun2.txt");
+
+    ASSERT_TRUE(first.open(QIODevice::WriteOnly | QIODevice::Truncate));
+    ASSERT_TRUE(second.open(QIODevice::WriteOnly | QIODevice::Truncate));
+
+    ASSERT_NO_THROW(PatientHashTable::testHashFunctions(first, second));
 }

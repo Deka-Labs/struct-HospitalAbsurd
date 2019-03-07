@@ -4,9 +4,11 @@
 #include "patient.hpp"
 #include "twowaylist.hpp"
 #include <QAbstractTableModel>
+#include <QFile>
 #include <QString>
 
 #define MAX_PATIENTS 100
+#define MAX_PATIENT_HASH_STEP 5
 
 class PatientHashTable : public QAbstractTableModel {
     Q_OBJECT
@@ -29,11 +31,13 @@ public:
 
     void delPatient(const QString& regid);
 
-private:
-    int hash(const QString& regid) const;
-    int dopHash(const QString& regid) const;
+    static void testHashFunctions(QFile& first, QFile& second);
 
-    bool validateKey(const QString& regid) const;
+private:
+    static int hash(const QString& regid);
+    static int dopHash(const QString& regid);
+
+    static bool validateKey(const QString& regid);
 
     int getEmptyCellFor(const QString& regid) const;
     int getPatientCell(const QString& regid) const;
