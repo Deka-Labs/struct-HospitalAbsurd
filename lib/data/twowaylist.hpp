@@ -270,13 +270,61 @@ void TwoWayList<T>::swap(unsigned pos1, unsigned pos2)
 {
     if (pos1 == pos2)
         return;
+    if (pos1 > pos2) {
+        swap(pos2, pos1);
+        return;
+    }
 
     auto node1 = getNode(pos1);
     auto node2 = getNode(pos2);
 
-    auto tmp = node1->data;
-    node1->data = node2->data;
-    node2->data = tmp;
+    if (!node1 || !node2)
+        return;
+
+    //Алгоритм для близстоящих
+    if (pos1 == pos2 - 1) {
+        auto before_nodes = node1->prev;
+        auto after_nodes = node2->next;
+
+        node1->next = after_nodes;
+        node1->prev = node2;
+        if (after_nodes)
+            after_nodes->prev = node1;
+
+        node2->next = node1;
+        node2->prev = before_nodes;
+        if (before_nodes)
+            before_nodes->next = node2;
+    } else {
+        //Алгоритм для стоящих на далеких расстояниях
+        auto before_node1 = node1->prev;
+        auto before_node2 = node2->prev;
+        auto after_node1 = node1->next;
+        auto after_node2 = node2->next;
+
+        node1->next = after_node2;
+        node1->prev = before_node2;
+        if (before_node2)
+            before_node2->next = node1;
+        if (after_node2)
+            after_node2->prev = node1;
+
+        node2->next = after_node1;
+        node2->prev = before_node1;
+        if (before_node1)
+            before_node1->next = node2;
+        if (after_node1)
+            after_node1->prev = node2;
+    }
+
+    if (node1 == m_first)
+        m_first = node2;
+    else if (node2 == m_first)
+        m_first = node1;
+
+    //auto tmp = node1->data;
+    //node1->data = node2->data;
+    //node2->data = tmp;
 }
 
 template <typename T>

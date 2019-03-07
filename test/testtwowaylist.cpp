@@ -147,9 +147,36 @@ TEST(TwoWayList, Swapping)
         ASSERT_EQ(list.at(unsigned(i)), i);
     }
 
+    //Near elements
+    list.swap(0, 1);
+    ASSERT_EQ(list.at(0), 1);
+    ASSERT_EQ(list.at(1), 0);
+    list.swap(0, 1);
+    for (unsigned i = 0; i < count; i++) {
+        ASSERT_EQ(list.at(unsigned(i)), i);
+    }
+
+    list.swap(count / 2, count / 2 + 1);
+    ASSERT_EQ(list.at(count / 2), count / 2 + 1);
+    ASSERT_EQ(list.at(count / 2 + 1), count / 2);
+    list.swap(count / 2, count / 2 + 1);
+    for (unsigned i = 0; i < count; i++) {
+        ASSERT_EQ(list.at(unsigned(i)), i);
+    }
+
+    list.swap(count - 1, count - 2);
+    ASSERT_EQ(list.at(count - 1), count - 2);
+    ASSERT_EQ(list.at(count - 2), count - 1);
+    list.swap(count - 1, count - 2);
+    for (unsigned i = 0; i < count; i++) {
+        ASSERT_EQ(list.at(unsigned(i)), i);
+    }
+
     srand(time(nullptr));
     for (unsigned i = 0; i < count; i++) {
-        list.swap(rand() % count, rand() % count);
+        auto x = rand() % count;
+        auto y = rand() % count;
+        list.swap(x, y);
     }
 
     for (unsigned i = 0; i < count; i++) {
