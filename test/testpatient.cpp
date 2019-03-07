@@ -4,11 +4,11 @@
 TEST(Patient, Setters)
 {
     Patient pat;
-    ASSERT_NO_THROW(pat.setRegID("12-345678"));
-    ASSERT_NO_THROW(pat.setFullName("Иванов И.И."));
-    ASSERT_NO_THROW(pat.setYearOfBirth(2005));
-    ASSERT_NO_THROW(pat.setAddress("г. Новосталинск. Ул. Сталина д. 45 к. 2 кв. 7"));
-    ASSERT_NO_THROW(pat.setWorkPlace("ПАО Черный банк"));
+    ASSERT_TRUE(pat.setRegID("12-345678"));
+    ASSERT_TRUE(pat.setFullName("Иванов И.И."));
+    ASSERT_TRUE(pat.setYearOfBirth(2005));
+    ASSERT_TRUE(pat.setAddress("г. Новосталинск. Ул. Сталина д. 45 к. 2 кв. 7"));
+    ASSERT_TRUE(pat.setWorkPlace("ПАО Черный банк"));
 
     ASSERT_EQ(pat.regID(), "12-345678");
     ASSERT_EQ(pat.fullName(), "Иванов И.И.");
@@ -59,11 +59,11 @@ TEST(Patient, Setters)
 TEST(Patient, toDataObject)
 {
     Patient pat;
-    ASSERT_NO_THROW(pat.setRegID("12-345678"));
-    ASSERT_NO_THROW(pat.setFullName("Иванов И.И."));
-    ASSERT_NO_THROW(pat.setYearOfBirth(2005));
-    ASSERT_NO_THROW(pat.setAddress("г. Новосталинск. Ул. Сталина д. 45 к. 2 кв. 7"));
-    ASSERT_NO_THROW(pat.setWorkPlace("ПАО Черный банк"));
+    ASSERT_TRUE(pat.setRegID("12-345678"));
+    ASSERT_TRUE(pat.setFullName("Иванов И.И."));
+    ASSERT_TRUE(pat.setYearOfBirth(2005));
+    ASSERT_TRUE(pat.setAddress("г. Новосталинск. Ул. Сталина д. 45 к. 2 кв. 7"));
+    ASSERT_TRUE(pat.setWorkPlace("ПАО Черный банк"));
 
     DataObject data = pat.toDataObject();
 
@@ -89,11 +89,11 @@ TEST(Patient, toDataObject)
 TEST(Patient, fromDataObject)
 {
     Patient pat;
-    ASSERT_NO_THROW(pat.setRegID("12-345678"));
-    ASSERT_NO_THROW(pat.setFullName("Иванов И.И."));
-    ASSERT_NO_THROW(pat.setYearOfBirth(2005));
-    ASSERT_NO_THROW(pat.setAddress("г. Новосталинск. Ул. Сталина д. 45 к. 2 кв. 7"));
-    ASSERT_NO_THROW(pat.setWorkPlace("ПАО Черный банк"));
+    ASSERT_TRUE(pat.setRegID("12-345678"));
+    ASSERT_TRUE(pat.setFullName("Иванов И.И."));
+    ASSERT_TRUE(pat.setYearOfBirth(2005));
+    ASSERT_TRUE(pat.setAddress("г. Новосталинск. Ул. Сталина д. 45 к. 2 кв. 7"));
+    ASSERT_TRUE(pat.setWorkPlace("ПАО Черный банк"));
 
     auto resetData = [](DataObject& data) {
         data.setType("patient");
@@ -154,18 +154,18 @@ TEST(Patient, fromDataObject)
 TEST(Patient, OperatorEqual)
 {
     Patient pat;
-    ASSERT_NO_THROW(pat.setRegID("12-345678"));
-    ASSERT_NO_THROW(pat.setFullName("Иванов И.И."));
-    ASSERT_NO_THROW(pat.setYearOfBirth(2005));
-    ASSERT_NO_THROW(pat.setAddress("г. Новосталинск. Ул. Сталина д. 45 к. 2 кв. 7"));
-    ASSERT_NO_THROW(pat.setWorkPlace("ПАО Черный банк"));
+    ASSERT_TRUE(pat.setRegID("12-345678"));
+    ASSERT_TRUE(pat.setFullName("Иванов И.И."));
+    ASSERT_TRUE(pat.setYearOfBirth(2005));
+    ASSERT_TRUE(pat.setAddress("г. Новосталинск. Ул. Сталина д. 45 к. 2 кв. 7"));
+    ASSERT_TRUE(pat.setWorkPlace("ПАО Черный банк"));
 
     Patient other;
-    ASSERT_NO_THROW(other.setRegID("12-345678"));
-    ASSERT_NO_THROW(other.setFullName("Иванов И.И."));
-    ASSERT_NO_THROW(other.setYearOfBirth(2005));
-    ASSERT_NO_THROW(other.setAddress("г. Новосталинск. Ул. Сталина д. 45 к. 2 кв. 7"));
-    ASSERT_NO_THROW(other.setWorkPlace("ПАО Черный банк"));
+    ASSERT_TRUE(other.setRegID("12-345678"));
+    ASSERT_TRUE(other.setFullName("Иванов И.И."));
+    ASSERT_TRUE(other.setYearOfBirth(2005));
+    ASSERT_TRUE(other.setAddress("г. Новосталинск. Ул. Сталина д. 45 к. 2 кв. 7"));
+    ASSERT_TRUE(other.setWorkPlace("ПАО Черный банк"));
 
     ASSERT_TRUE(pat == other);
     ASSERT_FALSE(pat != other);
