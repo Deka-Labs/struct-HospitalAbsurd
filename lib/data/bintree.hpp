@@ -113,6 +113,7 @@ bool BinTree<TypeData, TypeKey>::add(const TypeData& data)
             }
         } else {
             //Элемент уже существует.
+            delete newNode;
             return false;
         }
     }
