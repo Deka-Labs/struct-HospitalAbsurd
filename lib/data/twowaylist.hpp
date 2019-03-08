@@ -11,6 +11,13 @@ struct TwoWayNode {
     T data;
 };
 
+/**
+ * \brief TwoWayList двусвязный нециклический список
+ * \details Двусвязный список с поддержкой вставки, удаления элементов.
+ * Сортировкой, поиском и другими полезными свойствами.
+ * \pre Класс, используемый в шаблоне должен поддерживать операторы сравнения и равенства,
+ *  иметь возможность копирования и использование оператора =
+ */
 template <typename T>
 class TwoWayList {
 
@@ -18,32 +25,113 @@ class TwoWayList {
     unsigned m_size;
 
 public:
-    TwoWayList();
-    TwoWayList(const TwoWayList<T>& other);
-    ~TwoWayList();
+    TwoWayList(); ///< Создает пустой список
+    TwoWayList(const TwoWayList<T>& other); ///< Копирует список
+    ~TwoWayList(); ///< Очищает список
 
+    /**
+     * \brief push_back вставляет элемент в конец
+     * \param [in] data элемент для добавления
+     * \remark Если список пуст, то вставка идет в начало
+     */
     void push_back(const T& data);
+    /**
+     * \brief push_first вставляет элемент в начало, заменяя текущий опорный элемент
+     * \param [in] data элемент для добавления
+     * \remark Если список пуст, то вставка идет в начало
+     */
     void push_first(const T& data);
+    /**
+     * \brief insert вставляет элемент после заданной позиции
+     * \param [in] pos
+     * \param [in] data элемент для добавления
+     * \remark Если список пуст, то вставка идет в начало, а параметр pos игнорируется
+     * \remark Если pos вне диапазона допустимых значений, то элемент не добавляется
+     */
     void insert(unsigned pos, const T& data);
 
+    /**
+     * \brief remove удаляет элемент в определенной позиции
+     * \param [in] pos позиция, в которой элемент будет удален
+     * \remark Если элемент опорный, то следующий после него станет новым опорным элементов
+     * \remark Удаление не производится, если pos больше или равен размеру списка
+     */
     void remove(unsigned pos);
+    /**
+     * \brief removeAll удаляет все элементы с определенном значением
+     * \param [in] value значение элемента для удаления
+     */
     void removeAll(const T& value);
 
+    /**
+     * \brief sort сортирует элементы от маленького к большему
+     */
     void sort();
+    /**
+     * \brief search ищет элемент с определеном значением
+     * \param [in] search элемент для поиска
+     * \param [out] outPos позиция элемента устанавливается в этом параметре, если поиск успешен
+     * \return true - элемент найден, false - нет
+     * \remark Если нет необходимости знать позицию, то outPos можно установить на nullptr
+     */
     bool search(const T& search, unsigned* outPos = nullptr);
 
+    /**
+     * \brief swap меняет местами два элемента
+     * \param [in] pos1 1 позиция для обмена
+     * \param [in] pos2 2 позиция для обмена
+     * \remark Обмен местами не производится при pos1 == pos2 или если позиция вне допустимых диапазонах
+     */
     void swap(unsigned pos1, unsigned pos2);
 
+    /**
+     * \brief at получает элемент в определенной позиции
+     * \param [in] pos позиция элемента
+     * \return константную ссылку на элемент
+     * \throw std::invalid_argument если pos >= размеру списка
+     */
     const T& at(unsigned pos) const;
+    /**
+     * \brief operator [] получает доступ к элементу в определенной позиции
+     * \param [in] pos позиция элемента
+     * \return ссылка на элемент
+     * \throw std::invalid_argument если pos >= размеру списка
+     */
     T& operator[](unsigned pos);
+    /**
+     * \brief operator = копирует элементы списка правой части в список с левой стороны, удаляя из него старые
+     * \param [in] other список правой стороны
+     */
     void operator=(const TwoWayList<T>& other);
+    /**
+     * \brief size получения размера списка
+     * \return размер списка
+     */
     unsigned size() const;
 
 private:
+    /**
+     * \brief getNode получает узел элемента в определенной позиции
+     * \param [in] pos позиция
+     * \return узел или nullptr, если pos >= размера списка
+     */
     TwoWayNode<T>* getNode(unsigned pos) const;
 
-    //QuickSort utils
+    /**
+     * \brief findMedIndex находит индекс среднего элемента
+     * \param [out] out индекс среднего элемента
+     * \param [in] begin левая граница поиска
+     * \param [in] end правая граница поиска
+     * \return true - такой элемент найден, иначе false
+     */
     bool findMedIndex(unsigned& out, unsigned begin, unsigned end);
+    /**
+     * \brief splitPosition находит место, где следует разделить список при сортировки
+     * \param [in] medPos позиция среднего элемента
+     * \param [in] begin левая граница поиска
+     * \param [in] end правая граница поиска
+     * \return позиция, где следует поделить список
+     */
     unsigned splitPosition(unsigned medPos, unsigned begin, unsigned end);
 };
 
@@ -134,7 +222,7 @@ void TwoWayList<T>::insert(unsigned pos, const T& data)
 template <typename T>
 void TwoWayList<T>::remove(unsigned pos)
 {
-    if (m_size == 1) {
+    if (pos == 0 && m_size == 1) {
         delete m_first;
         m_first = nullptr;
         m_size--;
@@ -241,6 +329,10 @@ T& TwoWayList<T>::operator[](unsigned pos)
 template <typename T>
 void TwoWayList<T>::operator=(const TwoWayList<T>& other)
 {
+    while (m_size != 0) {
+        remove(0);
+    }
+
     for (unsigned i = 0; i < other.size(); i++) {
         push_back(other.at(i));
     }

@@ -16,6 +16,27 @@ TEST(TwoWayList, Copying)
     ASSERT_EQ(second.size(), first.size());
     ASSERT_EQ(first.at(0), second.at(0));
     ASSERT_EQ(first.at(1), second.at(1));
+
+    first = TwoWayList<int>();
+    second = TwoWayList<int>();
+    ASSERT_EQ(first.size(), 0);
+    ASSERT_EQ(second.size(), 0);
+
+    const int count = 100;
+
+    for (int i = 0; i < count; i++) {
+        first.push_back(i);
+        second.push_back(count - i);
+    }
+    ASSERT_EQ(first.size(), count);
+    ASSERT_EQ(second.size(), count);
+
+    second = first;
+    ASSERT_EQ(second.size(), count);
+
+    for (int i = 0; i < count; i++) {
+        ASSERT_EQ(second.at(unsigned(i)), i);
+    }
 }
 
 TEST(TwoWayList, Sizeing)
