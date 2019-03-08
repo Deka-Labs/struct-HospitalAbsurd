@@ -117,26 +117,6 @@ bool Doctor::setSchedule(const QString& schedule)
     return true;
 }
 
-bool Doctor::operator>(const Doctor& other) const
-{
-    return m_fullname > other.fullname();
-}
-
-bool Doctor::operator<(const Doctor& other) const
-{
-    return m_fullname < other.fullname();
-}
-
-bool Doctor::operator>=(const Doctor& other) const
-{
-    return (*this > other) || (*this == other);
-}
-
-bool Doctor::operator<=(const Doctor& other) const
-{
-    return (*this < other) || (*this == other);
-}
-
 bool Doctor::operator==(const Doctor& other) const
 {
     return m_fullname == other.fullname();

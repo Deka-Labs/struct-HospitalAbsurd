@@ -35,11 +35,9 @@ public:
     QString schedule() const;
     bool setSchedule(const QString& schedule);
 
+    QString key() const { return fullname(); }
+
     //operators
-    bool operator>(const Doctor& other) const;
-    bool operator<(const Doctor& other) const;
-    bool operator>=(const Doctor& other) const;
-    bool operator<=(const Doctor& other) const;
     bool operator==(const Doctor& other) const;
     bool operator!=(const Doctor& other) const;
 };
