@@ -3,6 +3,12 @@
 
 #include <stdexcept>
 
+/**
+ * \brief класс Stack
+ * \details шаблонный класс позволяющий в структуре данных стек
+ *  хранить некоторые данные и извлекать их по принципу LIFO
+ * \pre шаблонный класс обязан иметь конструктор копирования и оператор =
+ */
 template <class T>
 class Stack {
 private:
@@ -14,13 +20,27 @@ private:
     StackNode* m_top;
 
 public:
-    Stack();
-    Stack(const Stack&) = delete;
-    ~Stack();
+    Stack(); ///< Создает пустой стек
+    Stack(const Stack&) = delete; ///< Конструктор копирования недоступен
+    ~Stack(); ///< Деструктор
 
-    void push(T data);
+    /**
+     * \brief push - добавляет элемент в стек
+     * \param [in] data - информация для добавления
+     */
+    void push(const T& data);
+
+    /**
+     * \brief pop - извлекает элемент из стека
+     * \return элемент, находящийся в топе стека
+     * \throw std::runtime_error если стек пуст
+     */
     T pop();
 
+    /**
+     * \brief isEmpty - проаеряет пуст ли стек
+     * \return true - если стек пустой, иначе false
+     */
     bool isEmpty() const;
 };
 
@@ -39,7 +59,7 @@ Stack<T>::~Stack()
 }
 
 template <class T>
-void Stack<T>::push(T data)
+void Stack<T>::push(const T& data)
 {
     auto new_node = new StackNode;
     new_node->data = data;
