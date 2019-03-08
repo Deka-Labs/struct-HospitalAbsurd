@@ -1,4 +1,4 @@
-#include "data/patienthashtable.hpp"
+#include "models/patienthashtable.hpp"
 #include <QFile>
 #include <gtest/gtest.h>
 #include <iomanip>

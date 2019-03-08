@@ -1,8 +1,8 @@
 #ifndef PATIENTHASHTABLE_HPP
 #define PATIENTHASHTABLE_HPP
 
-#include "patient.hpp"
-#include "twowaylist.hpp"
+#include "data/patient.hpp"
+#include "data/twowaylist.hpp"
 #include <QAbstractTableModel>
 #include <QFile>
 #include <QString>
