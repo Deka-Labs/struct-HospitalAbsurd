@@ -32,36 +32,104 @@ public:
     BinTree(const BinTree& other) = delete; ///< Копирование запрещено
     ~BinTree(); ///< Удаляет все узлы
 
+    /**
+     * \brief add добавляет элемент в дерево
+     * \param [in] data элемент для добавления
+     * \return true если элемент добавлен, иначе false
+     * \remark Нельзя добавить элемент с ключом, который уже существует. Функция вернет false и не добавит его.
+     */
     bool add(const TypeData& data);
 
-    const TypeData& find(const TypeKey& key);
+    /**
+     * \brief find ищет элемент по ключу и возвращает его
+     * \param [in] key ключ для поиска
+     * \return элемент с заданным ключом
+     * \throw std::invalid_argument если элемента с данным ключом нет
+     * \remark полученное значение нельзя менять
+     */
+    const TypeData& find(const TypeKey& key) const;
 
-    void
-    remove(const TypeKey& key);
+    /**
+     * \brief remove удаляет элемент с установленным ключом, если он есть
+     * \param [in] key ключ элемента
+     */
+    void remove(const TypeKey& key);
 
+    /**
+     * \brief isEmpty проверят пустое ли дерево
+     * \return true если дерево пусто, иначе false
+     */
     bool isEmpty() const { return !m_root; }
+
+    /**
+     * \brief root возвращает корень дерева
+     * \return корень дерева
+     * \remark Функция используется в тестировании. Не стоит ей пользоваться.
+     */
     BinTreeNode<TypeData>* root() const { return m_root; }
 
+    /**
+     * \brief getListInOrder получает список элементов дерева в симметричном обходе
+     * \return список элементов дерева в симметричном обходе
+     */
     TwoWayList<TypeData> getListInOrder() const;
 
 private:
+    /**
+     * \brief isLeaf проверяет является ли указанный узел листом
+     * \param [in] node узел для проверки
+     * \return true если лист, false - нет
+     */
     bool isLeaf(BinTreeNode<TypeData>* node) const;
 
+    /**
+     * \brief findNode находит узел по ключу
+     * \param [in] key ключ элемента
+     * \return узел, соодержащий элемент с ключом key
+     */
     BinTreeNode<TypeData>* findNode(const TypeKey& key) const;
 
+    /**
+     * \brief removeNode удаляет узел
+     * \param [in] node узел для удаления
+     */
     void removeNode(BinTreeNode<TypeData>* node);
 
+    /**
+     * \brief swap меняет местами два узла
+     * \param node1 1 узел для обмена
+     * \param node2 2 узел для обмена
+     */
     void swap(BinTreeNode<TypeData>* node1, BinTreeNode<TypeData>* node2);
-    int parentTo(BinTreeNode<TypeData>* parent, BinTreeNode<TypeData>* node) const;
+    /**
+     * \brief parentTo определяет является ли parent родителем к node
+     * \param [in] parent элемент, который должен быть родителем
+     * \param [in] node элемент, который должен быть проверен
+     * \return -1 если node слева от parent, 1 - справа, 0 - не родитель
+     */
+    short parentTo(BinTreeNode<TypeData>* parent, BinTreeNode<TypeData>* node) const;
 
+    /**
+     * \brief balance вычисляет баланс в указаном узле
+     * \param [in] node узел
+     * \return баланс
+     */
     int balance(BinTreeNode<TypeData>* node) const;
+    /**
+     * \brief recalcHeight перерассчитывает высоту указанного узла на основе присоединеных к нему узлах
+     * \param [in] node узел
+     */
     void recalcHeight(BinTreeNode<TypeData>* node);
+    /**
+     * \brief normalize выравнивает высоту дерева
+     * \param [in] node узел
+     */
     void normalize(BinTreeNode<TypeData>* node);
 
-    void bigLeftTurn(BinTreeNode<TypeData>* node);
-    void bigRightTurn(BinTreeNode<TypeData>* node);
-    void smallLeftTurn(BinTreeNode<TypeData>* node);
-    void smallRightTurn(BinTreeNode<TypeData>* node);
+    void bigLeftTurn(BinTreeNode<TypeData>* node); ///< Большой левый поворот
+    void bigRightTurn(BinTreeNode<TypeData>* node); ///< Большой правый поворот
+    void smallLeftTurn(BinTreeNode<TypeData>* node); ///< Малый левый поворот
+    void smallRightTurn(BinTreeNode<TypeData>* node); ///< Малый правый поворот
 };
 
 //Realization
@@ -123,7 +191,7 @@ bool BinTree<TypeData, TypeKey>::add(const TypeData& data)
 }
 
 template <class TypeData, class TypeKey>
-const TypeData& BinTree<TypeData, TypeKey>::find(const TypeKey& key)
+const TypeData& BinTree<TypeData, TypeKey>::find(const TypeKey& key) const
 {
     BinTreeNode<TypeData>* node = findNode(key);
     if (node)
@@ -318,7 +386,7 @@ void BinTree<TypeData, TypeKey>::swap(BinTreeNode<TypeData>* node1, BinTreeNode<
 }
 
 template <class TypeData, class TypeKey>
-int BinTree<TypeData, TypeKey>::parentTo(BinTreeNode<TypeData>* parent, BinTreeNode<TypeData>* node) const
+short BinTree<TypeData, TypeKey>::parentTo(BinTreeNode<TypeData>* parent, BinTreeNode<TypeData>* node) const
 {
     if (!parent || !node || (!parent->left && !parent->right))
         return 0;
