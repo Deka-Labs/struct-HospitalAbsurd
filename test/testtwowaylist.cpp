@@ -242,7 +242,7 @@ TEST(TwoWayList, Searching)
     ASSERT_TRUE(list.search(-1));
     ASSERT_TRUE(list.search(-2));
     ASSERT_TRUE(list.search(-3));
-    ASSERT_FALSE(list.search((-rand() % count) - 4));
+    ASSERT_FALSE(list.search((-(rand() % count)) - 4));
 }
 
 TEST(TwoWayList, RemoveAll)

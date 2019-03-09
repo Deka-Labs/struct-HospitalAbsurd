@@ -23,6 +23,9 @@ public:
     Referral(const Referral& other);
     ~Referral();
 
+    DataObject toDataObject() const;
+    bool fromDataObject(const DataObject& obj);
+
     //Setters and getters
     QString regID() const;
     bool setRegID(const QString& regID);
@@ -32,6 +35,13 @@ public:
     bool setDate(const QString& date);
     QString time() const;
     bool setTime(const QString& time);
+
+    bool operator==(const Referral& other) const;
+    bool operator!=(const Referral& other) const;
+    bool operator<(const Referral& other) const;
+    bool operator>(const Referral& other) const;
+    bool operator<=(const Referral& other) const;
+    bool operator>=(const Referral& other) const;
 };
 
 #endif // REFERRAL_HPP

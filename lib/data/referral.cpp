@@ -21,6 +21,47 @@ Referral::~Referral()
 {
 }
 
+DataObject Referral::toDataObject() const
+{
+    DataObject out;
+
+    out.setType("referral");
+    out.setValue("regid", m_regID);
+    out.setValue("docfullname", m_doctorFullname);
+    out.setValue("date", m_date);
+    out.setValue("time", m_time);
+
+    return out;
+}
+
+bool Referral::fromDataObject(const DataObject& obj)
+{
+    QString new_regID, new_docfullname, new_data, new_time;
+
+    if (obj.getType() != "referral")
+        return false;
+
+    if (!obj.getValue("regid", new_regID))
+        return false;
+    if (!obj.getValue("docfullname", new_docfullname))
+        return false;
+    if (!obj.getValue("date", new_data))
+        return false;
+    if (!obj.getValue("time", new_time))
+        return false;
+
+    if (!setRegID(new_regID))
+        return false;
+    if (!setDoctorFullname(new_docfullname))
+        return false;
+    if (!setDate(new_data))
+        return false;
+    if (!setTime(new_time))
+        return false;
+
+    return true;
+}
+
 QString Referral::regID() const
 {
     return m_regID;
@@ -84,4 +125,34 @@ bool Referral::setTime(const QString& time)
     m_time = time;
 
     return true;
+}
+
+bool Referral::operator==(const Referral& other) const
+{
+    return m_doctorFullname == other.m_doctorFullname;
+}
+
+bool Referral::operator!=(const Referral& other) const
+{
+    return !(*this == other);
+}
+
+bool Referral::operator<(const Referral& other) const
+{
+    return m_doctorFullname < other.m_doctorFullname;
+}
+
+bool Referral::operator>(const Referral& other) const
+{
+    return !(*this < other) && (*this != other);
+}
+
+bool Referral::operator<=(const Referral& other) const
+{
+    return *this < other || *this == other;
+}
+
+bool Referral::operator>=(const Referral& other) const
+{
+    return *this > other || *this == other;
 }
