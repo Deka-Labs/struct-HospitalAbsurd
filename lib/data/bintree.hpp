@@ -246,7 +246,7 @@ template <class TypeData, class TypeKey>
 BinTreeNode<TypeData>* BinTree<TypeData, TypeKey>::findNode(const TypeKey& key) const
 {
     if (isEmpty())
-        return false;
+        return nullptr;
 
     auto currentNode = m_root;
 
