@@ -27,7 +27,7 @@ public:
     int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
     bool addPatient(const Patient& newPatient);
-    bool getPatient(const QString& regid, Patient& structToFill) const;
+    bool getPatient(const QString& regid, Patient* structToFill = nullptr) const;
 
     void delPatient(const QString& regid);
 

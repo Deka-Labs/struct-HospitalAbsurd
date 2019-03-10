@@ -33,6 +33,8 @@ QVariant PatientHashTable::headerData(int section, Qt::Orientation orientation, 
                 return "Адрес";
             case 4:
                 return "Место работы";
+            default:
+                return "ERROR";
             }
         }
     }
@@ -47,7 +49,7 @@ QVariant PatientHashTable::data(const QModelIndex& index, int role) const
     if (role == Qt::DisplayRole) {
         QString regid = m_registredKeys.at(static_cast<unsigned>(index.row()));
         Patient patient;
-        if (!getPatient(regid, patient))
+        if (!getPatient(regid, &patient))
             return QVariant();
         switch (index.column()) {
         case 0:
@@ -97,19 +99,20 @@ bool PatientHashTable::addPatient(const Patient& newPatient)
     return false;
 }
 
-bool PatientHashTable::getPatient(const QString& regid, Patient& structToFill) const
+bool PatientHashTable::getPatient(const QString& regid, Patient* structToFill) const
 {
     int cell = getPatientCell(regid);
     if (cell != -1) {
 
         auto patinet = m_hashTable[cell];
 
-        structToFill.setRegID(patinet->regID());
-        structToFill.setFullName(patinet->fullName());
-        structToFill.setYearOfBirth(patinet->yearOfBirth());
-        structToFill.setAddress(patinet->address());
-        structToFill.setWorkPlace(patinet->workPlace());
-
+        if (structToFill) {
+            structToFill->setRegID(patinet->regID());
+            structToFill->setFullName(patinet->fullName());
+            structToFill->setYearOfBirth(patinet->yearOfBirth());
+            structToFill->setAddress(patinet->address());
+            structToFill->setWorkPlace(patinet->workPlace());
+        }
         return true;
     }
     return false;

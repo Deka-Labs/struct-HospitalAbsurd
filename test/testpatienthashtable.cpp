@@ -81,7 +81,7 @@ TEST(PatientHashTable, Getting)
         SS << std::setw(6) << std::setfill('0') << i + 10 * i + 100 * i;
         std::string str = SS.str();
 
-        if (hashTable.getPatient(str.c_str(), pat)) {
+        if (hashTable.getPatient(str.c_str(), &pat)) {
             getted++;
         }
     }
