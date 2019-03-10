@@ -36,6 +36,8 @@ public:
     QString time() const;
     bool setTime(const QString& time);
 
+    bool isEqual(const Referral& other);
+
     bool operator==(const Referral& other) const;
     bool operator!=(const Referral& other) const;
     bool operator<(const Referral& other) const;
