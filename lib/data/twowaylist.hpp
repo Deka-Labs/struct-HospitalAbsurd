@@ -437,22 +437,33 @@ unsigned TwoWayList<T>::splitPosition(unsigned medPos, unsigned begin, unsigned 
 
     T medData = this->at(medPos);
 
-    auto left = begin;
-    auto right = end;
+    auto leftPos = begin;
+    auto rightPos = end;
+
+    auto left = getNode(leftPos);
+    auto right = getNode(rightPos);
 
     while (true) {
-        while (this->at(left) < medData && left <= end)
-            left++;
-        while (this->at(right) > medData && begin <= right)
-            right--;
+        while (left->data < medData && leftPos <= end) {
+            left = left->next;
+            leftPos++;
+        }
+        while (right->data > medData && begin <= rightPos) {
+            right = right->prev;
+            rightPos--;
+        }
 
-        if (left >= right)
-            return left;
+        if (leftPos >= rightPos)
+            return leftPos;
 
-        if (this->at(left) != this->at(right)) {
-            swap(left, right);
+        if (left->data != right->data) {
+            auto tmp = right;
+            right = left;
+            left = tmp;
+            swap(leftPos, rightPos);
         } else {
-            left++; ///< Во избежания зацикливания передвигаем границу
+            left = left->next;
+            leftPos++; ///< Во избежания зацикливания передвигаем границу
         }
     }
 }
