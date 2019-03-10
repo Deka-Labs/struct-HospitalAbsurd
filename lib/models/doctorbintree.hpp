@@ -6,6 +6,8 @@
 #include "data/twowaylist.hpp"
 #include <QAbstractTableModel>
 
+class Database;
+
 class DoctorBinTree : public QAbstractTableModel {
     Q_OBJECT
 private:
@@ -26,6 +28,8 @@ public:
     bool addDoctor(const Doctor& other);
     void removeDoctor(const QModelIndex& index);
     bool containsDoctorWithKey(const QString& key);
+
+    friend class Database;
 
 private:
     void updateList();

@@ -10,6 +10,8 @@
 #define MAX_PATIENTS 100
 #define MAX_PATIENT_HASH_STEP 5
 
+class Database;
+
 class PatientHashTable : public QAbstractTableModel {
     Q_OBJECT
     Patient* m_hashTable[MAX_PATIENTS];
@@ -32,6 +34,8 @@ public:
     void delPatient(const QString& regid);
 
     static void testHashFunctions(QFile& first, QFile& second);
+
+    friend class Database;
 
 private:
     static int hash(const QString& regid);

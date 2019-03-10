@@ -7,15 +7,15 @@
 #include "patienthashtable.hpp"
 #include <QAbstractTableModel>
 
+class Database;
+
 class ReferralList : QAbstractTableModel {
     Q_OBJECT
 private:
     TwoWayList<Referral> m_list;
-    PatientHashTable* m_connectedPatients;
-    DoctorBinTree* m_connectedDoctors;
 
 public:
-    ReferralList(PatientHashTable* patients, DoctorBinTree* doctors, QObject* parent = nullptr);
+    ReferralList(QObject* parent = nullptr);
     ReferralList(const ReferralList&) = delete;
     ~ReferralList();
 
@@ -27,6 +27,8 @@ public:
 
     bool addReferral(const Referral& newRef);
     void removeReferral(const Referral& ref);
+
+    friend class Database;
 };
 
 #endif // REFERRALLIST_HPP

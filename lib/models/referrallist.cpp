@@ -1,9 +1,7 @@
 #include "referrallist.hpp"
 
-ReferralList::ReferralList(PatientHashTable* patients, DoctorBinTree* doctors, QObject* parent)
+ReferralList::ReferralList(QObject* parent)
     : QAbstractTableModel(parent)
-    , m_connectedPatients(patients)
-    , m_connectedDoctors(doctors)
 {
 }
 
@@ -71,19 +69,6 @@ int ReferralList::columnCount(const QModelIndex& parent) const
 
 bool ReferralList::addReferral(const Referral& newRef)
 {
-    auto regID = newRef.regID();
-    auto fullname = newRef.doctorFullname();
-
-    if (m_connectedPatients) {
-        if (!m_connectedPatients->getPatient(regID))
-            return false;
-    }
-
-    if (m_connectedDoctors) {
-        if (!m_connectedDoctors->containsDoctorWithKey(fullname))
-            return false;
-    }
-
     beginResetModel();
     m_list.push_back(newRef);
     m_list.sort();
