@@ -60,10 +60,12 @@ QVariant PatientHashTable::data(const QModelIndex& index, int role) const
             return patient.address();
         case 4:
             return patient.workPlace();
+        default:
+            return "ERROR";
         }
     }
 
-    return "ERROR";
+    return QVariant();
 }
 
 int PatientHashTable::rowCount(const QModelIndex& parent) const
