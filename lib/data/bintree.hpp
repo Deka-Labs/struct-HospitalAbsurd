@@ -26,6 +26,7 @@ template <class TypeData, class TypeKey>
 class BinTree {
 private:
     BinTreeNode<TypeData>* m_root;
+    unsigned m_size;
 
 public:
     BinTree(); ///< Создает пустое дерево
@@ -73,6 +74,11 @@ public:
      * \return список элементов дерева в симметричном обходе
      */
     TwoWayList<TypeData> getListInOrder() const;
+
+    /**
+     * \brief size возвращает число элементов в дереве
+     */
+    unsigned size() const;
 
 private:
     /**
@@ -135,8 +141,15 @@ private:
 //Realization
 
 template <class TypeData, class TypeKey>
+unsigned BinTree<TypeData, TypeKey>::size() const
+{
+    return m_size;
+}
+
+template <class TypeData, class TypeKey>
 BinTree<TypeData, TypeKey>::BinTree()
     : m_root(nullptr)
+    , m_size(0)
 {
 }
 
@@ -155,6 +168,7 @@ bool BinTree<TypeData, TypeKey>::add(const TypeData& data)
 
     if (isEmpty()) {
         m_root = newNode;
+        m_size++;
         return true;
     }
 
@@ -187,6 +201,7 @@ bool BinTree<TypeData, TypeKey>::add(const TypeData& data)
     }
 
     normalize(newNode);
+    m_size++;
     return true;
 }
 
@@ -289,6 +304,7 @@ void BinTree<TypeData, TypeKey>::removeNode(BinTreeNode<TypeData>* node)
 
             normalize(parent);
         }
+        m_size--;
         delete node;
     } else if (node->right) {
         //Ищем самый левый узел в правом поддереве
@@ -320,7 +336,7 @@ void BinTree<TypeData, TypeKey>::removeNode(BinTreeNode<TypeData>* node)
         }
 
         normalize(newNode);
-
+        m_size--;
         delete node;
     }
 }
