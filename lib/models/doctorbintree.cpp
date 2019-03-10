@@ -23,6 +23,8 @@ QVariant DoctorBinTree::headerData(int section, Qt::Orientation orientation, int
                 return "Кабинет";
             case 3:
                 return "Расписание";
+            default:
+                return "ERROR";
             }
         }
     }
@@ -82,6 +84,16 @@ void DoctorBinTree::removeDoctor(const QModelIndex& index)
         Doctor doc = m_listToDisplay.at(static_cast<unsigned>(index.row()));
         m_binTree.remove(doc.key());
         updateList();
+    }
+}
+
+bool DoctorBinTree::containsDoctorWithKey(const QString& key)
+{
+    try {
+        Doctor doc = m_binTree.find(key);
+        return true;
+    } catch (...) {
+        return false;
     }
 }
 

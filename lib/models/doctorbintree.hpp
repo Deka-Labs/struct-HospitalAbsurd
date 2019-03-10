@@ -25,6 +25,7 @@ public:
 
     bool addDoctor(const Doctor& other);
     void removeDoctor(const QModelIndex& index);
+    bool containsDoctorWithKey(const QString& key);
 
 private:
     void updateList();
