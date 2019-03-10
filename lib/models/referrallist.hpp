@@ -15,7 +15,7 @@ private:
     TwoWayList<Referral> m_list;
 
 public:
-    ReferralList(QObject* parent = nullptr);
+    explicit ReferralList(QObject* parent = nullptr);
     ReferralList(const ReferralList&) = delete;
     ~ReferralList();
 
