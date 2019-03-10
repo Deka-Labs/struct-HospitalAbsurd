@@ -13,6 +13,7 @@ struct BinTreeNode {
     BinTreeNode* parent = nullptr;
 
     int height = 1;
+    bool mark = false;
 };
 /**
  * \brief BinTree шаблонный класс для реализации бинарного дерева
@@ -225,27 +226,31 @@ void BinTree<TypeData, TypeKey>::remove(const TypeKey& key)
 template <class TypeData, class TypeKey>
 TwoWayList<TypeData> BinTree<TypeData, TypeKey>::getListInOrder() const
 {
-    TwoWayList<TypeData> list;
+    TwoWayList<TypeData> listOut;
 
     auto currentNode = m_root;
+    bool marked = !currentNode->mark;
 
     while (currentNode) {
-        while (currentNode->left && !list.search(currentNode->left->data)) {
+        while (currentNode->left && currentNode->left->mark != marked) {
             currentNode = currentNode->left;
         };
 
-        if (!list.search(currentNode->data))
-            list.push_back(currentNode->data);
+        if (currentNode->mark != marked) {
+            listOut.push_back(currentNode->data);
+            currentNode->mark = marked;
+        }
 
-        if (currentNode->right && !list.search(currentNode->right->data)) {
+        if (currentNode->right && currentNode->right->mark != marked) {
             currentNode = currentNode->right;
         } else {
-            while (currentNode && list.search(currentNode->data)) {
+            while (currentNode && currentNode->mark == marked) {
                 currentNode = currentNode->parent;
             }
         }
     }
-    return list;
+
+    return listOut;
 }
 
 template <class TypeData, class TypeKey>
