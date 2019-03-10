@@ -120,3 +120,45 @@ TEST(Doctor, fromDataObject)
     ASSERT_FALSE(fromData.fromDataObject(data));
     resetData(data);
 }
+
+TEST(Doctor, OperatorCompare)
+{
+    Doctor doc;
+    ASSERT_TRUE(doc.setFullname("Иванов И. И"));
+    ASSERT_TRUE(doc.setPost("Психолог"));
+    ASSERT_TRUE(doc.setCabinet(13));
+    ASSERT_TRUE(doc.setSchedule("ПН: 11-16; ПТ: 16-19"));
+
+    Doctor other;
+    ASSERT_TRUE(other.setFullname("Иванов П. И"));
+    ASSERT_TRUE(other.setPost("Психолог"));
+    ASSERT_TRUE(other.setCabinet(13));
+    ASSERT_TRUE(other.setSchedule("ПН: 11-16; ПТ: 16-19"));
+
+    ASSERT_TRUE(other > doc);
+    ASSERT_FALSE(doc > other);
+    ASSERT_TRUE(other >= doc);
+    ASSERT_FALSE(doc >= other);
+
+    ASSERT_TRUE(doc < other);
+    ASSERT_FALSE(other < doc);
+    ASSERT_TRUE(doc <= other);
+    ASSERT_FALSE(other <= doc);
+
+    ASSERT_TRUE(other != doc);
+    ASSERT_FALSE(other == doc);
+
+    ASSERT_TRUE(other.setFullname("Иванов И. И"));
+    ASSERT_TRUE(other >= doc);
+    ASSERT_TRUE(doc >= other);
+    ASSERT_TRUE(doc <= other);
+    ASSERT_TRUE(other <= doc);
+
+    ASSERT_FALSE(other > doc);
+    ASSERT_FALSE(doc > other);
+    ASSERT_FALSE(doc < other);
+    ASSERT_FALSE(other < doc);
+
+    ASSERT_TRUE(other == doc);
+    ASSERT_FALSE(other != doc);
+}

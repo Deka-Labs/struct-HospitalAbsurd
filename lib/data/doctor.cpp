@@ -126,3 +126,23 @@ bool Doctor::operator!=(const Doctor& other) const
 {
     return !(m_fullname == other.fullname());
 }
+
+bool Doctor::operator<(const Doctor& other) const
+{
+    return m_fullname < other.m_fullname;
+}
+
+bool Doctor::operator>(const Doctor& other) const
+{
+    return !(*this < other) && (*this != other);
+}
+
+bool Doctor::operator<=(const Doctor& other) const
+{
+    return *this < other || *this == other;
+}
+
+bool Doctor::operator>=(const Doctor& other) const
+{
+    return *this > other || *this == other;
+}

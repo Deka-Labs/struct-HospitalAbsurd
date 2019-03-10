@@ -37,9 +37,13 @@ public:
 
     QString key() const { return fullname(); }
 
-    //operators
+    //operators Keys compare
     bool operator==(const Doctor& other) const;
     bool operator!=(const Doctor& other) const;
+    bool operator<(const Doctor& other) const;
+    bool operator>(const Doctor& other) const;
+    bool operator<=(const Doctor& other) const;
+    bool operator>=(const Doctor& other) const;
 };
 
 #endif // DOCTOR_HPP
