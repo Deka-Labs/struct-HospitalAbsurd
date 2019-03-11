@@ -1,8 +1,8 @@
 #ifndef REFERRALLIST_HPP
 #define REFERRALLIST_HPP
 
-#include "data/referral.hpp"
-#include "data/twowaylist.hpp"
+#include "data/dataprocessingclasses/twowaylist.hpp"
+#include "data/hospital/referral.hpp"
 #include "doctorbintree.hpp"
 #include "patienthashtable.hpp"
 #include <QAbstractTableModel>

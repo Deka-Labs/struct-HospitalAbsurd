@@ -1,9 +1,9 @@
 #ifndef DOCTORBINTREE_HPP
 #define DOCTORBINTREE_HPP
 
-#include "data/bintree.hpp"
-#include "data/doctor.hpp"
-#include "data/twowaylist.hpp"
+#include "data/dataprocessingclasses/bintree.hpp"
+#include "data/dataprocessingclasses/twowaylist.hpp"
+#include "data/hospital/doctor.hpp"
 #include <QAbstractTableModel>
 
 class Database;

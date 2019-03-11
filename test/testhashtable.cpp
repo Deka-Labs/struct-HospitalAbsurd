@@ -1,4 +1,4 @@
-#include "data/hashtable.hpp"
+#include "data/dataprocessingclasses/hashtable.hpp"
 #include <gtest/gtest.h>
 
 #define MAX_TEST_KEY 10000

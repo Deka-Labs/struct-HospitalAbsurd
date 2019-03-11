@@ -1,4 +1,4 @@
-#include "data/patient.hpp"
+#include "data/hospital/patient.hpp"
 #include <gtest/gtest.h>
 
 TEST(Patient, Setters)

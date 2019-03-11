@@ -1,7 +1,7 @@
 #ifndef PATIENTHASHKEY_HPP
 #define PATIENTHASHKEY_HPP
 
-#include "hashtable.hpp"
+#include "data/dataprocessingclasses/hashtable.hpp"
 #include <QString>
 
 #define MAX_PATIENTS 100

@@ -1,5 +1,5 @@
-#include "data/bintree.hpp"
-#include "data/twowaylist.hpp"
+#include "data/dataprocessingclasses/bintree.hpp"
+#include "data/dataprocessingclasses/twowaylist.hpp"
 #include <gtest/gtest.h>
 
 class TestClass {

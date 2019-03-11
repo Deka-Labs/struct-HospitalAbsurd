@@ -1,5 +1,5 @@
-#include "data/patienthashkey.hpp"
-#include "data/twowaylist.hpp"
+#include "data/dataprocessingclasses/twowaylist.hpp"
+#include "data/hospital/patienthashkey.hpp"
 #include <QFile>
 #include <gtest/gtest.h>
 

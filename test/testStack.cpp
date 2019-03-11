@@ -1,4 +1,4 @@
-#include "data/stack.hpp"
+#include "data/dataprocessingclasses/stack.hpp"
 #include "gtest/gtest.h"
 
 TEST(Stack, isEmpty)

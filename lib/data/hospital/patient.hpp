@@ -1,7 +1,7 @@
 #ifndef PATIENT_HPP
 #define PATIENT_HPP
 
-#include "../file/dataobject.hpp"
+#include "file/dataobject.hpp"
 #include "patienthashkey.hpp"
 #include <QString>
 

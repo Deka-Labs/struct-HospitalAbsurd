@@ -1,7 +1,7 @@
 #ifndef BINTREE_HPP
 #define BINTREE_HPP
 
-#include "data/twowaylist.hpp"
+#include "twowaylist.hpp"
 #include <QString>
 #include <stdexcept>
 

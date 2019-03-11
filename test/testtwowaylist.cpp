@@ -1,4 +1,4 @@
-#include "data/twowaylist.hpp"
+#include "data/dataprocessingclasses/twowaylist.hpp"
 #include "gtest/gtest.h"
 
 TEST(TwoWayList, Copying)

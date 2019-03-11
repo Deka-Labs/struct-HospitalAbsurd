@@ -1,4 +1,4 @@
-#include "data/doctor.hpp"
+#include "data/hospital/doctor.hpp"
 #include "file/dataobject.hpp"
 #include <gtest/gtest.h>
 

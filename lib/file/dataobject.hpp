@@ -1,7 +1,7 @@
 #ifndef DATAOBJECT_HPP
 #define DATAOBJECT_HPP
 
-#include "../data/twowaylist.hpp"
+#include "data/dataprocessingclasses/twowaylist.hpp"
 #include <QString>
 
 class DataFile;

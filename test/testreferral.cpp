@@ -1,4 +1,4 @@
-#include "data/referral.hpp"
+#include "data/hospital/referral.hpp"
 #include <gtest/gtest.h>
 
 TEST(Referral, Setters)

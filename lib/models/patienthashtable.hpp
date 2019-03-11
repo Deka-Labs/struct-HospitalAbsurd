@@ -1,9 +1,9 @@
 #ifndef PATIENTHASHTABLE_HPP
 #define PATIENTHASHTABLE_HPP
 
-#include "data/hashtable.hpp"
-#include "data/patient.hpp"
-#include "data/twowaylist.hpp"
+#include "data/dataprocessingclasses/hashtable.hpp"
+#include "data/dataprocessingclasses/twowaylist.hpp"
+#include "data/hospital/patient.hpp"
 #include <QAbstractTableModel>
 #include <QFile>
 #include <QString>
