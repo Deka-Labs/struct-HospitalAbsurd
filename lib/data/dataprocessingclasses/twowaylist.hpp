@@ -165,6 +165,7 @@ TwoWayList<T>::TwoWayList(const TwoWayList<T>& other)
 
 template <typename T>
 TwoWayList<T>::TwoWayList(TwoWayList<T>&& other)
+    : TwoWayList()
 {
     std::swap(m_first, other.m_first);
     std::swap(m_size, other.m_size);
