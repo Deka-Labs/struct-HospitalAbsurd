@@ -1,10 +1,9 @@
 #include "database.hpp"
 #include <gtest/gtest.h>
 
-TEST(Database, SaveAndLoad)
+TEST(Database, Loading)
 {
     srand(static_cast<unsigned>(time(nullptr)));
-    Database db;
 
     auto generateRegID = []() -> QString {
         return QString("%1-%2")
@@ -53,23 +52,40 @@ TEST(Database, SaveAndLoad)
     };
 
     const unsigned count = 250;
+    const char* filename = "testDB.txt";
+
+    DataFile df;
+    df.open(filename, false);
+
+    TwoWayList<QString> m_doctorsKeyList;
+    TwoWayList<PatientHashKey> m_patsKeysList;
 
     for (unsigned i = 0; i < MAX_PATIENTS / 2; i++) {
         auto pat = generatePatinet();
-        db.getPatientsModel().addPatient(pat);
+        while (m_patsKeysList.search(pat.key())) {
+            pat = generatePatinet();
+        }
+
+        df.insertObject(pat.toDataObject());
+        m_patsKeysList.push_back(pat.key());
     }
 
     for (unsigned i = 0; i < count; i++) {
         auto pat = generateDoctor();
-        db.getDoctorsModel().addDoctor(pat);
+        while (m_doctorsKeyList.search(pat.key())) {
+            pat = generateDoctor();
+        }
+
+        df.insertObject(pat.toDataObject());
+        m_doctorsKeyList.push_back(pat.key());
     }
 
     for (unsigned i = 0; i < count; i++) {
         auto pat = generateRef();
-        db.getReferralsModel().addReferral(pat);
+        df.insertObject(pat.toDataObject());
     }
 
-    db.saveTo("testDB.txt");
+    df.close();
 
     Database newDB;
     ASSERT_TRUE(newDB.loadData("testDB.txt"));
