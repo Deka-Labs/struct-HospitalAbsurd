@@ -31,6 +31,7 @@ class TwoWayList {
 public:
     TwoWayList(); ///< Создает пустой список
     TwoWayList(const TwoWayList<T>& other); ///< Копирует список
+    TwoWayList(TwoWayList<T>&& other); ///<Перемещает список
     ~TwoWayList(); ///< Очищает список
 
     /**
@@ -108,6 +109,11 @@ public:
      */
     void operator=(const TwoWayList<T>& other);
     /**
+     * \brief operator = перемещает список с правой части в левую
+     * \param [in] other список правой части (rvalue ссылка)
+     */
+    void operator=(TwoWayList<T>&& other);
+    /**
      * \brief size получения размера списка
      * \return размер списка
      */
@@ -155,6 +161,15 @@ TwoWayList<T>::TwoWayList(const TwoWayList<T>& other)
     for (unsigned i = 0; i < other.size(); i++) {
         push_back(other.at(i));
     }
+}
+
+template <typename T>
+TwoWayList<T>::TwoWayList(TwoWayList<T>&& other)
+{
+    std::swap(m_first, other.m_first);
+    std::swap(m_size, other.m_size);
+    std::swap(m_currentPos, other.m_currentPos);
+    std::swap(m_currentNode, other.m_currentNode);
 }
 
 template <typename T>
@@ -357,6 +372,15 @@ void TwoWayList<T>::operator=(const TwoWayList<T>& other)
     for (unsigned i = 0; i < other.size(); i++) {
         push_back(other.at(i));
     }
+}
+
+template <typename T>
+void TwoWayList<T>::operator=(TwoWayList<T>&& other)
+{
+    std::swap(m_first, other.m_first);
+    std::swap(m_size, other.m_size);
+    std::swap(m_currentPos, other.m_currentPos);
+    std::swap(m_currentNode, other.m_currentNode);
 }
 
 template <typename T>
