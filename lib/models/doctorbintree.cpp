@@ -78,13 +78,9 @@ bool DoctorBinTree::addDoctor(const Doctor& other)
     return false;
 }
 
-void DoctorBinTree::removeDoctor(const QModelIndex& index)
+void DoctorBinTree::removeDoctor(const QString& key)
 {
-    if (index.isValid()) {
-        Doctor doc = m_listToDisplay.at(static_cast<unsigned>(index.row()));
-        m_binTree.remove(doc.key());
-        updateList();
-    }
+    m_binTree.remove(key);
 }
 
 bool DoctorBinTree::getDoctor(const QString& key, Doctor* structToFill)

@@ -25,14 +25,16 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
-    bool addDoctor(const Doctor& other);
-    void removeDoctor(const QModelIndex& index);
-    bool getDoctor(const QString& key, Doctor* structToFill = nullptr);
+    Doctor getDoctor(const QModelIndex& index) const;
 
     friend class Database;
 
 private:
     void updateList();
+
+    bool addDoctor(const Doctor& other);
+    void removeDoctor(const QString& key);
+    bool getDoctor(const QString& key, Doctor* structToFill = nullptr);
 };
 
 #endif // DOCTORBINTREE_HPP

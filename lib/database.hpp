@@ -25,7 +25,17 @@ public:
     DoctorBinTree& getDoctorsModel() { return m_doctors; }
     ReferralList& getReferralsModel() { return m_referrals; }
 
+    bool addPatient(const Patient& newPat);
+    void delPatinet(const PatientHashKey& patientKey);
+
+    bool addDoctor(const Doctor& newDoc);
+    void delDoctor(const QString& docKey);
+
+    bool addReferral(const Referral& newRef);
+    void delReferral(const Referral& ref);
+
 private:
+    void fixConnections();
 };
 
 #endif // DATABASE_HPP

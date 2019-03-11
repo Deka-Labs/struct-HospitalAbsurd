@@ -25,10 +25,11 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
+    friend class Database;
+
+private:
     bool addReferral(const Referral& newRef);
     void removeReferral(const Referral& ref);
-
-    friend class Database;
 };
 
 #endif // REFERRALLIST_HPP

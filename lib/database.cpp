@@ -88,3 +88,59 @@ void Database::saveTo(const char* fileName)
         m_file.insertObject(obj);
     }
 }
+
+bool Database::addPatient(const Patient& newPat)
+{
+    return m_patients.m_hashTable.add(newPat);
+}
+
+void Database::delPatinet(const PatientHashKey& patientKey)
+{
+    m_patients.m_hashTable.del(patientKey);
+    fixConnections();
+}
+
+bool Database::addDoctor(const Doctor& newDoc)
+{
+    return m_doctors.addDoctor(newDoc);
+}
+
+void Database::delDoctor(const QString& docKey)
+{
+    m_doctors.removeDoctor(docKey);
+    fixConnections();
+}
+
+bool Database::addReferral(const Referral& newRef)
+{
+    auto docName = newRef.doctorFullname();
+    auto patID = newRef.regID();
+
+    if (!m_patients.m_hashTable.get(PatientHashKey(patID)))
+        return false;
+    if (!m_doctors.getDoctor(docName))
+        return false;
+
+    m_referrals.addReferral(newRef);
+    return true;
+}
+
+void Database::delReferral(const Referral& ref)
+{
+    m_referrals.removeReferral(ref);
+}
+
+void Database::fixConnections()
+{
+    for (unsigned i = 0; i < m_referrals.m_list.size(); i++) {
+        auto ref = m_referrals.m_list[i];
+        if (!m_patients.m_hashTable.get(PatientHashKey(ref.regID()))) {
+            delReferral(ref);
+            continue;
+        }
+        if (!m_doctors.getDoctor(ref.doctorFullname())) {
+            delReferral(ref);
+            continue;
+        }
+    }
+}
