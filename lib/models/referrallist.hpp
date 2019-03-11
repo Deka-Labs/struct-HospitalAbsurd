@@ -9,7 +9,7 @@
 
 class Database;
 
-class ReferralList : QAbstractTableModel {
+class ReferralList : public QAbstractTableModel {
     Q_OBJECT
 private:
     TwoWayList<Referral> m_list;

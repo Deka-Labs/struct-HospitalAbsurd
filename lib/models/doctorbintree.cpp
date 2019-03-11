@@ -78,6 +78,11 @@ Doctor DoctorBinTree::getDoctor(const QModelIndex& index) const
     return out;
 }
 
+TwoWayList<Doctor> DoctorBinTree::getAllDoctors() const
+{
+    return m_listToDisplay;
+}
+
 bool DoctorBinTree::addDoctor(const Doctor& other)
 {
     if (m_binTree.add(other)) {

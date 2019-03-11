@@ -29,6 +29,7 @@ public:
     int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
     Patient getPatient(const QModelIndex& index) const;
+    TwoWayList<Patient> getAllPatients() const;
 
     friend class Database;
 

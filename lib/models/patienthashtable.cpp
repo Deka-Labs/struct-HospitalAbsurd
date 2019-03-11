@@ -90,6 +90,17 @@ Patient PatientHashTable::getPatient(const QModelIndex& index) const
     throw std::runtime_error("PatientHashTable::getPatient - Looks like, the tableview is not updated");
 }
 
+TwoWayList<Patient> PatientHashTable::getAllPatients() const
+{
+    TwoWayList<Patient> out;
+    for (unsigned pos = 0; pos < m_registredKeys.size(); pos++) {
+        Patient newPat;
+        if (m_hashTable.get(m_registredKeys.at(pos), &newPat))
+            out.push_back(newPat);
+    }
+    return out;
+}
+
 bool PatientHashTable::addPatient(const Patient& patinet)
 {
     beginResetModel();
