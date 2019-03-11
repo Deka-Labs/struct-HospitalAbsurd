@@ -301,6 +301,9 @@ TEST(BinTree, InOrderList)
 {
     BinTree<TestClass, unsigned> tree;
 
+    auto list = tree.getListInOrder();
+    ASSERT_EQ(list.size(), 0);
+
     for (unsigned i = 1; i <= 5; i++) {
         tree.add(TestClass(i, int(i)));
     }
@@ -312,7 +315,7 @@ TEST(BinTree, InOrderList)
     ASSERT_EQ(root->right->left->data.key(), 3);
     ASSERT_EQ(root->right->right->data.key(), 5);
 
-    auto list = tree.getListInOrder();
+    list = tree.getListInOrder();
 
     ASSERT_EQ(list.at(0).key(), 1);
     ASSERT_EQ(list.at(1).key(), 2);
