@@ -1,8 +1,12 @@
 #ifndef MAINWINDOW_HPP
 #define MAINWINDOW_HPP
 
+#include "../globaldatabase.hpp"
+#include "database.hpp"
 #include "ui_mainwindow.h"
 #include <QWidget>
+
+#define SAVE_FILE "db"
 
 class MainWindow : public QWidget {
     Q_OBJECT

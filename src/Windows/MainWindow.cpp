@@ -14,11 +14,20 @@ MainWindow::MainWindow(QWidget* parent)
     connect(m_ui->pushButton_doctors, &QPushButton::clicked, this, &MainWindow::doctorsButtonPressed);
     connect(m_ui->pushButton_referral, &QPushButton::clicked, this, &MainWindow::referralsButtonPressed);
     connect(m_ui->pushButton_saveandexit, &QPushButton::clicked, this, &MainWindow::exitButtonPressed);
+
+    if (!g_DATABASE)
+        g_DATABASE = new Database();
+
+    g_DATABASE->loadData(SAVE_FILE);
 }
 
 MainWindow::~MainWindow()
 {
     delete m_ui;
+    if (g_DATABASE) {
+        delete g_DATABASE;
+        g_DATABASE = nullptr;
+    }
 }
 
 void MainWindow::patientsButtonPressed()
@@ -41,6 +50,6 @@ void MainWindow::referralsButtonPressed()
 
 void MainWindow::exitButtonPressed()
 {
-    //TODO! save database
+    g_DATABASE->saveTo(SAVE_FILE);
     this->close();
 }

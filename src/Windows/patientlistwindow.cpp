@@ -1,4 +1,5 @@
 #include "patientlistwindow.hpp"
+#include "../globaldatabase.hpp"
 #include "newpatientwindow.hpp"
 #include "patientsearchwindow.hpp"
 #include <QMessageBox>
@@ -12,7 +13,8 @@ PatientListWindow::PatientListWindow(QWidget* parent)
     m_ui = new Ui::ListForm();
     m_ui->setupUi(this);
 
-    //TODO! set model for tableView
+    m_ui->tableView->setModel(&g_DATABASE->getPatientsModel());
+    m_ui->tableView->setSelectionBehavior(QAbstractItemView::SelectionBehavior::SelectRows);
     this->setWindowTitle("Список больных");
 
     connect(m_ui->pushButton_add, &QPushButton::clicked, this, &PatientListWindow::addButtonPressed);
@@ -29,17 +31,24 @@ PatientListWindow::~PatientListWindow()
 
 void PatientListWindow::addButtonPressed()
 {
-    NewPatientWindow wnd(this);
+    Patient newPat;
+    NewPatientWindow wnd(newPat, this);
     auto code = wnd.exec();
     if (code == QDialog::Accepted) {
-        //TODO! add to database
+        g_DATABASE->addPatient(newPat);
     }
 }
 
 void PatientListWindow::deleteButtonPressed()
 {
-    if (QMessageBox::question(this, "Удалить?", "Вы действительно хотите удалить эту запись?") == QMessageBox::Yes) {
-        //TODO! Delete from database selected
+    auto index = m_ui->tableView->currentIndex();
+    if (index.isValid()) {
+        if (QMessageBox::question(this, "Удалить?", "Вы действительно хотите удалить эту запись?") == QMessageBox::Yes) {
+            auto toDel = g_DATABASE->getPatientsModel().getPatient(index);
+            g_DATABASE->delPatinet(toDel.key());
+        }
+    } else {
+        QMessageBox::warning(this, "Неверное действие.", "Необходмо выбрать элемент для удаления.");
     }
 }
 
@@ -52,7 +61,7 @@ void PatientListWindow::searchButtonPressed()
 void PatientListWindow::purgeAllButtonPressed()
 {
     if (QMessageBox::question(this, "Очистить все?", "Вы действительно хотите удалить все записи?") == QMessageBox::Yes) {
-        //TODO! Delete from database all
+        g_DATABASE->delAllPatients();
     }
 }
 

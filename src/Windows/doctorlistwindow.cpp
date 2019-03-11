@@ -1,4 +1,5 @@
 #include "doctorlistwindow.hpp"
+#include "../globaldatabase.hpp"
 #include "doctorsearchwindow.hpp"
 #include "newdoctorwindow.hpp"
 #include <QMessageBox>
@@ -17,6 +18,8 @@ DoctorListWindow::DoctorListWindow(QWidget* parent)
     connect(m_ui->pushButton_help, &QPushButton::clicked, this, &DoctorListWindow::helpButtonPressed);
 
     this->setWindowTitle("Список врачей");
+    m_ui->tableView->setModel(&g_DATABASE->getDoctorsModel());
+    m_ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 DoctorListWindow::~DoctorListWindow()
@@ -26,17 +29,24 @@ DoctorListWindow::~DoctorListWindow()
 
 void DoctorListWindow::addButtonPressed()
 {
-    NewDoctorWindow wnd(this);
+    Doctor doc;
+    NewDoctorWindow wnd(doc, this);
     auto code = wnd.exec();
     if (code == QDialog::Accepted) {
-        //TODO! add to database
+        g_DATABASE->addDoctor(doc);
     }
 }
 
 void DoctorListWindow::deleteButtonPressed()
 {
-    if (QMessageBox::question(this, "Удалить?", "Вы действительно хотите удалить эту запись?") == QMessageBox::Yes) {
-        //TODO! Delete from database selected
+    auto index = m_ui->tableView->currentIndex();
+    if (index.isValid()) {
+        if (QMessageBox::question(this, "Удалить?", "Вы действительно хотите удалить эту запись?") == QMessageBox::Yes) {
+            auto toDel = g_DATABASE->getDoctorsModel().getDoctor(index);
+            g_DATABASE->delDoctor(toDel.key());
+        }
+    } else {
+        QMessageBox::warning(this, "Неверное действие.", "Необходмо выбрать элемент для удаления.");
     }
 }
 
@@ -49,7 +59,7 @@ void DoctorListWindow::searchButtonPressed()
 void DoctorListWindow::purgeAllButtonPressed()
 {
     if (QMessageBox::question(this, "Очистить все?", "Вы действительно хотите удалить все записи?") == QMessageBox::Yes) {
-        //TODO! Delete from database all
+        g_DATABASE->delAllDoctors();
     }
 }
 
