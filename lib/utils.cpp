@@ -1,4 +1,5 @@
 #include "utils.hpp"
+#include "file/datafile.hpp"
 
 bool QStringSearch(const QString& request, const QString& string)
 {
@@ -41,4 +42,13 @@ bool TemplateValidate(const QString& templ, const QString& str)
     }
 
     return true;
+}
+
+bool haveRestrictedChars(const QString& str)
+{
+    auto request = QChar(DATA_CHAR_DIVIDER_ARG);
+    if (QStringSearch(request, str)) {
+        return true;
+    }
+    return false;
 }

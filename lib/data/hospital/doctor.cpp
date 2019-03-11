@@ -1,4 +1,5 @@
 #include "doctor.hpp"
+#include "utils.hpp"
 
 Doctor::Doctor()
     : m_fullname("")
@@ -74,6 +75,9 @@ bool Doctor::setFullname(const QString& fullname)
 {
     if (fullname.size() > MAX_DOCTOR_FULLNAME_STRING_SIZE)
         return false;
+    if (haveRestrictedChars(fullname))
+        return false;
+
     m_fullname = fullname;
     return true;
 }
@@ -87,6 +91,9 @@ bool Doctor::setPost(const QString& post)
 {
     if (post.size() > MAX_DOCTOR_POST_STRING_SIZE)
         return false;
+    if (haveRestrictedChars(post))
+        return false;
+
     m_post = post;
     return true;
 }
@@ -113,6 +120,9 @@ bool Doctor::setSchedule(const QString& schedule)
 {
     if (schedule.size() > MAX_DOCTOR_SCHEDULE_STRING_SIZE)
         return false;
+    if (haveRestrictedChars(schedule))
+        return false;
+
     m_schedule = schedule;
     return true;
 }

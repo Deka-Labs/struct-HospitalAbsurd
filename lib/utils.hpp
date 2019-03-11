@@ -7,4 +7,6 @@ bool QStringSearch(const QString& request, const QString& string);
 
 bool TemplateValidate(const QString& templ, const QString& str);
 
+bool haveRestrictedChars(const QString& str);
+
 #endif // UTILS_HPP

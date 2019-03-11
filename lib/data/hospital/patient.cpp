@@ -50,6 +50,9 @@ bool Patient::setFullName(const QString& fullName)
 {
     if (fullName.size() > MAX_PATIENT_FULLNAME_STRING_SIZE)
         return false;
+    if (haveRestrictedChars(fullName))
+        return false;
+
     m_fullName = fullName;
     return true;
 }
@@ -76,6 +79,9 @@ bool Patient::setAddress(const QString& address)
 {
     if (address.size() > MAX_PATIENT_ADDRESS_STRING_SIZE)
         return false;
+    if (haveRestrictedChars(address))
+        return false;
+
     m_address = address;
     return true;
 }
@@ -89,6 +95,9 @@ bool Patient::setWorkPlace(const QString& workPlace)
 {
     if (workPlace.size() > MAX_PATIENT_WORKPLACE_STRING_SIZE)
         return false;
+    if (haveRestrictedChars(workPlace))
+        return false;
+
     m_workPlace = workPlace;
     return true;
 }

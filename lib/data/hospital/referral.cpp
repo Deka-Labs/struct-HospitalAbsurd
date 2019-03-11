@@ -88,6 +88,8 @@ bool Referral::setDoctorFullname(const QString& doctorFullname)
 {
     if (doctorFullname.size() > MAX_DOCTOR_FULLNAME_STRING_SIZE)
         return false;
+    if (haveRestrictedChars(doctorFullname))
+        return false;
 
     m_doctorFullname = doctorFullname;
     return true;
