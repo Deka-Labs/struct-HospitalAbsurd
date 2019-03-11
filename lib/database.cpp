@@ -27,7 +27,7 @@ bool Database::loadData(const char* fileName)
             Patient pat;
             if (!pat.fromDataObject(obj))
                 return false;
-            if (!m_patients.addPatient(pat))
+            if (!m_patients.m_hashTable.add(pat))
                 return false;
         } else if (obj.getType() == "referral") {
             Referral ref;
@@ -60,7 +60,7 @@ void Database::saveTo(const char* fileName)
     auto sizePatients = registedKeys.size();
     for (unsigned pos = 0; pos < sizePatients; pos++) {
         Patient pat;
-        if (m_patients.getPatient(registedKeys[pos], &pat)) {
+        if (m_patients.m_hashTable.get(registedKeys[pos], &pat)) {
             DataObject obj = pat.toDataObject();
             m_file.insertObject(obj);
         }
