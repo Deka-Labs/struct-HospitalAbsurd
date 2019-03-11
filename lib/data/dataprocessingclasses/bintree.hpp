@@ -172,6 +172,7 @@ bool BinTree<TypeData, TypeKey>::add(const TypeData& data)
         m_size++;
         return true;
     }
+    newNode->mark = m_root->mark;
 
     auto currentNode = m_root;
 
@@ -227,6 +228,9 @@ template <class TypeData, class TypeKey>
 TwoWayList<TypeData> BinTree<TypeData, TypeKey>::getListInOrder() const
 {
     TwoWayList<TypeData> listOut;
+
+    if (isEmpty())
+        return listOut;
 
     auto currentNode = m_root;
     bool marked = !currentNode->mark;
