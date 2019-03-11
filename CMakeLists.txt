@@ -28,7 +28,7 @@ file(GLOB_RECURSE EXE_HDRS src/*.hpp)
 file(GLOB_RECURSE EXE_FORMS forms/*.ui)
 
 add_executable(hospital ${EXE_HDRS} ${EXE_SRCS} ${EXE_FORMS})
-target_link_libraries(hospital PUBLIC ${Qt5Core_QTMAIN_LIBRARIES} ${Qt5Widgets_LIBRARIES})
+target_link_libraries(hospital PUBLIC hospital-lib ${Qt5Core_QTMAIN_LIBRARIES} ${Qt5Widgets_LIBRARIES})
 target_compile_features(hospital PUBLIC cxx_std_17)
 
 # test
