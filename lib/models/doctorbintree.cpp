@@ -87,10 +87,12 @@ void DoctorBinTree::removeDoctor(const QModelIndex& index)
     }
 }
 
-bool DoctorBinTree::containsDoctorWithKey(const QString& key)
+bool DoctorBinTree::getDoctor(const QString& key, Doctor* structToFill)
 {
     try {
         Doctor doc = m_binTree.find(key);
+        if (structToFill)
+            *structToFill = doc;
         return true;
     } catch (...) {
         return false;
@@ -102,7 +104,7 @@ void DoctorBinTree::updateList()
     beginResetModel();
 
     m_listToDisplay = m_binTree.getListInOrder();
-    m_listToDisplay.sort();
+    //m_listToDisplay.sort();
 
     endResetModel();
 }

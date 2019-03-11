@@ -27,7 +27,7 @@ public:
 
     bool addDoctor(const Doctor& other);
     void removeDoctor(const QModelIndex& index);
-    bool containsDoctorWithKey(const QString& key);
+    bool getDoctor(const QString& key, Doctor* structToFill = nullptr);
 
     friend class Database;
 
