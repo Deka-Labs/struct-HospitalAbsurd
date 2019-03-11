@@ -28,7 +28,15 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
+    Patient getPatient(const QModelIndex& index) const;
+
     friend class Database;
+
+private:
+    bool addPatient(const Patient& patinet);
+    bool getPatient(const PatientHashKey& key, Patient* structToAssign = nullptr) const;
+    void delPatient(const PatientHashKey& key);
+    void delAll();
 };
 
 #endif // PATIENTHASHTABLE_HPP

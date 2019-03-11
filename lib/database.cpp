@@ -27,7 +27,7 @@ bool Database::loadData(const char* fileName)
             Patient pat;
             if (!pat.fromDataObject(obj))
                 return false;
-            if (!m_patients.m_hashTable.add(pat))
+            if (!m_patients.addPatient(pat))
                 return false;
         } else if (obj.getType() == "referral") {
             Referral ref;
@@ -91,13 +91,18 @@ void Database::saveTo(const char* fileName)
 
 bool Database::addPatient(const Patient& newPat)
 {
-    return m_patients.m_hashTable.add(newPat);
+    return m_patients.addPatient(newPat);
 }
 
 void Database::delPatinet(const PatientHashKey& patientKey)
 {
-    m_patients.m_hashTable.del(patientKey);
+    m_patients.delPatient(patientKey);
     fixConnections();
+}
+
+void Database::delAllPatients()
+{
+    m_patients.delAll();
 }
 
 bool Database::addDoctor(const Doctor& newDoc)
@@ -109,6 +114,11 @@ void Database::delDoctor(const QString& docKey)
 {
     m_doctors.removeDoctor(docKey);
     fixConnections();
+}
+
+void Database::delAllDoctors()
+{
+    m_doctors.removeAll();
 }
 
 bool Database::addReferral(const Referral& newRef)
@@ -128,6 +138,11 @@ bool Database::addReferral(const Referral& newRef)
 void Database::delReferral(const Referral& ref)
 {
     m_referrals.removeReferral(ref);
+}
+
+void Database::delAllReferrals()
+{
+    m_referrals.removeAll();
 }
 
 void Database::fixConnections()

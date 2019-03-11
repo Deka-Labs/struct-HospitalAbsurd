@@ -12,7 +12,7 @@ DoctorBinTree::~DoctorBinTree()
 
 QVariant DoctorBinTree::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (orientation == Qt::Vertical) {
+    if (orientation == Qt::Horizontal) {
         if (role == Qt::DisplayRole) {
             switch (section) {
             case 0:
@@ -68,6 +68,16 @@ int DoctorBinTree::columnCount(const QModelIndex& parent) const
     return 4;
 }
 
+Doctor DoctorBinTree::getDoctor(const QModelIndex& index) const
+{
+    if (!index.isValid())
+        throw std::runtime_error("Wrong index in DoctorBinTree::getDoctor");
+
+    auto key = m_listToDisplay.at(static_cast<unsigned>(index.row())).key();
+    Doctor out = m_binTree.find(key);
+    return out;
+}
+
 bool DoctorBinTree::addDoctor(const Doctor& other)
 {
     if (m_binTree.add(other)) {
@@ -81,6 +91,7 @@ bool DoctorBinTree::addDoctor(const Doctor& other)
 void DoctorBinTree::removeDoctor(const QString& key)
 {
     m_binTree.remove(key);
+    updateList();
 }
 
 bool DoctorBinTree::getDoctor(const QString& key, Doctor* structToFill)
@@ -92,6 +103,13 @@ bool DoctorBinTree::getDoctor(const QString& key, Doctor* structToFill)
         return true;
     } catch (...) {
         return false;
+    }
+}
+
+void DoctorBinTree::removeAll()
+{
+    while (!m_binTree.isEmpty()) {
+        removeDoctor(m_listToDisplay[0].key());
     }
 }
 

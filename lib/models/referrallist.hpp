@@ -27,9 +27,12 @@ public:
 
     friend class Database;
 
+    Referral getReferral(const QModelIndex& index) const;
+
 private:
     bool addReferral(const Referral& newRef);
     void removeReferral(const Referral& ref);
+    void removeAll();
 };
 
 #endif // REFERRALLIST_HPP

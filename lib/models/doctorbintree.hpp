@@ -35,6 +35,7 @@ private:
     bool addDoctor(const Doctor& other);
     void removeDoctor(const QString& key);
     bool getDoctor(const QString& key, Doctor* structToFill = nullptr);
+    void removeAll();
 };
 
 #endif // DOCTORBINTREE_HPP

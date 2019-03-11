@@ -27,12 +27,15 @@ public:
 
     bool addPatient(const Patient& newPat);
     void delPatinet(const PatientHashKey& patientKey);
+    void delAllPatients();
 
     bool addDoctor(const Doctor& newDoc);
     void delDoctor(const QString& docKey);
+    void delAllDoctors();
 
     bool addReferral(const Referral& newRef);
     void delReferral(const Referral& ref);
+    void delAllReferrals();
 
 private:
     void fixConnections();

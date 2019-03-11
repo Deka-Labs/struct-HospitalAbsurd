@@ -11,7 +11,7 @@ ReferralList::~ReferralList()
 
 QVariant ReferralList::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (orientation == Qt::Vertical) {
+    if (orientation == Qt::Horizontal) {
         if (role == Qt::DisplayRole) {
             switch (section) {
             case 0:
@@ -67,6 +67,14 @@ int ReferralList::columnCount(const QModelIndex& parent) const
     return 4;
 }
 
+Referral ReferralList::getReferral(const QModelIndex& index) const
+{
+    if (!index.isValid())
+        throw std::runtime_error("Wrong index in ReferralList::getReferral");
+
+    return m_list.at(static_cast<unsigned>(index.row()));
+}
+
 bool ReferralList::addReferral(const Referral& newRef)
 {
     beginResetModel();
@@ -81,4 +89,11 @@ void ReferralList::removeReferral(const Referral& ref)
     beginResetModel();
     m_list.removeAll(ref);
     endResetModel();
+}
+
+void ReferralList::removeAll()
+{
+    while (m_list.size() != 0) {
+        removeReferral(m_list.at(0));
+    }
 }
