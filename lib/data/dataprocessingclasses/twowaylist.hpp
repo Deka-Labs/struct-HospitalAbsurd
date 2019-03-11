@@ -21,8 +21,12 @@ struct TwoWayNode {
 template <typename T>
 class TwoWayList {
 
-    TwoWayNode<T>* m_first;
-    unsigned m_size;
+    TwoWayNode<T>* m_first; ///< Опорный элемент. Стоит на позиции 0
+    unsigned m_size; ///< Размер списка
+
+    //В целях быстрой работы в циклах for и прочих будем хранить эти значения:
+    unsigned m_currentPos; ///< Текущая позиция
+    TwoWayNode<T>* m_currentNode; ///< Текущий узел для обработки
 
 public:
     TwoWayList(); ///< Создает пустой список
@@ -139,6 +143,8 @@ template <typename T>
 TwoWayList<T>::TwoWayList()
     : m_first(nullptr)
     , m_size(0)
+    , m_currentPos(0)
+    , m_currentNode(nullptr)
 {
 }
 
@@ -165,6 +171,9 @@ void TwoWayList<T>::push_back(const T& data)
     if (!m_first) {
         m_first = new TwoWayNode<T>;
         m_first->data = data;
+
+        m_currentNode = m_first;
+        m_currentPos = 0;
     } else {
         auto currentNode = getNode(m_size - 1);
 
@@ -191,6 +200,8 @@ void TwoWayList<T>::push_first(const T& data)
         m_first->prev = newNode;
         m_first = newNode;
     }
+    m_currentNode = m_first;
+    m_currentPos = 0;
     m_size++;
 }
 
@@ -200,6 +211,9 @@ void TwoWayList<T>::insert(unsigned pos, const T& data)
     if (!m_first) {
         m_first = new TwoWayNode<T>;
         m_first->data = data;
+
+        m_currentNode = m_first;
+        m_currentPos = 0;
     } else {
         auto currentNode = getNode(pos);
 
@@ -226,6 +240,8 @@ void TwoWayList<T>::remove(unsigned pos)
         delete m_first;
         m_first = nullptr;
         m_size--;
+        m_currentNode = nullptr;
+        m_currentPos = 0;
     } else if (m_size > 1) {
         auto nodeToDelete = getNode(pos);
 
@@ -242,6 +258,11 @@ void TwoWayList<T>::remove(unsigned pos)
 
         if (nodeToDelete == m_first) {
             m_first = nextNode;
+        }
+
+        if (m_currentNode == nodeToDelete) {
+            m_currentNode = m_first;
+            m_currentPos = 0;
         }
 
         delete nodeToDelete;
@@ -347,12 +368,25 @@ unsigned TwoWayList<T>::size() const
 template <typename T>
 TwoWayNode<T>* TwoWayList<T>::getNode(unsigned pos) const
 {
+
     if (pos < m_size) {
-        auto currentNode = m_first;
-        for (unsigned i = 0; i < pos; i++) {
-            currentNode = currentNode->next;
+        long delta = pos - m_currentPos;
+
+        if (delta == 0)
+            return m_currentNode;
+        else if (delta > 0) {
+            for (long i = delta; i > 0; i--) {
+                const_cast<TwoWayList<T>*>(this)->m_currentPos++;
+                const_cast<TwoWayList<T>*>(this)->m_currentNode = m_currentNode->next;
+            }
+        } else if (delta < 0) {
+            for (long i = delta; i < 0; i++) {
+                const_cast<TwoWayList<T>*>(this)->m_currentPos--;
+                const_cast<TwoWayList<T>*>(this)->m_currentNode = m_currentNode->prev;
+            }
         }
-        return currentNode;
+
+        return m_currentNode;
     }
     return nullptr;
 }
@@ -413,6 +447,12 @@ void TwoWayList<T>::swap(unsigned pos1, unsigned pos2)
         m_first = node2;
     else if (node2 == m_first)
         m_first = node1;
+
+    if (m_currentNode == node1) {
+        m_currentPos = pos2;
+    } else if (m_currentNode == node2) {
+        m_currentPos = pos1;
+    }
 
     //auto tmp = node1->data;
     //node1->data = node2->data;
