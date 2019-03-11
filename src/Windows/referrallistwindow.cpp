@@ -1,4 +1,6 @@
 #include "referrallistwindow.hpp"
+#include "../globaldatabase.hpp"
+#include "data/hospital/referral.hpp"
 #include "newreferralwindow.hpp"
 #include <QMessageBox>
 
@@ -11,6 +13,9 @@ ReferralListWindow::ReferralListWindow(QWidget* parent)
 
     connect(m_ui->pushButton_add, &QPushButton::clicked, this, &ReferralListWindow::addButtonPressed);
     connect(m_ui->pushButton_remove, &QPushButton::clicked, this, &ReferralListWindow::deleteButtonPressed);
+
+    m_ui->tableView->setModel(&g_DATABASE->getReferralsModel());
+    m_ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 ReferralListWindow::~ReferralListWindow()
@@ -20,16 +25,18 @@ ReferralListWindow::~ReferralListWindow()
 
 void ReferralListWindow::addButtonPressed()
 {
-    NewReferralWindow wnd(this);
+    Referral ref;
+    NewReferralWindow wnd(ref, this);
     auto code = wnd.exec();
     if (code == QDialog::Accepted) {
-        //TODO! add to database
+        g_DATABASE->addReferral(ref);
     }
 }
 
 void ReferralListWindow::deleteButtonPressed()
 {
     if (QMessageBox::question(this, "Удалить?", "Вы действительно хотите удалить эту запись?") == QMessageBox::Yes) {
-        //TODO! Delete from database selected
+        auto ref = g_DATABASE->getReferralsModel().getReferral(m_ui->tableView->currentIndex());
+        g_DATABASE->delReferral(ref);
     }
 }

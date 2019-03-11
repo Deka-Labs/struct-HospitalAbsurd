@@ -46,7 +46,7 @@ void DoctorListWindow::deleteButtonPressed()
             g_DATABASE->delDoctor(toDel.key());
         }
     } else {
-        QMessageBox::warning(this, "Неверное действие.", "Необходмо выбрать элемент для удаления.");
+        QMessageBox::warning(this, "Неверное действие.", "Необходимо выбрать элемент для удаления.");
     }
 }
 
