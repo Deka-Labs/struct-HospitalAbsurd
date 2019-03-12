@@ -35,7 +35,7 @@ public:
     friend class Database;
 
 private:
-    bool addPatient(const Patient& patinet);
+    StatusCodes addPatient(const Patient& patinet);
 
     void delPatient(const PatientHashKey& key);
     void delAll();

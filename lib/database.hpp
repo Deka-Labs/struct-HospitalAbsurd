@@ -25,7 +25,7 @@ public:
     DoctorBinTree& getDoctorsModel() { return m_doctors; }
     ReferralList& getReferralsModel() { return m_referrals; }
 
-    bool addPatient(const Patient& newPat);
+    StatusCodes addPatient(const Patient& newPat);
     void delPatinet(const PatientHashKey& patientKey);
     void delAllPatients();
 

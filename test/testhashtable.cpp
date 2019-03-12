@@ -48,9 +48,9 @@ TEST(HashTable, AddingEqual)
     TestHashClass test(1, 1);
     HashTable<TestHashClass> table(MAX_TEST_KEY);
 
-    ASSERT_TRUE(table.add(test));
+    ASSERT_EQ(table.add(test), StatusCode_OK);
 
-    ASSERT_FALSE(table.add(test));
+    ASSERT_EQ(table.add(test), StatusCode_AlreadyExist);
 }
 
 TEST(HashTable, AddingOverflow)
@@ -60,8 +60,10 @@ TEST(HashTable, AddingOverflow)
 
     TestHashClass toAdd;
     unsigned count = 0;
-    while (table.add(toAdd)) {
+
+    while (table.add(toAdd) == StatusCode_OK) {
         toAdd = TestHashClass(static_cast<unsigned>(rand()), rand());
+
         count++;
 
         ASSERT_LE(count, unsigned(MAX_TEST_KEY));
@@ -78,7 +80,7 @@ TEST(HashTable, Getting)
 
     for (unsigned i = 0; i < step * count; i += step) {
         auto toAdd = TestHashClass(static_cast<unsigned>(i), static_cast<int>(i));
-        if (table.add(toAdd)) {
+        if (table.add(toAdd) == StatusCode_OK) {
             countOfInsertes++;
         }
     }
@@ -103,8 +105,9 @@ TEST(HashTable, Deleting)
     unsigned countOfInsertes = 0;
 
     for (unsigned i = 0; i < step * count; i += step) {
+
         auto toAdd = TestHashClass(static_cast<unsigned>(i), static_cast<int>(i));
-        if (table.add(toAdd)) {
+        if (table.add(toAdd) == StatusCode_OK) {
             countOfInsertes++;
         }
     }

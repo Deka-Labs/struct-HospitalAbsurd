@@ -101,12 +101,12 @@ TwoWayList<Patient> PatientHashTable::getAllPatients() const
     return out;
 }
 
-bool PatientHashTable::addPatient(const Patient& patinet)
+StatusCodes PatientHashTable::addPatient(const Patient& patinet)
 {
     beginResetModel();
 
     auto res = m_hashTable.add(patinet);
-    if (res) {
+    if (res == StatusCode_OK) {
         m_registredKeys.push_back(patinet.key());
     }
 

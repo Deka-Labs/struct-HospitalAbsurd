@@ -1,6 +1,7 @@
 #ifndef HASHTABLE_HPP
 #define HASHTABLE_HPP
 
+#include "statuscodes.hpp"
 #include <stdexcept>
 
 class IHashKey {
@@ -29,7 +30,7 @@ public:
     HashTable(const HashTable&) = delete;
     ~HashTable();
 
-    bool add(const TypeData& data);
+    StatusCodes add(const TypeData& data);
     bool get(const IHashKey& key, TypeData* dataToAssign = nullptr) const;
     void del(const IHashKey& key);
 
@@ -63,18 +64,18 @@ HashTable<TypeData>::~HashTable()
 }
 
 template <class TypeData>
-bool HashTable<TypeData>::add(const TypeData& data)
+StatusCodes HashTable<TypeData>::add(const TypeData& data)
 {
     unsigned cell = 0;
 
     if (getCell(data.key()))
-        return false;
+        return StatusCode_AlreadyExist;
 
     if (getEmptyCellFor(data.key(), &cell)) {
         m_dataArray[cell] = new TypeData(data);
-        return true;
+        return StatusCode_OK;
     } else {
-        return false;
+        return StatusCode_Overloaded;
     }
 }
 

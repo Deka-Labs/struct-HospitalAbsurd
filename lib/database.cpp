@@ -27,7 +27,7 @@ bool Database::loadData(const char* fileName)
             Patient pat;
             if (!pat.fromDataObject(obj))
                 return false;
-            if (!m_patients.addPatient(pat))
+            if (m_patients.addPatient(pat) != StatusCode_OK)
                 return false;
         } else if (obj.getType() == "referral") {
             Referral ref;
@@ -39,7 +39,7 @@ bool Database::loadData(const char* fileName)
             Doctor doc;
             if (!doc.fromDataObject(obj))
                 return false;
-            if (!m_doctors.addDoctor(doc))
+            if (m_doctors.addDoctor(doc) != StatusCode_OK)
                 return false;
         } else {
             return false;
@@ -89,7 +89,7 @@ void Database::saveTo(const char* fileName)
     }
 }
 
-bool Database::addPatient(const Patient& newPat)
+StatusCodes Database::addPatient(const Patient& newPat)
 {
     return m_patients.addPatient(newPat);
 }
