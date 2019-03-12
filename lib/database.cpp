@@ -130,18 +130,18 @@ void Database::delAllDoctors()
     m_doctors.removeAll();
 }
 
-bool Database::addReferral(const Referral& newRef)
+StatusCodes Database::addReferral(const Referral& newRef)
 {
     auto docName = newRef.doctorFullname();
     auto patID = newRef.regID();
 
     if (!m_patients.m_hashTable.get(PatientHashKey(patID)))
-        return false;
+        return StatusCode_InvalidObject;
     if (!m_doctors.getDoctor(docName))
-        return false;
+        return StatusCode_InvalidObject;
 
     m_referrals.addReferral(newRef);
-    return true;
+    return StatusCode_OK;
 }
 
 void Database::delReferral(const Referral& ref)

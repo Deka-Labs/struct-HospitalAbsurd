@@ -33,7 +33,7 @@ public:
     void delDoctor(const QString& docKey);
     void delAllDoctors();
 
-    bool addReferral(const Referral& newRef);
+    StatusCodes addReferral(const Referral& newRef);
     void delReferral(const Referral& ref);
     void delAllReferrals();
 };
