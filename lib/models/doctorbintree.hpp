@@ -27,6 +27,7 @@ public:
 
     Doctor getDoctor(const QModelIndex& index) const;
     TwoWayList<Doctor> getAllDoctors() const;
+    bool getDoctor(const QString& key, Doctor* structToFill = nullptr) const;
 
     friend class Database;
 
@@ -35,7 +36,7 @@ private:
 
     bool addDoctor(const Doctor& other);
     void removeDoctor(const QString& key);
-    bool getDoctor(const QString& key, Doctor* structToFill = nullptr);
+
     void removeAll();
 };
 

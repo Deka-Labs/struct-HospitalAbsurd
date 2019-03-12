@@ -99,7 +99,7 @@ void DoctorBinTree::removeDoctor(const QString& key)
     updateList();
 }
 
-bool DoctorBinTree::getDoctor(const QString& key, Doctor* structToFill)
+bool DoctorBinTree::getDoctor(const QString& key, Doctor* structToFill) const
 {
     try {
         Doctor doc = m_binTree.find(key);

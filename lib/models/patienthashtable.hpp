@@ -30,12 +30,13 @@ public:
 
     Patient getPatient(const QModelIndex& index) const;
     TwoWayList<Patient> getAllPatients() const;
+    bool getPatient(const PatientHashKey& key, Patient* structToAssign = nullptr) const;
 
     friend class Database;
 
 private:
     bool addPatient(const Patient& patinet);
-    bool getPatient(const PatientHashKey& key, Patient* structToAssign = nullptr) const;
+
     void delPatient(const PatientHashKey& key);
     void delAll();
 };

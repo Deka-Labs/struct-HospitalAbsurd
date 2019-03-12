@@ -1,4 +1,10 @@
 #include "patientsearchwindow.hpp"
+#include "../globaldatabase.hpp"
+#include "../models/searchpatientbyregid.hpp"
+#include "data/hospital/patient.hpp"
+#include "searchresults.hpp"
+#include "utils.hpp"
+#include <QMessageBox>
 
 PatientSearchWindow::PatientSearchWindow(QWidget* parent)
     : QDialog(parent)
@@ -24,9 +30,32 @@ PatientSearchWindow::~PatientSearchWindow()
 void PatientSearchWindow::okButtonPressed()
 {
     if (validate()) {
-        //TODO! Open results
+        auto request = m_ui->lineEdit_request->text();
+        auto id = m_ui->comboBox_type->currentIndex();
+
+        switch (id) {
+        case 0: {
+            Patient result;
+            if (g_DATABASE->getPatientsModel().getPatient(request, &result)) {
+                SearchPatientByRegID model(result);
+                SearchResults resWindow("Результаты поиска пациента по рег. номеру", &model, this);
+                resWindow.exec();
+            } else {
+                QMessageBox::warning(this, "Поиск не успешен", "Поиск не дал результатов");
+            }
+            break;
+        }
+
+        case 1: {
+            //TODO! Search by FIO
+            break;
+        }
+        default:
+            return;
+        }
+
     } else {
-        //TODO! tell what
+        QMessageBox::warning(this, "Неверный ввод", "Поле поиска не соотвествует формату записи");
     }
 }
 
@@ -36,12 +65,26 @@ void PatientSearchWindow::comboBoxChanged(const QString& text)
         m_ui->lineEdit_request->setInputMask("99-999999");
     } else if (text == "ФИО") {
         m_ui->lineEdit_request->setInputMask("");
-        m_ui->lineEdit_request->setMaxLength(100); //TODO! Set const
+        m_ui->lineEdit_request->setMaxLength(MAX_PATIENT_FULLNAME_STRING_SIZE);
     }
 }
 
 bool PatientSearchWindow::validate()
 {
-    //TODO! validate!
+    auto id = m_ui->comboBox_type->currentIndex();
+
+    switch (id) {
+    case 0:
+        if (!TemplateValidate(PATIENT_REGID_TEMPLATE, m_ui->lineEdit_request->text()))
+            return false;
+        break;
+    case 1:
+        if (m_ui->lineEdit_request->text().size() > MAX_PATIENT_FULLNAME_STRING_SIZE)
+            return false;
+        break;
+    default:
+        return false;
+    }
+
     return true;
 }
