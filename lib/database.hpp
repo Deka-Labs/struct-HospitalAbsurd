@@ -36,9 +36,6 @@ public:
     bool addReferral(const Referral& newRef);
     void delReferral(const Referral& ref);
     void delAllReferrals();
-
-private:
-    void fixConnections();
 };
 
 #endif // DATABASE_HPP

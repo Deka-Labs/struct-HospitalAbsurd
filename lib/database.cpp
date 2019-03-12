@@ -96,8 +96,12 @@ bool Database::addPatient(const Patient& newPat)
 
 void Database::delPatinet(const PatientHashKey& patientKey)
 {
+    auto list = m_referrals.getConnectedToPatient(patientKey);
+
+    for (unsigned pos = 0; pos < list.size(); pos++) {
+        m_referrals.removeReferral(list.at(pos));
+    }
     m_patients.delPatient(patientKey);
-    fixConnections();
 }
 
 void Database::delAllPatients()
@@ -112,8 +116,13 @@ bool Database::addDoctor(const Doctor& newDoc)
 
 void Database::delDoctor(const QString& docKey)
 {
+    auto list = m_referrals.getConnectedToDoctor(docKey);
+
+    for (unsigned pos = 0; pos < list.size(); pos++) {
+        m_referrals.removeReferral(list.at(pos));
+    }
+
     m_doctors.removeDoctor(docKey);
-    fixConnections();
 }
 
 void Database::delAllDoctors()
@@ -143,19 +152,4 @@ void Database::delReferral(const Referral& ref)
 void Database::delAllReferrals()
 {
     m_referrals.removeAll();
-}
-
-void Database::fixConnections()
-{
-    for (unsigned i = 0; i < m_referrals.m_list.size(); i++) {
-        auto ref = m_referrals.m_list[i];
-        if (!m_patients.m_hashTable.get(PatientHashKey(ref.regID()))) {
-            delReferral(ref);
-            continue;
-        }
-        if (!m_doctors.getDoctor(ref.doctorFullname())) {
-            delReferral(ref);
-            continue;
-        }
-    }
 }
