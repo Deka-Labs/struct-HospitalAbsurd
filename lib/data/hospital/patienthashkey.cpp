@@ -1,6 +1,11 @@
 #include "patienthashkey.hpp"
 #include "utils.hpp"
 
+QString PatientHashKey::key() const
+{
+    return m_key;
+}
+
 PatientHashKey::PatientHashKey(const QString& key)
     : m_key(key)
 {

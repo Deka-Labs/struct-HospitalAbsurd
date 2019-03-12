@@ -24,6 +24,7 @@ public:
     bool validateKey() const;
 
     bool operator==(const IHashKey& key) const;
+    QString key() const;
 };
 
 #endif // PATIENTHASHKEY_HPP
