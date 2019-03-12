@@ -1,6 +1,7 @@
 #ifndef BINTREE_HPP
 #define BINTREE_HPP
 
+#include "statuscodes.hpp"
 #include "twowaylist.hpp"
 #include <QString>
 #include <stdexcept>
@@ -37,10 +38,10 @@ public:
     /**
      * \brief add добавляет элемент в дерево
      * \param [in] data элемент для добавления
-     * \return true если элемент добавлен, иначе false
-     * \remark Нельзя добавить элемент с ключом, который уже существует. Функция вернет false и не добавит его.
+     * \return код статуса добавления
+     * \remark Нельзя добавить элемент с ключом, который уже существует. Функция вернет StatusCode_AlreadyExist и не добавит его.
      */
-    bool add(const TypeData& data);
+    StatusCodes add(const TypeData& data);
 
     /**
      * \brief find ищет элемент по ключу и возвращает его
@@ -162,7 +163,7 @@ BinTree<TypeData, TypeKey>::~BinTree()
 }
 
 template <class TypeData, class TypeKey>
-bool BinTree<TypeData, TypeKey>::add(const TypeData& data)
+StatusCodes BinTree<TypeData, TypeKey>::add(const TypeData& data)
 {
     auto newNode = new BinTreeNode<TypeData>();
     newNode->data = data;
@@ -170,7 +171,7 @@ bool BinTree<TypeData, TypeKey>::add(const TypeData& data)
     if (isEmpty()) {
         m_root = newNode;
         m_size++;
-        return true;
+        return StatusCode_OK;
     }
     newNode->mark = m_root->mark;
 
@@ -198,13 +199,13 @@ bool BinTree<TypeData, TypeKey>::add(const TypeData& data)
         } else {
             //Элемент уже существует.
             delete newNode;
-            return false;
+            return StatusCode_AlreadyExist;
         }
     }
 
     normalize(newNode);
     m_size++;
-    return true;
+    return StatusCode_OK;
 }
 
 template <class TypeData, class TypeKey>

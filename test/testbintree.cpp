@@ -56,7 +56,7 @@ TEST(BinTree, AddingAndFinding)
 
     for (unsigned i = 0; i < count; i++) {
         auto testClass = TestClass(i, begin + int(i));
-        ASSERT_TRUE(tree.add(testClass));
+        ASSERT_EQ(tree.add(testClass), StatusCode_OK);
     }
 
     for (unsigned i = 0; i < count; i++) {
@@ -78,7 +78,7 @@ TEST(BinTree, Removing)
 
     for (unsigned i = 0; i < count; i++) {
         auto testClass = TestClass(i, begin + int(i));
-        ASSERT_NO_THROW(tree.add(testClass));
+        ASSERT_EQ(tree.add(testClass), StatusCode_OK);
     }
     ASSERT_FALSE(tree.isEmpty());
 
@@ -106,14 +106,14 @@ TEST(BinTree, Sizeing)
 
     for (unsigned i = 0; i < count; i++) {
         auto testClass = TestClass(i, begin + int(i));
-        ASSERT_TRUE(tree.add(testClass));
+        ASSERT_EQ(tree.add(testClass), StatusCode_OK);
         ASSERT_EQ(tree.size(), i + 1);
     }
 
     ASSERT_FALSE(tree.isEmpty());
 
     auto oldSize = tree.size();
-    ASSERT_FALSE(tree.add(TestClass(count / 2, 0)));
+    ASSERT_EQ(tree.add(TestClass(count / 2, 0)), StatusCode_AlreadyExist);
     ASSERT_EQ(oldSize, tree.size());
 
     TwoWayList<unsigned> keys;
@@ -243,7 +243,7 @@ TEST(BinTree, Balancing)
             unsigned val = 0;
             do {
                 val = unsigned(rand()) % count;
-            } while (!tree.add(TestClass(val, int(i))));
+            } while (tree.add(TestClass(val, int(i))) != StatusCode_OK);
         }
 
         auto listNodes = makeListInOrder(tree);
@@ -293,7 +293,7 @@ TEST(BinTree, AddingSameElements)
     }
 
     for (unsigned i = 0; i < count; i++) {
-        ASSERT_FALSE(tree.add(TestClass(i, int(i))));
+        ASSERT_EQ(tree.add(TestClass(i, int(i))), StatusCode_AlreadyExist);
     }
 }
 
@@ -304,22 +304,20 @@ TEST(BinTree, InOrderList)
     auto list = tree.getListInOrder();
     ASSERT_EQ(list.size(), 0);
 
-    for (unsigned i = 1; i <= 5; i++) {
-        tree.add(TestClass(i, int(i)));
-    }
-    auto root = tree.root();
+    srand(unsigned(time(nullptr)));
 
-    ASSERT_EQ(root->data.key(), 2);
-    ASSERT_EQ(root->left->data.key(), 1);
-    ASSERT_EQ(root->right->data.key(), 4);
-    ASSERT_EQ(root->right->left->data.key(), 3);
-    ASSERT_EQ(root->right->right->data.key(), 5);
+    const unsigned count = 1000;
+
+    for (unsigned i = 0; i < count; i++) {
+        unsigned val = 0;
+        do {
+            val = unsigned(rand());
+        } while (tree.add(TestClass(val, int(i))) != StatusCode_OK);
+    }
 
     list = tree.getListInOrder();
 
-    ASSERT_EQ(list.at(0).key(), 1);
-    ASSERT_EQ(list.at(1).key(), 2);
-    ASSERT_EQ(list.at(2).key(), 3);
-    ASSERT_EQ(list.at(3).key(), 4);
-    ASSERT_EQ(list.at(4).key(), 5);
+    for (unsigned pos = 1; pos < list.size(); pos++) {
+        ASSERT_LE(list.at(pos - 1).key(), list.at(pos).key());
+    }
 }

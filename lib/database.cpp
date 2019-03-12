@@ -109,7 +109,7 @@ void Database::delAllPatients()
     m_patients.delAll();
 }
 
-bool Database::addDoctor(const Doctor& newDoc)
+StatusCodes Database::addDoctor(const Doctor& newDoc)
 {
     return m_doctors.addDoctor(newDoc);
 }

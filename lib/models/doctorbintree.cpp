@@ -83,14 +83,14 @@ TwoWayList<Doctor> DoctorBinTree::getAllDoctors() const
     return m_listToDisplay;
 }
 
-bool DoctorBinTree::addDoctor(const Doctor& other)
+StatusCodes DoctorBinTree::addDoctor(const Doctor& other)
 {
-    if (m_binTree.add(other)) {
+    auto result = m_binTree.add(other);
+    if (result == StatusCode_OK) {
         updateList();
-        return true;
     }
 
-    return false;
+    return result;
 }
 
 void DoctorBinTree::removeDoctor(const QString& key)

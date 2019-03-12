@@ -29,7 +29,7 @@ public:
     void delPatinet(const PatientHashKey& patientKey);
     void delAllPatients();
 
-    bool addDoctor(const Doctor& newDoc);
+    StatusCodes addDoctor(const Doctor& newDoc);
     void delDoctor(const QString& docKey);
     void delAllDoctors();
 

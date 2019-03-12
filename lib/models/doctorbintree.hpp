@@ -34,7 +34,7 @@ public:
 private:
     void updateList();
 
-    bool addDoctor(const Doctor& other);
+    StatusCodes addDoctor(const Doctor& other);
     void removeDoctor(const QString& key);
 
     void removeAll();
