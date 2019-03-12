@@ -29,6 +29,9 @@ public:
 
     Referral getReferral(const QModelIndex& index) const;
 
+    TwoWayList<Referral> getConnectedToPatient(const PatientHashKey& patRegID);
+    TwoWayList<Referral> getConnectedToDoctor(const QString& docFullname);
+
 private:
     bool addReferral(const Referral& newRef);
     void removeReferral(const Referral& ref);

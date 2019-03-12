@@ -75,6 +75,32 @@ Referral ReferralList::getReferral(const QModelIndex& index) const
     return m_list.at(static_cast<unsigned>(index.row()));
 }
 
+TwoWayList<Referral> ReferralList::getConnectedToPatient(const PatientHashKey& patRegID)
+{
+    TwoWayList<Referral> listOut;
+    for (unsigned pos = 0; pos < m_list.size(); pos++) {
+        auto ref = m_list.at(pos);
+        if (ref.regID() == patRegID.key()) {
+            listOut.push_back(ref);
+        }
+    }
+
+    return listOut;
+}
+
+TwoWayList<Referral> ReferralList::getConnectedToDoctor(const QString& docFullname)
+{
+    TwoWayList<Referral> listOut;
+    for (unsigned pos = 0; pos < m_list.size(); pos++) {
+        auto ref = m_list.at(pos);
+        if (ref.doctorFullname() == docFullname) {
+            listOut.push_back(ref);
+        }
+    }
+
+    return listOut;
+}
+
 bool ReferralList::addReferral(const Referral& newRef)
 {
     beginResetModel();
