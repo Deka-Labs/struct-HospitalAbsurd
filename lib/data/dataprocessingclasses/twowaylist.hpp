@@ -395,7 +395,7 @@ TwoWayNode<T>* TwoWayList<T>::getNode(unsigned pos) const
 {
 
     if (pos < m_size) {
-        long delta = pos - m_currentPos;
+        long delta = static_cast<long>(pos) - static_cast<long>(m_currentPos);
 
         if (delta == 0)
             return m_currentNode;
