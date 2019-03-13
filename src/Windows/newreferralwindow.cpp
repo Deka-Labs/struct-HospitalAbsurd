@@ -41,7 +41,7 @@ void NewReferralWindow::okButtonPressed()
             QMessageBox::warning(this, "Не удалось добавить запись", "Неверно указан регистрационный номер или ФИО врача.");
             return;
         default:
-            throw std::exception("Not implemented");
+            throw std::runtime_error("Not implemented");
         }
     } else {
         QMessageBox::warning(this, "Неверный ввод", m_errMsg + "\nПовторите ввод.");

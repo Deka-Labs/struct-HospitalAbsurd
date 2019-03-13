@@ -1,6 +1,7 @@
 #include "newdoctorwindow.hpp"
 #include "../globaldatabase.hpp"
 #include <QMessageBox>
+#include <stdexcept>
 
 NewDoctorWindow::NewDoctorWindow(QWidget* parent)
     : QDialog(parent)
@@ -32,7 +33,7 @@ void NewDoctorWindow::okButtonPressed()
                                                                  "Увольте старого доктора или откажите в приеме новому доктору.\n");
             return;
         default:
-            throw std::exception("Not implemented");
+            throw std::runtime_error("Not implemented");
         }
 
     } else {

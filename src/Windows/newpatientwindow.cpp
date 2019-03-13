@@ -37,7 +37,7 @@ void NewPatientWindow::okButtonPressed()
             QMessageBox::warning(this, "Невозможно добавить запись", "Запись с таким регистрационный номером уже существует.");
             return;
         default:
-            throw std::exception("Not implemented");
+            throw std::runtime_error("Not implemented");
         }
     } else {
         QMessageBox::warning(this, "Неверный ввод", m_errMsg + "\nПовторите ввод.");
