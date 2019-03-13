@@ -40,6 +40,9 @@ void NewReferralWindow::okButtonPressed()
         case StatusCode_InvalidObject:
             QMessageBox::warning(this, "Не удалось добавить запись", "Неверно указан регистрационный номер или ФИО врача.");
             return;
+        case StatusCode_AlreadyExist:
+            QMessageBox::warning(this, "Не удалось добавить запись", "На эту дату и время к этому врачу уже назначен пациент");
+            return;
         default:
             throw std::runtime_error("Not implemented");
         }

@@ -113,7 +113,13 @@ bool ReferralList::addReferral(const Referral& newRef)
 void ReferralList::removeReferral(const Referral& ref)
 {
     beginResetModel();
-    m_list.removeAll(ref);
+    //Так как == перегружен для сравнения по ключу обходим список вручную
+    for (unsigned pos = 0; pos < m_list.size(); pos++) {
+        if (m_list.at(pos).isEqual(ref)) {
+            m_list.remove(pos);
+            pos--;
+        }
+    }
     endResetModel();
 }
 

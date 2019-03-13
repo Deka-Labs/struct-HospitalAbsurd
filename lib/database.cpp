@@ -135,10 +135,18 @@ StatusCodes Database::addReferral(const Referral& newRef)
     auto docName = newRef.doctorFullname();
     auto patID = newRef.regID();
 
-    if (!m_patients.m_hashTable.get(PatientHashKey(patID)))
+    if (!m_patients.getPatient(PatientHashKey(patID)))
         return StatusCode_InvalidObject;
-    if (!m_doctors.getDoctor(docName))
+    Doctor doc;
+    if (!m_doctors.getDoctor(docName, &doc))
         return StatusCode_InvalidObject;
+
+    auto list = m_referrals.getConnectedToDoctor(doc.fullname());
+
+    for (unsigned pos = 0; pos < list.size(); pos++) {
+        if (list.at(pos).date() == newRef.date() && list.at(pos).time() == newRef.time())
+            return StatusCode_AlreadyExist;
+    }
 
     m_referrals.addReferral(newRef);
     return StatusCode_OK;

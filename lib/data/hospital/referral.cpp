@@ -129,7 +129,7 @@ bool Referral::setTime(const QString& time)
     return true;
 }
 
-bool Referral::isEqual(const Referral& other)
+bool Referral::isEqual(const Referral& other) const
 {
     return m_regID == other.m_regID && m_doctorFullname == other.m_doctorFullname && m_date == other.m_date && m_time == other.m_time;
 }
