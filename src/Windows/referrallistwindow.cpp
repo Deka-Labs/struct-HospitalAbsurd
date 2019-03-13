@@ -32,8 +32,13 @@ void ReferralListWindow::addButtonPressed()
 
 void ReferralListWindow::deleteButtonPressed()
 {
-    if (QMessageBox::question(this, "Удалить?", "Вы действительно хотите удалить эту запись?") == QMessageBox::Yes) {
-        auto ref = g_DATABASE->getReferralsModel().getReferral(m_ui->tableView->currentIndex());
-        g_DATABASE->delReferral(ref);
+    auto index = m_ui->tableView->currentIndex();
+    if (index.isValid()) {
+        if (QMessageBox::question(this, "Удалить?", "Вы действительно хотите удалить эту запись?") == QMessageBox::Yes) {
+            auto ref = g_DATABASE->getReferralsModel().getReferral(index);
+            g_DATABASE->delReferral(ref);
+        }
+    } else {
+        QMessageBox::warning(this, "Неверное действие.", "Необходимо выбрать элемент для удаления.");
     }
 }
