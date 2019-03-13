@@ -29,12 +29,8 @@ DoctorListWindow::~DoctorListWindow()
 
 void DoctorListWindow::addButtonPressed()
 {
-    Doctor doc;
-    NewDoctorWindow wnd(doc, this);
-    auto code = wnd.exec();
-    if (code == QDialog::Accepted) {
-        g_DATABASE->addDoctor(doc);
-    }
+    NewDoctorWindow wnd(this);
+    wnd.exec();
 }
 
 void DoctorListWindow::deleteButtonPressed()

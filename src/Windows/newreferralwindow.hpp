@@ -9,11 +9,11 @@ class NewReferralWindow : public QDialog {
     Q_OBJECT
 private:
     Ui::NewReferralForm* m_ui;
-    Referral& m_toEdit;
+    Referral m_toEdit;
     QString m_errMsg;
 
 public:
-    NewReferralWindow(Referral& toEdit, QWidget* widget = nullptr);
+    NewReferralWindow(QWidget* widget = nullptr);
     NewReferralWindow(const NewReferralWindow&) = delete;
     ~NewReferralWindow();
 

@@ -9,11 +9,11 @@ class NewDoctorWindow : public QDialog {
     Q_OBJECT
 private:
     Ui::NewDoctorForm* m_ui;
-    Doctor& m_toEdit;
+    Doctor m_toEdit;
     QString m_errMsg;
 
 public:
-    NewDoctorWindow(Doctor& toEdit, QWidget* parent = nullptr);
+    NewDoctorWindow(QWidget* parent = nullptr);
     NewDoctorWindow(const NewDoctorWindow&) = delete;
     ~NewDoctorWindow();
 

@@ -25,12 +25,9 @@ ReferralListWindow::~ReferralListWindow()
 
 void ReferralListWindow::addButtonPressed()
 {
-    Referral ref;
-    NewReferralWindow wnd(ref, this);
-    auto code = wnd.exec();
-    if (code == QDialog::Accepted) {
-        g_DATABASE->addReferral(ref);
-    }
+
+    NewReferralWindow wnd(this);
+    wnd.exec();
 }
 
 void ReferralListWindow::deleteButtonPressed()

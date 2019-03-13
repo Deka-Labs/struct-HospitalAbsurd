@@ -1,10 +1,11 @@
 #include "newpatientwindow.hpp"
+#include "../globaldatabase.hpp"
 #include <QMessageBox>
 
-NewPatientWindow::NewPatientWindow(Patient& toEdit, QWidget* parent)
+NewPatientWindow::NewPatientWindow(QWidget* parent)
     : QDialog(parent)
     , m_ui(nullptr)
-    , m_toEdit(toEdit)
+    , m_toEdit()
     , m_errMsg("")
 {
     m_ui = new Ui::NewPatientForm;
@@ -20,9 +21,25 @@ NewPatientWindow::~NewPatientWindow()
 
 void NewPatientWindow::okButtonPressed()
 {
-    if (validate())
-        this->accept();
-    else {
+    if (validate()) {
+        auto res = g_DATABASE->addPatient(m_toEdit);
+        switch (res) {
+        case StatusCode_OK:
+            accept();
+            return;
+        case StatusCode_Overloaded:
+            QMessageBox::warning(this,
+                "Невозможно добавить запись",
+                "Данную запись невозможно добавить, так как в таблице нет места для этого регистрационного номера.\n"
+                "Попробуйте выбрать другой номер");
+            return;
+        case StatusCode_AlreadyExist:
+            QMessageBox::warning(this, "Невозможно добавить запись", "Запись с таким регистрационный номером уже существует.");
+            return;
+        default:
+            throw std::exception("Not implemented");
+        }
+    } else {
         QMessageBox::warning(this, "Неверный ввод", m_errMsg + "\nПовторите ввод.");
     }
 }

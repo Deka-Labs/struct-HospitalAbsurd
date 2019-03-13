@@ -2,10 +2,10 @@
 #include "../globaldatabase.hpp"
 #include <QMessageBox>
 
-NewReferralWindow::NewReferralWindow(Referral& toEdit, QWidget* parent)
+NewReferralWindow::NewReferralWindow(QWidget* parent)
     : QDialog(parent)
     , m_ui(nullptr)
-    , m_toEdit(toEdit)
+    , m_toEdit()
     , m_errMsg("")
 {
     m_ui = new Ui::NewReferralForm;
@@ -13,7 +13,6 @@ NewReferralWindow::NewReferralWindow(Referral& toEdit, QWidget* parent)
 
     connect(m_ui->pushButton_ok, &QPushButton::clicked, this, &NewReferralWindow::okButtonPressed);
 
-    //TODO! Init comboboxes
     auto listPat = g_DATABASE->getPatientsModel().getAllPatients();
     for (unsigned pos = 0; pos < listPat.size(); pos++) {
         m_ui->comboBox_regID->addItem(listPat.at(pos).regID());
@@ -32,9 +31,19 @@ NewReferralWindow::~NewReferralWindow()
 
 void NewReferralWindow::okButtonPressed()
 {
-    if (validate())
-        this->accept();
-    else {
+    if (validate()) {
+        auto res = g_DATABASE->addReferral(m_toEdit);
+        switch (res) {
+        case StatusCode_OK:
+            this->accept();
+            return;
+        case StatusCode_InvalidObject:
+            QMessageBox::warning(this, "Не удалось добавить запись", "Неверно указан регистрационный номер или ФИО врача.");
+            return;
+        default:
+            throw std::exception("Not implemented");
+        }
+    } else {
         QMessageBox::warning(this, "Неверный ввод", m_errMsg + "\nПовторите ввод.");
     }
 }

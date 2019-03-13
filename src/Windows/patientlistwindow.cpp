@@ -31,12 +31,8 @@ PatientListWindow::~PatientListWindow()
 
 void PatientListWindow::addButtonPressed()
 {
-    Patient newPat;
-    NewPatientWindow wnd(newPat, this);
-    auto code = wnd.exec();
-    if (code == QDialog::Accepted) {
-        g_DATABASE->addPatient(newPat);
-    }
+    NewPatientWindow wnd(this);
+    wnd.exec();
 }
 
 void PatientListWindow::deleteButtonPressed()

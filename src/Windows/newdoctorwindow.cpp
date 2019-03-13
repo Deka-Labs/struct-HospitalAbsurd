@@ -1,10 +1,11 @@
 #include "newdoctorwindow.hpp"
+#include "../globaldatabase.hpp"
 #include <QMessageBox>
 
-NewDoctorWindow::NewDoctorWindow(Doctor& toEdit, QWidget* parent)
+NewDoctorWindow::NewDoctorWindow(QWidget* parent)
     : QDialog(parent)
     , m_ui(nullptr)
-    , m_toEdit(toEdit)
+    , m_toEdit()
     , m_errMsg("")
 {
     m_ui = new Ui::NewDoctorForm;
@@ -20,9 +21,21 @@ NewDoctorWindow::~NewDoctorWindow()
 
 void NewDoctorWindow::okButtonPressed()
 {
-    if (validate())
-        this->accept();
-    else {
+    if (validate()) {
+        auto res = g_DATABASE->addDoctor(m_toEdit);
+        switch (res) {
+        case StatusCode_OK:
+            accept();
+            return;
+        case StatusCode_AlreadyExist:
+            QMessageBox::warning(this, "Ошибка добавления в БД", "Доктор с таким полем ФИО уже существует.\n"
+                                                                 "Увольте старого доктора или откажите в приеме новому доктору.\n");
+            return;
+        default:
+            throw std::exception("Not implemented");
+        }
+
+    } else {
         QMessageBox::warning(this, "Неверный ввод", m_errMsg + "\nПовторите ввод.");
     }
 }
