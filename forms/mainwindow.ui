@@ -38,9 +38,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_saveandexit">
+      <widget class="QPushButton" name="pushButton_exit">
        <property name="text">
-        <string>Сохранить и выйти</string>
+        <string>Выйти</string>
        </property>
       </widget>
      </item>

@@ -23,6 +23,8 @@ public slots:
     void doctorsButtonPressed();
     void referralsButtonPressed();
     void exitButtonPressed();
+
+    void onClose();
 };
 
 #endif //!MAINWINDOW_HPP

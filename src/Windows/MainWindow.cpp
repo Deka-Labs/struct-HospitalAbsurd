@@ -2,6 +2,7 @@
 #include "doctorlistwindow.hpp"
 #include "patientlistwindow.hpp"
 #include "referrallistwindow.hpp"
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget* parent)
     : QWidget(parent)
@@ -13,7 +14,8 @@ MainWindow::MainWindow(QWidget* parent)
     connect(m_ui->pushButton_patients, &QPushButton::clicked, this, &MainWindow::patientsButtonPressed);
     connect(m_ui->pushButton_doctors, &QPushButton::clicked, this, &MainWindow::doctorsButtonPressed);
     connect(m_ui->pushButton_referral, &QPushButton::clicked, this, &MainWindow::referralsButtonPressed);
-    connect(m_ui->pushButton_saveandexit, &QPushButton::clicked, this, &MainWindow::exitButtonPressed);
+    connect(m_ui->pushButton_exit, &QPushButton::clicked, this, &MainWindow::exitButtonPressed);
+    connect(this, &QWidget::destroyed, this, &MainWindow::onClose);
 
     if (!g_DATABASE)
         g_DATABASE = new Database();
@@ -24,10 +26,6 @@ MainWindow::MainWindow(QWidget* parent)
 MainWindow::~MainWindow()
 {
     delete m_ui;
-    if (g_DATABASE) {
-        delete g_DATABASE;
-        g_DATABASE = nullptr;
-    }
 }
 
 void MainWindow::patientsButtonPressed()
@@ -50,6 +48,17 @@ void MainWindow::referralsButtonPressed()
 
 void MainWindow::exitButtonPressed()
 {
-    g_DATABASE->saveTo(SAVE_FILE);
     this->close();
+}
+
+void MainWindow::onClose()
+{
+    auto res = QMessageBox::question(this, "Сохранить?", "Вы хотите сохранить изменения за текущий сеанс?");
+    if (res == QMessageBox::Yes) {
+        g_DATABASE->saveTo(SAVE_FILE);
+    }
+    if (g_DATABASE) {
+        delete g_DATABASE;
+        g_DATABASE = nullptr;
+    }
 }
