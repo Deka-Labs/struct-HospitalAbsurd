@@ -5,6 +5,7 @@
 #include <QAbstractTableModel>
 
 class SearchPatientByRegID : public QAbstractTableModel {
+    Q_OBJECT
 private:
     struct {
         Patient patient;

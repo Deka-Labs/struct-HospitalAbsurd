@@ -1,5 +1,6 @@
 #include "patientsearchwindow.hpp"
 #include "../globaldatabase.hpp"
+#include "../models/searchpatientbyfullname.hpp"
 #include "../models/searchpatientbyregid.hpp"
 #include "data/hospital/patient.hpp"
 #include "searchresults.hpp"
@@ -47,7 +48,21 @@ void PatientSearchWindow::okButtonPressed()
         }
 
         case 1: {
-            //TODO! Search by FIO
+            auto request = m_ui->lineEdit_request->text();
+            auto list = g_DATABASE->getPatientsModel().getAllPatients();
+            for (unsigned pos = 0; pos < list.size(); pos++) {
+                if (list.at(pos).fullName() != request) {
+                    list.remove(pos);
+                    pos--; //Возвращаемся назад, чтобы не проскачить элемент
+                }
+            }
+            if (list.size() > 0) {
+                SearchPatientByFullname model(std::move(list));
+                SearchResults resWindow("Результаты поиска пациента по ФИО", &model);
+                resWindow.exec();
+            } else {
+                QMessageBox::warning(this, "Поиск не успешен", "Поиск не дал результатов");
+            }
             break;
         }
         default:
