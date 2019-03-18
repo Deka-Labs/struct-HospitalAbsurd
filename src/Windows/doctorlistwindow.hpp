@@ -19,7 +19,6 @@ public slots:
     void deleteButtonPressed();
     void searchButtonPressed();
     void purgeAllButtonPressed();
-    void helpButtonPressed();
 };
 
 #endif // DOCTORLISTWINDOW_HPP

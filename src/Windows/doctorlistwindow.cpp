@@ -15,7 +15,6 @@ DoctorListWindow::DoctorListWindow(QWidget* parent)
     connect(m_ui->pushButton_delete, &QPushButton::clicked, this, &DoctorListWindow::deleteButtonPressed);
     connect(m_ui->pushButton_search, &QPushButton::clicked, this, &DoctorListWindow::searchButtonPressed);
     connect(m_ui->pushButton_purgeAll, &QPushButton::clicked, this, &DoctorListWindow::purgeAllButtonPressed);
-    connect(m_ui->pushButton_help, &QPushButton::clicked, this, &DoctorListWindow::helpButtonPressed);
 
     this->setWindowTitle("Список врачей");
     m_ui->tableView->setModel(&g_DATABASE->getDoctorsModel());
@@ -57,9 +56,4 @@ void DoctorListWindow::purgeAllButtonPressed()
     if (QMessageBox::question(this, "Очистить все?", "Вы действительно хотите удалить все записи?") == QMessageBox::Yes) {
         g_DATABASE->delAllDoctors();
     }
-}
-
-void DoctorListWindow::helpButtonPressed()
-{
-    //TODO! HEEEEEEEELP ME
 }

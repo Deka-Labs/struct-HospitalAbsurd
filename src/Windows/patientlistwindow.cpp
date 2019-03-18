@@ -21,7 +21,6 @@ PatientListWindow::PatientListWindow(QWidget* parent)
     connect(m_ui->pushButton_delete, &QPushButton::clicked, this, &PatientListWindow::deleteButtonPressed);
     connect(m_ui->pushButton_search, &QPushButton::clicked, this, &PatientListWindow::searchButtonPressed);
     connect(m_ui->pushButton_purgeAll, &QPushButton::clicked, this, &PatientListWindow::purgeAllButtonPressed);
-    connect(m_ui->pushButton_help, &QPushButton::clicked, this, &PatientListWindow::helpButtonPressed);
 }
 
 PatientListWindow::~PatientListWindow()
@@ -59,9 +58,4 @@ void PatientListWindow::purgeAllButtonPressed()
     if (QMessageBox::question(this, "Очистить все?", "Вы действительно хотите удалить все записи?") == QMessageBox::Yes) {
         g_DATABASE->delAllPatients();
     }
-}
-
-void PatientListWindow::helpButtonPressed()
-{
-    //TODO! HEEEEEEEELP ME
 }
