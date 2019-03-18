@@ -111,7 +111,7 @@ TEST(TwoWayList, Insert)
 
 TEST(TwoWayList, Removing)
 {
-    srand(time(nullptr));
+    srand(unsigned(time(nullptr)));
     TwoWayList<unsigned> list = TwoWayList<unsigned>();
     ASSERT_NO_THROW(list.remove(0));
     const unsigned count = 1000;
@@ -123,7 +123,7 @@ TEST(TwoWayList, Removing)
 
     while (list.size() != 0) {
         auto size = list.size();
-        list.remove(rand() % size);
+        list.remove(unsigned(rand()) % size);
         ASSERT_EQ(list.size(), size - 1);
     }
 }
@@ -193,10 +193,10 @@ TEST(TwoWayList, Swapping)
         ASSERT_EQ(list.at(unsigned(i)), i);
     }
 
-    srand(time(nullptr));
+    srand(unsigned(time(nullptr)));
     for (unsigned i = 0; i < count; i++) {
-        auto x = rand() % count;
-        auto y = rand() % count;
+        auto x = unsigned(rand()) % count;
+        auto y = unsigned(rand()) % count;
         list.swap(x, y);
     }
 
@@ -207,12 +207,12 @@ TEST(TwoWayList, Swapping)
 
 TEST(TwoWayList, Sorting)
 {
-    srand(time(nullptr));
+    srand(unsigned(time(nullptr)));
     TwoWayList<unsigned> list = TwoWayList<unsigned>();
 
     const unsigned count = 1000;
     for (unsigned i = 0; i < count; i++) {
-        list.push_back(rand());
+        list.push_back(unsigned(rand()));
     }
 
     list.size();
@@ -226,7 +226,7 @@ TEST(TwoWayList, Sorting)
 
 TEST(TwoWayList, Searching)
 {
-    srand(time(nullptr));
+    srand(unsigned(time(nullptr)));
     TwoWayList<int> list;
     const unsigned count = 1000;
 
@@ -236,18 +236,18 @@ TEST(TwoWayList, Searching)
     }
 
     list[0] = -1;
-    list[rand() % (count - 2) + 1] = -2;
+    list[unsigned(rand()) % (count - 2) + 1] = -2;
     list[count - 1] = -3;
 
     ASSERT_TRUE(list.search(-1));
     ASSERT_TRUE(list.search(-2));
     ASSERT_TRUE(list.search(-3));
-    ASSERT_FALSE(list.search((-(rand() % count)) - 4));
+    ASSERT_FALSE(list.search((-(unsigned(rand()) % count)) - 4));
 }
 
 TEST(TwoWayList, RemoveAll)
 {
-    srand(time(nullptr));
+    srand(unsigned(time(nullptr)));
     TwoWayList<int> list;
     const unsigned count = 1000;
     const int maxValue = 10;

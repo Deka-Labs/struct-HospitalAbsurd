@@ -37,7 +37,7 @@ void PatientSearchWindow::okButtonPressed()
         switch (id) {
         case 0: {
             Patient result;
-            if (g_DATABASE->getPatientsModel().getPatient(request, &result)) {
+            if (g_DATABASE->getPatientsModel().getPatient(PatientHashKey(request), &result)) {
                 SearchPatientByRegID model(result);
                 SearchResults resWindow("Результаты поиска пациента по рег. номеру", &model, this);
                 resWindow.exec();
@@ -48,7 +48,6 @@ void PatientSearchWindow::okButtonPressed()
         }
 
         case 1: {
-            auto request = m_ui->lineEdit_request->text();
             auto list = g_DATABASE->getPatientsModel().getAllPatients();
             for (unsigned pos = 0; pos < list.size(); pos++) {
                 if (list.at(pos).fullName() != request) {

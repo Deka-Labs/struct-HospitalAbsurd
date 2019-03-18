@@ -17,7 +17,7 @@ class PatientHashKey : public IHashKey {
     QString m_key;
 
 public:
-    PatientHashKey(QString  key = "");
+    explicit PatientHashKey(QString key = "");
 
     unsigned hash() const;
     unsigned dopHash() const;

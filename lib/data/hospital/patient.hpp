@@ -38,7 +38,7 @@ public:
     bool operator==(const Patient& other);
     bool operator!=(const Patient& other);
 
-    PatientHashKey key() const { return m_regID; }
+    PatientHashKey key() const { return PatientHashKey(m_regID); }
 
     friend class PatientHashTable;
 };

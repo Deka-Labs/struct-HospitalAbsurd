@@ -16,7 +16,7 @@ TEST(PatientHashKey, TestWithOut)
             QString first = QString("%1").arg(rand() % 100);
             QString second = QString("%1").arg(rand() % 1000000);
             str = QString("%1-%2").arg(first, 2, '0').arg(second, 6, '0');
-        } while (m_keys.search(str));
+        } while (m_keys.search(PatientHashKey(str)));
 
         m_keys.push_back(PatientHashKey(str));
         auto h1 = PatientHashKey(str).hash();
@@ -49,7 +49,7 @@ TEST(PatientHashKey, TestWithOut)
 
 TEST(PatientHashKey, OutOfRange)
 {
-    srand(time(nullptr));
+    srand(unsigned(time(nullptr)));
     const unsigned count = 100000;
 
     auto generateRegID = []() -> QString {

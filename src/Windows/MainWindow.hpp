@@ -14,7 +14,7 @@ private:
     Ui::MainWindow* m_ui;
 
 public:
-    MainWindow(QWidget* parent = nullptr);
+    explicit MainWindow(QWidget* parent = nullptr);
     MainWindow(const MainWindow&) = delete;
     ~MainWindow();
 

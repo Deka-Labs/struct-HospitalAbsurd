@@ -10,7 +10,7 @@ private:
     Ui::ListForm* m_ui;
 
 public:
-    DoctorListWindow(QWidget* parent = nullptr);
+    explicit DoctorListWindow(QWidget* parent = nullptr);
     DoctorListWindow(const DoctorListWindow&) = delete;
     ~DoctorListWindow();
 

@@ -8,7 +8,7 @@ class TestKey : public IHashKey {
     unsigned m_key = 0;
 
 public:
-    TestKey(const unsigned& key = 0)
+    explicit TestKey(const unsigned& key = 0)
         : m_key(key)
     {
     }

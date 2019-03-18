@@ -53,7 +53,7 @@ bool DataFile::ReadNextObject(DataObject& obj)
     if (!code)
         return false;
     while (currentSymbol != DATA_CHAR_OPEN_OBJ) {
-        auto code = readNext(&currentSymbol);
+        code = readNext(&currentSymbol);
         if (!code)
             return false;
     }
@@ -61,7 +61,7 @@ bool DataFile::ReadNextObject(DataObject& obj)
     //Читаем тип. Находим первый пробел между ним и < - название типа
     QString type;
     while (currentSymbol != DATA_CHAR_SPACE) {
-        auto code = readNext(&currentSymbol);
+        code = readNext(&currentSymbol);
         if (!code)
             return false;
         if (!currentSymbol.isSpace())
@@ -75,7 +75,7 @@ bool DataFile::ReadNextObject(DataObject& obj)
     while (true) {
         //Читаем до первого непробельного символа
         do {
-            auto code = readNext(&currentSymbol);
+            code = readNext(&currentSymbol);
             if (!code)
                 return false;
         } while (currentSymbol.isSpace());
@@ -91,12 +91,12 @@ bool DataFile::ReadNextObject(DataObject& obj)
             //Сначало имя
             while (currentSymbol != DATA_CHAR_EQUAL) {
                 name += currentSymbol; //Обязательно вначале. 1 символ уже считан.
-                auto code = readNext(&currentSymbol);
+                code = readNext(&currentSymbol);
                 if (!code || currentSymbol == DATA_CHAR_SPACE)
                     return false;
             }
             //Читаем разделитель
-            auto code = readNext(&currentSymbol);
+            code = readNext(&currentSymbol);
             if (!code || currentSymbol != DATA_CHAR_DIVIDER_ARG)
                 return false;
 
@@ -108,7 +108,7 @@ bool DataFile::ReadNextObject(DataObject& obj)
             //Читаем значения до разделителя
             while (currentSymbol != DATA_CHAR_DIVIDER_ARG) {
                 value += currentSymbol; //Обязательно вначале. 1 символ уже считан.
-                auto code = readNext(&currentSymbol);
+                code = readNext(&currentSymbol);
                 if (!code)
                     return false;
             }

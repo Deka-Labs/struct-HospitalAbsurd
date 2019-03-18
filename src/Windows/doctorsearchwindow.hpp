@@ -10,7 +10,7 @@ private:
     Ui::PatientSearchForm* m_ui;
 
 public:
-    DoctorSearchWindow(QWidget* parent = nullptr);
+    explicit DoctorSearchWindow(QWidget* parent = nullptr);
     DoctorSearchWindow(const DoctorSearchWindow&) = delete;
     ~DoctorSearchWindow();
 

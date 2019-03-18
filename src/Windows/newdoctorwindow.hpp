@@ -13,7 +13,7 @@ private:
     QString m_errMsg;
 
 public:
-    NewDoctorWindow(QWidget* parent = nullptr);
+    explicit NewDoctorWindow(QWidget* parent = nullptr);
     NewDoctorWindow(const NewDoctorWindow&) = delete;
     ~NewDoctorWindow();
 

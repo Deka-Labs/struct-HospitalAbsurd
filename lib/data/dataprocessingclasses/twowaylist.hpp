@@ -373,6 +373,8 @@ void TwoWayList<T>::operator=(const TwoWayList<T>& other)
     for (unsigned i = 0; i < other.size(); i++) {
         push_back(other.at(i));
     }
+
+    m_size = other.m_size;
 }
 
 template <typename T>

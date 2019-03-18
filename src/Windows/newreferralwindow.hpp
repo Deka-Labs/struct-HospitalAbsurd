@@ -13,7 +13,7 @@ private:
     QString m_errMsg;
 
 public:
-    NewReferralWindow(QWidget* widget = nullptr);
+    explicit NewReferralWindow(QWidget* widget = nullptr);
     NewReferralWindow(const NewReferralWindow&) = delete;
     ~NewReferralWindow();
 

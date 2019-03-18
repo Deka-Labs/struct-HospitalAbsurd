@@ -10,7 +10,7 @@ private:
     Ui::ReferralsForm* m_ui;
 
 public:
-    ReferralListWindow(QWidget* parent = nullptr);
+    explicit ReferralListWindow(QWidget* parent = nullptr);
     ReferralListWindow(const ReferralListWindow&) = delete;
     ~ReferralListWindow();
 
