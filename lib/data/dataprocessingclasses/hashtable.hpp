@@ -22,20 +22,57 @@ public:
  */
 template <class TypeData>
 class HashTable {
-    TypeData** m_dataArray;
-    unsigned m_maxSize;
+    TypeData** m_dataArray; ///< Хэш-таблицы
+    unsigned m_maxSize; ///< Максимально допустимый размер
 
 public:
+    /**
+     * \brief HashTable создает хэш таблицу размером maxSize
+     * \param [in] maxSize максимальное число элементов
+     */
     explicit HashTable(const unsigned maxSize);
-    HashTable(const HashTable&) = delete;
-    ~HashTable();
+    HashTable(const HashTable&) = delete; ///< Копирование таблиц запрещено
+    ~HashTable(); ///< Деструктор
 
+    /**
+     * \brief add добавляет элемент в хэш таблицу
+     * \param [in] data элемент для добавления
+     * \return StatusCode_AlreadyExist - если элемент с таким ключом уже существует
+     * \return StatusCode_Overloaded - если для данного ключа нет места в хэш-таблице
+     * \return StatusCode_OK - если элемент добавлен
+     */
     StatusCodes add(const TypeData& data);
+
+    /**
+     * \brief get получает элемент из таблицы
+     * \param [in] key ключ элемента
+     * \param [out] dataToAssign указатель на элемент, в который атрибуты запишутся. Может быть nullptr если результат не нужен
+     * \return true - если элемент найдет, иначе false
+     */
     bool get(const IHashKey& key, TypeData* dataToAssign = nullptr) const;
+
+    /**
+     * \brief del удаляет элемент, если он существует
+     * \param [in] key ключ элемента, который следует удалить
+     */
     void del(const IHashKey& key);
 
 private:
+    /**
+     * \brief getEmptyCellFor получает первую ячейку, в которую можно записать новый элемент
+     * \param [in] key ключ элемента, для которого надо найти пустое место
+     * \param [out] outPos позиция, куда запишется позиция, куда можно поместить элемент. Или nullptr если не требуется.
+     * \return true - если в таблице нашлось место, иначе false
+     * \throw std::runtime_error если хэш-функции вернули недопустимые значения
+     */
     bool getEmptyCellFor(const IHashKey& key, unsigned* outPos = nullptr) const;
+    /**
+     * \brief getCell получает ячейку с определенным ключом
+     * \param [in] key ключ элемента
+     * \param [out] outPos позиция искомого элемента. Или nullptr если не требуется.
+     * \return true - если ячейка найдена
+     * \throw std::runtime_error если хэш-функции вернули недопустимые значения
+     */
     bool getCell(const IHashKey& key, unsigned* outPos = nullptr) const;
 };
 
