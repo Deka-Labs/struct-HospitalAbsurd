@@ -6,8 +6,7 @@ ReferralList::ReferralList(QObject* parent)
 }
 
 ReferralList::~ReferralList()
-{
-}
+= default;
 
 QVariant ReferralList::headerData(int section, Qt::Orientation orientation, int role) const
 {

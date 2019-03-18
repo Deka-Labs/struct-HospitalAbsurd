@@ -18,8 +18,7 @@ Doctor::Doctor(const Doctor& other)
 }
 
 Doctor::~Doctor()
-{
-}
+= default;
 
 DataObject Doctor::toDataObject() const
 {

@@ -7,8 +7,7 @@ SearchDoctorByPost::SearchDoctorByPost(TwoWayList<Doctor>&& results, QObject* pa
 }
 
 SearchDoctorByPost::~SearchDoctorByPost()
-{
-}
+= default;
 
 QVariant SearchDoctorByPost::headerData(int section, Qt::Orientation orientation, int role) const
 {

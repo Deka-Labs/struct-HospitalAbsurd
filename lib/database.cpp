@@ -8,8 +8,7 @@ Database::Database()
 }
 
 Database::~Database()
-{
-}
+    = default;
 
 bool Database::loadData(const char* fileName)
 {
@@ -83,7 +82,7 @@ void Database::saveTo(const char* fileName)
     auto referrals = m_referrals.m_list;
     auto sizeReferrals = referrals.size();
     for (unsigned pos = 0; pos < sizeReferrals; pos++) {
-        Referral ref = referrals.at(pos);
+        const Referral& ref = referrals.at(pos);
         DataObject obj = ref.toDataObject();
         m_file.insertObject(obj);
     }

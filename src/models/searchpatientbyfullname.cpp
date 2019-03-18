@@ -7,8 +7,7 @@ SearchPatientByFullname::SearchPatientByFullname(TwoWayList<Patient>&& results, 
 }
 
 SearchPatientByFullname::~SearchPatientByFullname()
-{
-}
+= default;
 
 QVariant SearchPatientByFullname::headerData(int section, Qt::Orientation orientation, int role) const
 {

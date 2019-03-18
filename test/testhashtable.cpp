@@ -13,12 +13,12 @@ public:
     {
     }
 
-    unsigned hash() const { return m_key % MAX_TEST_KEY; }
-    unsigned dopHash() const { return m_key % MAX_DELTA + 1; }
-    bool validateKey() const { return true; }
-    bool operator==(const IHashKey& other) const
+    unsigned hash() const override { return m_key % MAX_TEST_KEY; }
+    unsigned dopHash() const override { return m_key % MAX_DELTA + 1; }
+    bool validateKey() const override { return true; }
+    bool operator==(const IHashKey& other) const override
     {
-        const TestKey& o = dynamic_cast<const TestKey&>(other);
+        const auto& o = dynamic_cast<const TestKey&>(other);
         return m_key == o.m_key;
     }
 };
@@ -55,7 +55,7 @@ TEST(HashTable, AddingEqual)
 
 TEST(HashTable, AddingOverflow)
 {
-    srand(time(nullptr));
+    srand(unsigned(time(nullptr)));
     HashTable<TestHashClass> table(MAX_TEST_KEY);
 
     TestHashClass toAdd;

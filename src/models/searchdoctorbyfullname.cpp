@@ -13,8 +13,7 @@ SearchDoctorByFullname::SearchDoctorByFullname(const Doctor& doc, QObject* paren
 }
 
 SearchDoctorByFullname::~SearchDoctorByFullname()
-{
-}
+= default;
 
 QVariant SearchDoctorByFullname::headerData(int section, Qt::Orientation orientation, int role) const
 {

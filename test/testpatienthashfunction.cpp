@@ -35,8 +35,8 @@ TEST(PatientHashKey, TestWithOut)
     EXPECT_TRUE(second.open(QIODevice::WriteOnly | QIODevice::Truncate));
 
     if (first.isWritable()) {
-        for (unsigned i = 0; i < MAX_PATIENTS; i++) {
-            first.write(QString("%1, ").arg(m_firstHashes[i]).toUtf8());
+        for (unsigned int m_firstHashe : m_firstHashes) {
+            first.write(QString("%1, ").arg(m_firstHashe).toUtf8());
         }
     }
 

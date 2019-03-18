@@ -7,8 +7,7 @@ DoctorBinTree::DoctorBinTree(QObject* parent)
 }
 
 DoctorBinTree::~DoctorBinTree()
-{
-}
+= default;
 
 QVariant DoctorBinTree::headerData(int section, Qt::Orientation orientation, int role) const
 {

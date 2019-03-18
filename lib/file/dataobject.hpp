@@ -17,7 +17,7 @@ private:
     TwoWayList<info> m_attributes;
 
 public:
-    DataObject(const QString& getType = "Unknown");
+    DataObject(QString  getType = "Unknown");
     DataObject(const DataObject&);
 
     void setType(const QString& getType);

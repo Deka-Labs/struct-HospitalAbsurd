@@ -123,9 +123,7 @@ TEST(BinTree, Balancing)
         auto rHeight = (node->right) ? node->right->height : 0;
         auto lHeight = (node->left) ? node->left->height : 0;
         auto balance = rHeight - lHeight;
-        if (balance >= 2 || balance <= -2)
-            return false;
-        return true;
+        return !(balance >= 2 || balance <= -2);
     };
 
     auto makeListInOrder = [=](const BinTree<TestClass, unsigned>& tree) -> TwoWayList<BinTreeNode<TestClass>*> {

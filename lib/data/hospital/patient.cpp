@@ -21,8 +21,7 @@ Patient::Patient(const Patient& other)
 }
 
 Patient::~Patient()
-{
-}
+= default;
 
 QString Patient::regID() const
 {
@@ -104,10 +103,7 @@ bool Patient::setWorkPlace(const QString& workPlace)
 
 bool Patient::operator==(const Patient& other)
 {
-    if (m_regID == other.regID() && m_fullName == other.fullName() && m_yearOfBirth == other.yearOfBirth() && m_address == other.address() && m_workPlace == other.workPlace()) {
-        return true;
-    }
-    return false;
+    return m_regID == other.regID() && m_fullName == other.fullName() && m_yearOfBirth == other.yearOfBirth() && m_address == other.address() && m_workPlace == other.workPlace();
 }
 
 bool Patient::operator!=(const Patient& other)

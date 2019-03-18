@@ -47,8 +47,5 @@ bool TemplateValidate(const QString& templ, const QString& str)
 bool haveRestrictedChars(const QString& str)
 {
     auto request = QChar(DATA_CHAR_DIVIDER_ARG);
-    if (QStringSearch(request, str)) {
-        return true;
-    }
-    return false;
+    return QStringSearch(request, str);
 }

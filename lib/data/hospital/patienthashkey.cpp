@@ -1,4 +1,6 @@
 #include "patienthashkey.hpp"
+
+#include <utility>
 #include "utils.hpp"
 
 QString PatientHashKey::key() const
@@ -6,8 +8,8 @@ QString PatientHashKey::key() const
     return m_key;
 }
 
-PatientHashKey::PatientHashKey(const QString& key)
-    : m_key(key)
+PatientHashKey::PatientHashKey(QString  key)
+    : m_key(std::move(key))
 {
 }
 
@@ -41,13 +43,11 @@ unsigned PatientHashKey::dopHash() const
 
 bool PatientHashKey::validateKey() const
 {
-    if (!TemplateValidate(PATIENT_REGID_TEMPLATE, m_key))
-        return false;
-    return true;
+    return TemplateValidate(PATIENT_REGID_TEMPLATE, m_key);
 }
 
 bool PatientHashKey::operator==(const IHashKey& key) const
 {
-    const PatientHashKey& other = dynamic_cast<const PatientHashKey&>(key);
+    const auto& other = dynamic_cast<const PatientHashKey&>(key);
     return m_key == other.m_key;
 }

@@ -1,16 +1,14 @@
 #include "dataobject.hpp"
 
-DataObject::DataObject(const QString& type)
-    : m_type(type)
+#include <utility>
+
+DataObject::DataObject(QString type)
+    : m_type(std::move(type))
     , m_attributes()
 {
 }
 
-DataObject::DataObject(const DataObject& other)
-    : m_type(other.m_type)
-    , m_attributes(other.m_attributes)
-{
-}
+DataObject::DataObject(const DataObject& other) = default;
 
 void DataObject::setType(const QString& type)
 {

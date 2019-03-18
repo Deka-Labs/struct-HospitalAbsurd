@@ -18,8 +18,7 @@ Referral::Referral(const Referral& other)
 }
 
 Referral::~Referral()
-{
-}
+= default;
 
 DataObject Referral::toDataObject() const
 {

@@ -9,8 +9,7 @@ PatientHashTable::PatientHashTable(QObject* parent)
 }
 
 PatientHashTable::~PatientHashTable()
-{
-}
+= default;
 
 QVariant PatientHashTable::headerData(int section, Qt::Orientation orientation, int role) const
 {
