@@ -27,8 +27,7 @@ struct BinTreeNode {
 template <class TypeData, class TypeKey>
 class BinTree {
 private:
-    BinTreeNode<TypeData>* m_root;
-    unsigned m_size;
+    BinTreeNode<TypeData>* m_root; ///< корневой элемент
 
 public:
     BinTree(); ///< Создает пустое дерево
@@ -143,15 +142,9 @@ private:
 //Realization
 
 template <class TypeData, class TypeKey>
-unsigned BinTree<TypeData, TypeKey>::size() const
-{
-    return m_size;
-}
-
-template <class TypeData, class TypeKey>
 BinTree<TypeData, TypeKey>::BinTree()
     : m_root(nullptr)
-    , m_size(0)
+
 {
 }
 
@@ -170,7 +163,6 @@ StatusCodes BinTree<TypeData, TypeKey>::add(const TypeData& data)
 
     if (isEmpty()) {
         m_root = newNode;
-        m_size++;
         return StatusCode_OK;
     }
     newNode->mark = m_root->mark;
@@ -204,7 +196,6 @@ StatusCodes BinTree<TypeData, TypeKey>::add(const TypeData& data)
     }
 
     normalize(newNode);
-    m_size++;
     return StatusCode_OK;
 }
 
@@ -314,7 +305,6 @@ void BinTree<TypeData, TypeKey>::removeNode(BinTreeNode<TypeData>* node)
 
             normalize(parent);
         }
-        m_size--;
         delete node;
     } else if (node->right) {
         //Ищем самый левый узел в правом поддереве
@@ -346,7 +336,6 @@ void BinTree<TypeData, TypeKey>::removeNode(BinTreeNode<TypeData>* node)
         }
 
         normalize(newNode);
-        m_size--;
         delete node;
     }
 }

@@ -97,41 +97,6 @@ TEST(BinTree, Removing)
     ASSERT_TRUE(tree.isEmpty());
 }
 
-TEST(BinTree, Sizeing)
-{
-    BinTree<TestClass, unsigned> tree;
-
-    const unsigned count = 1000;
-    const int begin = count;
-
-    for (unsigned i = 0; i < count; i++) {
-        auto testClass = TestClass(i, begin + int(i));
-        ASSERT_EQ(tree.add(testClass), StatusCode_OK);
-        ASSERT_EQ(tree.size(), i + 1);
-    }
-
-    ASSERT_FALSE(tree.isEmpty());
-
-    auto oldSize = tree.size();
-    ASSERT_EQ(tree.add(TestClass(count / 2, 0)), StatusCode_AlreadyExist);
-    ASSERT_EQ(oldSize, tree.size());
-
-    TwoWayList<unsigned> keys;
-
-    for (unsigned i = 0; i < count; i++) {
-        keys.push_back(i);
-    }
-
-    while (keys.size() != 0) {
-        auto key = keys.at(unsigned(rand()) % keys.size());
-        ASSERT_NO_THROW(tree.remove(key));
-        keys.removeAll(key);
-        ASSERT_EQ(tree.size(), keys.size());
-    }
-
-    ASSERT_TRUE(tree.isEmpty());
-}
-
 TEST(BinTree, Balancing)
 {
     srand(unsigned(time(nullptr)));
