@@ -14,10 +14,18 @@ NewDoctorWindow::NewDoctorWindow(QWidget* parent)
 
     connect(m_ui->pushButton_ok, &QPushButton::clicked, this, &NewDoctorWindow::okButtonPressed);
 
-    m_ui->lineEdit_fullName->setToolTip("Строка размером до " + QString("%1").arg(MAX_DOCTOR_FULLNAME_STRING_SIZE));
-    m_ui->lineEdit_post->setToolTip("Строка размером до " + QString("%1").arg(MAX_DOCTOR_POST_STRING_SIZE));
-    m_ui->spinBox_cabNumber->setToolTip("Число от 0 до " + QString("%1").arg(MAX_DOCTOR_CABINET));
-    m_ui->lineEdit_grafik->setToolTip("Строка размером до " + QString("%1").arg(MAX_DOCTOR_SCHEDULE_STRING_SIZE));
+    m_ui->lineEdit_fullName->setMaxLength(MAX_DOCTOR_FULLNAME_STRING_SIZE);
+    m_ui->lineEdit_fullName->setToolTip("Строка размером от " + QString("%1").arg(MIN_DOCTOR_FULLNAME_STRING_SIZE) + " до " + QString("%1").arg(MAX_DOCTOR_FULLNAME_STRING_SIZE));
+
+    m_ui->lineEdit_post->setMaxLength(MAX_DOCTOR_POST_STRING_SIZE);
+    m_ui->lineEdit_post->setToolTip("Строка размером от " + QString("%1").arg(MIN_DOCTOR_POST_STRING_SIZE) + " до " + QString("%1").arg(MAX_DOCTOR_POST_STRING_SIZE));
+
+    m_ui->spinBox_cabNumber->setMinimum(MIN_DOCTOR_CABINET);
+    m_ui->spinBox_cabNumber->setMaximum(MAX_DOCTOR_CABINET);
+    m_ui->spinBox_cabNumber->setToolTip("Число от " + QString("%1").arg(MIN_DOCTOR_CABINET) + " до " + QString("%1").arg(MAX_DOCTOR_CABINET));
+
+    m_ui->lineEdit_grafik->setMaxLength(MAX_DOCTOR_SCHEDULE_STRING_SIZE);
+    m_ui->lineEdit_grafik->setToolTip("Строка размером от " + QString("%1").arg(MIN_DOCTOR_SCHEDULE_STRING_SIZE) + " до " + QString("%1").arg(MAX_DOCTOR_SCHEDULE_STRING_SIZE));
 }
 
 NewDoctorWindow::~NewDoctorWindow()

@@ -18,7 +18,7 @@ Doctor::Doctor(const Doctor& other)
 }
 
 Doctor::~Doctor()
-= default;
+    = default;
 
 DataObject Doctor::toDataObject() const
 {
@@ -72,7 +72,7 @@ QString Doctor::fullname() const
 
 bool Doctor::setFullname(const QString& fullname)
 {
-    if (fullname.size() > MAX_DOCTOR_FULLNAME_STRING_SIZE)
+    if (fullname.size() < MIN_DOCTOR_FULLNAME_STRING_SIZE || MAX_DOCTOR_FULLNAME_STRING_SIZE < fullname.size())
         return false;
     if (haveRestrictedChars(fullname))
         return false;
@@ -88,7 +88,7 @@ QString Doctor::post() const
 
 bool Doctor::setPost(const QString& post)
 {
-    if (post.size() > MAX_DOCTOR_POST_STRING_SIZE)
+    if (post.size() < MIN_DOCTOR_POST_STRING_SIZE || MAX_DOCTOR_POST_STRING_SIZE < post.size())
         return false;
     if (haveRestrictedChars(post))
         return false;
@@ -104,7 +104,7 @@ unsigned Doctor::cabinet() const
 
 bool Doctor::setCabinet(const unsigned& cabinet)
 {
-    if (cabinet > MAX_DOCTOR_CABINET)
+    if (cabinet < MIN_DOCTOR_CABINET || MAX_DOCTOR_CABINET < cabinet)
         return false;
     m_cabinet = cabinet;
     return true;
@@ -117,7 +117,7 @@ QString Doctor::schedule() const
 
 bool Doctor::setSchedule(const QString& schedule)
 {
-    if (schedule.size() > MAX_DOCTOR_SCHEDULE_STRING_SIZE)
+    if (schedule.size() < MIN_DOCTOR_SCHEDULE_STRING_SIZE || MAX_DOCTOR_SCHEDULE_STRING_SIZE < schedule.size())
         return false;
     if (haveRestrictedChars(schedule))
         return false;
