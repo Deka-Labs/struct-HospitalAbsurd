@@ -22,6 +22,11 @@ NewReferralWindow::NewReferralWindow(QWidget* parent)
     for (unsigned pos = 0; pos < listDoc.size(); pos++) {
         m_ui->comboBox->addItem(listDoc.at(pos).fullname());
     }
+
+    m_ui->comboBox_regID->setToolTip("Регистрационный номер пациента");
+    m_ui->comboBox->setToolTip("ФИО врача");
+    m_ui->dateEdit->setToolTip("Дата направления");
+    m_ui->timeEdit->setToolTip("Время направления");
 }
 
 NewReferralWindow::~NewReferralWindow()

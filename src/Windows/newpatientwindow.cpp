@@ -12,6 +12,12 @@ NewPatientWindow::NewPatientWindow(QWidget* parent)
     m_ui->setupUi(this);
 
     connect(m_ui->pushButton_ok, &QPushButton::clicked, this, &NewPatientWindow::okButtonPressed);
+
+    m_ui->lineEdit_regID->setToolTip("Строка формата dd-dddddd; где d - число от 0 до 9");
+    m_ui->lineEdit_fullName->setToolTip("Строка размером до " + QString("%1").arg(MAX_PATIENT_FULLNAME_STRING_SIZE));
+    m_ui->spinBox_year->setToolTip("Год рождения - число от 0 до " + QString("%1").arg(MAX_PATIENT_YEAR));
+    m_ui->lineEdit_address->setToolTip("Строка размером до " + QString("%1").arg(MAX_PATIENT_FULLNAME_STRING_SIZE));
+    m_ui->lineEdit_workplace->setToolTip("Строка размером до " + QString("%1").arg(MAX_PATIENT_WORKPLACE_STRING_SIZE));
 }
 
 NewPatientWindow::~NewPatientWindow()

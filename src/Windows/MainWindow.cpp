@@ -20,7 +20,12 @@ MainWindow::MainWindow(QWidget* parent)
     if (!g_DATABASE)
         g_DATABASE = new Database();
 
-    g_DATABASE->loadData(SAVE_FILE);
+    auto code = g_DATABASE->loadData(SAVE_FILE);
+    if (code != StatusCode_OK && code != StatusCode_File_NoObject) {
+        QMessageBox::warning(this, "Загрузка базы данных", "Файл БД найден, но не может быть загружен\n"
+                                                           "Сообщение от программы: "
+                + QString(g_STATUSCODES_MESSAGES[code]));
+    }
 }
 
 MainWindow::~MainWindow()

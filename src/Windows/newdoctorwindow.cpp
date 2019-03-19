@@ -13,6 +13,11 @@ NewDoctorWindow::NewDoctorWindow(QWidget* parent)
     m_ui->setupUi(this);
 
     connect(m_ui->pushButton_ok, &QPushButton::clicked, this, &NewDoctorWindow::okButtonPressed);
+
+    m_ui->lineEdit_fullName->setToolTip("Строка размером до " + QString("%1").arg(MAX_DOCTOR_FULLNAME_STRING_SIZE));
+    m_ui->lineEdit_post->setToolTip("Строка размером до " + QString("%1").arg(MAX_DOCTOR_POST_STRING_SIZE));
+    m_ui->spinBox_cabNumber->setToolTip("Число от 0 до " + QString("%1").arg(MAX_DOCTOR_CABINET));
+    m_ui->lineEdit_grafik->setToolTip("Строка размером до " + QString("%1").arg(MAX_DOCTOR_SCHEDULE_STRING_SIZE));
 }
 
 NewDoctorWindow::~NewDoctorWindow()
