@@ -14,6 +14,8 @@
 #define DATA_CHAR_NEWLINE '\n'
 #define DATA_ENCODING "UTF-8"
 
+const QChar restrictedChars[] = { DATA_CHAR_EQUAL, DATA_CHAR_DIVIDER_ARG, DATA_CHAR_OPEN_OBJ, DATA_CHAR_CLOSE_OBJ };
+
 /*
 File template:
 

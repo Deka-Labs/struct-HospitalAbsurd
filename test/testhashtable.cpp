@@ -40,7 +40,7 @@ public:
     {
     }
 
-    TestKey key() const { return m_key; }
+    TestKey key() const { return TestKey(m_key); }
 };
 
 TEST(HashTable, AddingEqual)
