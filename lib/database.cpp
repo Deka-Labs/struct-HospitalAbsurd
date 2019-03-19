@@ -19,8 +19,15 @@ bool Database::loadData(const char* fileName)
 
     while (!m_file.atEOF()) {
         DataObject obj;
-        if (!m_file.ReadNextObject(obj))
+        auto code = m_file.ReadNextObject(obj);
+        switch (code) {
+        case StatusCode_File_NoObject:
             continue;
+        case StatusCode_OK:
+            break;
+        default:
+            return false;
+        };
 
         if (obj.getType() == "patient") {
             Patient pat;

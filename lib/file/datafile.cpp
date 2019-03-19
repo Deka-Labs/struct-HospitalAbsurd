@@ -43,19 +43,19 @@ void DataFile::close()
         m_file.close();
 }
 
-bool DataFile::ReadNextObject(DataObject& obj)
+StatusCodes DataFile::ReadNextObject(DataObject& obj)
 {
     if (!m_forRead)
-        return false;
+        return StatusCode_WrongMode;
     //Ищем первый символ открытия объекта
     QChar currentSymbol = '\0';
     auto code = readNext(&currentSymbol);
     if (!code)
-        return false;
+        return StatusCode_File_NoObject;
     while (currentSymbol != DATA_CHAR_OPEN_OBJ) {
         code = readNext(&currentSymbol);
         if (!code)
-            return false;
+            return StatusCode_File_NoObject;
     }
 
     //Читаем тип. Находим первый пробел между ним и < - название типа
@@ -63,13 +63,13 @@ bool DataFile::ReadNextObject(DataObject& obj)
     while (currentSymbol != DATA_CHAR_SPACE) {
         code = readNext(&currentSymbol);
         if (!code)
-            return false;
+            return StatusCode_File_UnexpectedEnd;
         if (!currentSymbol.isSpace())
             type += currentSymbol;
     }
 
     if (type.size() == 0)
-        return false;
+        return StatusCode_InvalidObject;
     obj.setType(type);
 
     while (true) {
@@ -77,7 +77,7 @@ bool DataFile::ReadNextObject(DataObject& obj)
         do {
             code = readNext(&currentSymbol);
             if (!code)
-                return false;
+                return StatusCode_File_UnexpectedEnd;
         } while (currentSymbol.isSpace());
 
         if (currentSymbol == DATA_CHAR_CLOSE_OBJ) //Конец
@@ -92,32 +92,36 @@ bool DataFile::ReadNextObject(DataObject& obj)
             while (currentSymbol != DATA_CHAR_EQUAL) {
                 name += currentSymbol; //Обязательно вначале. 1 символ уже считан.
                 code = readNext(&currentSymbol);
-                if (!code || currentSymbol == DATA_CHAR_SPACE)
-                    return false;
+                if (!code)
+                    return StatusCode_File_UnexpectedEnd;
+                if (currentSymbol == DATA_CHAR_SPACE)
+                    return StatusCode_InvalidObject;
             }
             //Читаем разделитель
             code = readNext(&currentSymbol);
-            if (!code || currentSymbol != DATA_CHAR_DIVIDER_ARG)
-                return false;
+            if (!code)
+                return StatusCode_File_UnexpectedEnd;
+            if (currentSymbol != DATA_CHAR_DIVIDER_ARG)
+                return StatusCode_InvalidObject;
 
             //Читаем первый символ после разделителя
             code = readNext(&currentSymbol);
             if (!code)
-                return false;
+                return StatusCode_File_UnexpectedEnd;
 
             //Читаем значения до разделителя
             while (currentSymbol != DATA_CHAR_DIVIDER_ARG) {
                 value += currentSymbol; //Обязательно вначале. 1 символ уже считан.
                 code = readNext(&currentSymbol);
                 if (!code)
-                    return false;
+                    return StatusCode_File_UnexpectedEnd;
             }
             //Устанавливаем значение
             obj.setValue(name, value);
         }
     }
 
-    return true;
+    return StatusCode_OK;
 }
 
 void DataFile::startOver()

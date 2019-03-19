@@ -25,7 +25,7 @@ TEST(DataFile, ReadingNormal)
 
     for (int i = 0; i < count; i++) {
         DataObject obj;
-        ASSERT_TRUE(df.ReadNextObject(obj));
+        ASSERT_EQ(df.ReadNextObject(obj), StatusCode_OK);
         ASSERT_EQ(obj.getType(), "object");
         QString id;
         ASSERT_TRUE(obj.getValue("id", id));
@@ -123,9 +123,9 @@ TEST(DataFile, ReadingBrokenObject)
 
     DataObject obj;
 
-    ASSERT_TRUE(df.ReadNextObject(obj));
-    ASSERT_FALSE(df.ReadNextObject(obj));
-    ASSERT_TRUE(df.ReadNextObject(obj));
+    ASSERT_EQ(df.ReadNextObject(obj), StatusCode_OK);
+    ASSERT_EQ(df.ReadNextObject(obj), StatusCode_InvalidObject);
+    ASSERT_EQ(df.ReadNextObject(obj), StatusCode_OK);
 
     df.close();
 }
@@ -154,7 +154,7 @@ TEST(DataFile, Writing)
 
     for (int i = 0; i < count; i++) {
         DataObject obj;
-        ASSERT_TRUE(df.ReadNextObject(obj));
+        ASSERT_EQ(df.ReadNextObject(obj), StatusCode_OK);
         ASSERT_EQ(obj.getType(), "object");
         QString id;
         ASSERT_TRUE(obj.getValue("id", id));
@@ -182,7 +182,7 @@ TEST(DataFile, RussianLoc)
 
     ASSERT_TRUE(df.open(testFile, true));
 
-    ASSERT_TRUE(df.ReadNextObject(obj));
+    ASSERT_EQ(df.ReadNextObject(obj), StatusCode_OK);
     ASSERT_EQ(obj.getType(), "объект");
     QString id;
     ASSERT_TRUE(obj.getValue("имя", id));

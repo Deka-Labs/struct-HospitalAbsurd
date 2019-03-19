@@ -2,6 +2,7 @@
 #define DATAFILE_HPP
 
 #include "dataobject.hpp"
+#include "statuscodes.hpp"
 #include <QFile>
 #include <QString>
 #include <QTextStream>
@@ -46,7 +47,7 @@ public:
     bool open(const char* filename, bool forRead = true);
     void close();
 
-    bool ReadNextObject(DataObject& obj);
+    StatusCodes ReadNextObject(DataObject& obj);
     void startOver();
 
     bool insertObject(const DataObject& obj);
