@@ -9,7 +9,21 @@ enum StatusCodes {
     StatusCode_WrongMode, ///< Попытка использовать объект в неверном режиме
     StatusCode_File_UnexpectedEnd, ///< Неожиданное завершение файла
     StatusCode_File_NoObject, ///< Для работы отсутсвует объект
-    StatusCode_InvalidObject ///< Объект имеет наверные данные
+    StatusCode_InvalidObject, ///< Объект имеет наверные данные
+    StatusCode_File_InvalidFormat, ///< Неверный формат файла
+    StatusCodes_SIZE
+};
+
+static const char* g_STATUSCODES_MESSAGES[StatusCodes_SIZE] = {
+    "Неизветная ошибка", ///< StatusCode_UNKNOWN
+    "Нет ошибки", ///<StatusCode_OK
+    "Объект уже существует", ///<StatusCode_AlreadyExist
+    "Переполнение", ///<StatusCode_Overloaded
+    "Неверный режим работы", ///<StatusCode_WrongMode
+    "Неожиданное завершение файла", ///<StatusCode_File_UnexpectedEnd
+    "Нет объекта для чтения", ///<StatusCode_File_NoObject
+    "Неверный объект", ///<StatusCode_InvalidObject
+    "Неверный формат файла" ///<StatusCode_File_InvalidFormat
 };
 
 #endif // STATUSCODES_HPP
