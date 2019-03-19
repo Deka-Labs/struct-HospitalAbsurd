@@ -14,10 +14,19 @@ NewPatientWindow::NewPatientWindow(QWidget* parent)
     connect(m_ui->pushButton_ok, &QPushButton::clicked, this, &NewPatientWindow::okButtonPressed);
 
     m_ui->lineEdit_regID->setToolTip("Строка формата dd-dddddd; где d - число от 0 до 9");
-    m_ui->lineEdit_fullName->setToolTip("Строка размером до " + QString("%1").arg(MAX_PATIENT_FULLNAME_STRING_SIZE));
-    m_ui->spinBox_year->setToolTip("Год рождения - число от 0 до " + QString("%1").arg(MAX_PATIENT_YEAR));
-    m_ui->lineEdit_address->setToolTip("Строка размером до " + QString("%1").arg(MAX_PATIENT_FULLNAME_STRING_SIZE));
-    m_ui->lineEdit_workplace->setToolTip("Строка размером до " + QString("%1").arg(MAX_PATIENT_WORKPLACE_STRING_SIZE));
+
+    m_ui->lineEdit_fullName->setMaxLength(MAX_PATIENT_FULLNAME_STRING_SIZE);
+    m_ui->lineEdit_fullName->setToolTip("Строка размером от " + QString("%1").arg(MIN_PATIENT_FULLNAME_STRING_SIZE) + " до " + QString("%1").arg(MAX_PATIENT_FULLNAME_STRING_SIZE));
+
+    m_ui->spinBox_year->setMinimum(MIN_PATIENT_YEAR);
+    m_ui->spinBox_year->setMaximum(MAX_PATIENT_YEAR);
+    m_ui->spinBox_year->setToolTip("Год рождения - число от " + QString("%1").arg(MIN_PATIENT_YEAR) + " до " + QString("%1").arg(MAX_PATIENT_YEAR));
+
+    m_ui->lineEdit_address->setMaxLength(MAX_PATIENT_ADDRESS_STRING_SIZE);
+    m_ui->lineEdit_address->setToolTip("Строка размером от " + QString("%1").arg(MIN_PATIENT_ADDRESS_STRING_SIZE) + " до " + QString("%1").arg(MAX_PATIENT_ADDRESS_STRING_SIZE));
+
+    m_ui->lineEdit_workplace->setMaxLength(MAX_PATIENT_WORKPLACE_STRING_SIZE);
+    m_ui->lineEdit_workplace->setToolTip("Строка размером от " + QString("%1").arg(MIN_PATIENT_WORKPLACE_STRING_SIZE) + " до " + QString("%1").arg(MAX_PATIENT_WORKPLACE_STRING_SIZE));
 }
 
 NewPatientWindow::~NewPatientWindow()

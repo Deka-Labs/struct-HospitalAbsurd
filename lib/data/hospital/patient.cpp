@@ -20,8 +20,7 @@ Patient::Patient(const Patient& other)
 {
 }
 
-Patient::~Patient()
-= default;
+Patient::~Patient() = default;
 
 QString Patient::regID() const
 {
@@ -30,7 +29,7 @@ QString Patient::regID() const
 
 bool Patient::setRegID(const QString& regID)
 {
-    if (regID.size() > MAX_PATIENT_REGID_STRING_SIZE)
+    if (regID.size() < MIN_PATIENT_REGID_STRING_SIZE || MAX_PATIENT_REGID_STRING_SIZE < regID.size())
         return false;
 
     if (!TemplateValidate(PATIENT_REGID_TEMPLATE, regID))
@@ -47,8 +46,9 @@ QString Patient::fullName() const
 
 bool Patient::setFullName(const QString& fullName)
 {
-    if (fullName.size() > MAX_PATIENT_FULLNAME_STRING_SIZE)
+    if (fullName.size() < MIN_PATIENT_FULLNAME_STRING_SIZE || MAX_PATIENT_FULLNAME_STRING_SIZE < fullName.size())
         return false;
+
     if (haveRestrictedChars(fullName))
         return false;
 
@@ -63,8 +63,9 @@ unsigned Patient::yearOfBirth() const
 
 bool Patient::setYearOfBirth(const unsigned& yearOfBirth)
 {
-    if (yearOfBirth > MAX_PATIENT_YEAR)
+    if (yearOfBirth < MIN_PATIENT_YEAR || MAX_PATIENT_YEAR < yearOfBirth)
         return false;
+
     m_yearOfBirth = yearOfBirth;
     return true;
 }
@@ -76,8 +77,9 @@ QString Patient::address() const
 
 bool Patient::setAddress(const QString& address)
 {
-    if (address.size() > MAX_PATIENT_ADDRESS_STRING_SIZE)
+    if (address.size() < MIN_PATIENT_ADDRESS_STRING_SIZE || MAX_PATIENT_ADDRESS_STRING_SIZE < address.size())
         return false;
+
     if (haveRestrictedChars(address))
         return false;
 
@@ -92,8 +94,9 @@ QString Patient::workPlace() const
 
 bool Patient::setWorkPlace(const QString& workPlace)
 {
-    if (workPlace.size() > MAX_PATIENT_WORKPLACE_STRING_SIZE)
+    if (workPlace.size() < MIN_PATIENT_WORKPLACE_STRING_SIZE || MAX_PATIENT_WORKPLACE_STRING_SIZE < workPlace.size())
         return false;
+
     if (haveRestrictedChars(workPlace))
         return false;
 
