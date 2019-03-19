@@ -1,27 +1,24 @@
 #include "doctor.hpp"
+
 #include "utils.hpp"
 
 Doctor::Doctor()
     : m_fullname("")
     , m_post("")
     , m_cabinet(0)
-    , m_schedule("")
-{
+    , m_schedule("") {
 }
 
 Doctor::Doctor(const Doctor& other)
     : m_fullname(other.fullname())
     , m_post(other.post())
     , m_cabinet(other.cabinet())
-    , m_schedule(other.schedule())
-{
+    , m_schedule(other.schedule()) {
 }
 
-Doctor::~Doctor()
-    = default;
+Doctor::~Doctor() = default;
 
-DataObject Doctor::toDataObject() const
-{
+DataObject Doctor::toDataObject() const {
     DataObject out;
     out.setType("doctor");
     out.setValue("fullname", m_fullname);
@@ -32,8 +29,7 @@ DataObject Doctor::toDataObject() const
     return out;
 }
 
-bool Doctor::fromDataObject(const DataObject& object)
-{
+bool Doctor::fromDataObject(const DataObject& object) {
     QString new_fullname, new_post, new_cabinet, new_schedule;
 
     if (object.getType() != "doctor")
@@ -48,7 +44,7 @@ bool Doctor::fromDataObject(const DataObject& object)
     if (!object.getValue("schedule", new_schedule))
         return false;
 
-    bool ok = false;
+    bool     ok        = false;
     unsigned cabNumber = new_cabinet.toUInt(&ok);
     if (!ok)
         return false;
@@ -65,13 +61,11 @@ bool Doctor::fromDataObject(const DataObject& object)
     return true;
 }
 
-QString Doctor::fullname() const
-{
+QString Doctor::fullname() const {
     return m_fullname;
 }
 
-bool Doctor::setFullname(const QString& fullname)
-{
+bool Doctor::setFullname(const QString& fullname) {
     if (fullname.size() < MIN_DOCTOR_FULLNAME_STRING_SIZE || MAX_DOCTOR_FULLNAME_STRING_SIZE < fullname.size())
         return false;
     if (haveRestrictedChars(fullname))
@@ -81,13 +75,11 @@ bool Doctor::setFullname(const QString& fullname)
     return true;
 }
 
-QString Doctor::post() const
-{
+QString Doctor::post() const {
     return m_post;
 }
 
-bool Doctor::setPost(const QString& post)
-{
+bool Doctor::setPost(const QString& post) {
     if (post.size() < MIN_DOCTOR_POST_STRING_SIZE || MAX_DOCTOR_POST_STRING_SIZE < post.size())
         return false;
     if (haveRestrictedChars(post))
@@ -97,26 +89,22 @@ bool Doctor::setPost(const QString& post)
     return true;
 }
 
-unsigned Doctor::cabinet() const
-{
+unsigned Doctor::cabinet() const {
     return m_cabinet;
 }
 
-bool Doctor::setCabinet(const unsigned& cabinet)
-{
+bool Doctor::setCabinet(const unsigned& cabinet) {
     if (cabinet < MIN_DOCTOR_CABINET || MAX_DOCTOR_CABINET < cabinet)
         return false;
     m_cabinet = cabinet;
     return true;
 }
 
-QString Doctor::schedule() const
-{
+QString Doctor::schedule() const {
     return m_schedule;
 }
 
-bool Doctor::setSchedule(const QString& schedule)
-{
+bool Doctor::setSchedule(const QString& schedule) {
     if (schedule.size() < MIN_DOCTOR_SCHEDULE_STRING_SIZE || MAX_DOCTOR_SCHEDULE_STRING_SIZE < schedule.size())
         return false;
     if (haveRestrictedChars(schedule))
@@ -126,32 +114,26 @@ bool Doctor::setSchedule(const QString& schedule)
     return true;
 }
 
-bool Doctor::operator==(const Doctor& other) const
-{
+bool Doctor::operator==(const Doctor& other) const {
     return m_fullname == other.fullname();
 }
 
-bool Doctor::operator!=(const Doctor& other) const
-{
+bool Doctor::operator!=(const Doctor& other) const {
     return !(m_fullname == other.fullname());
 }
 
-bool Doctor::operator<(const Doctor& other) const
-{
+bool Doctor::operator<(const Doctor& other) const {
     return m_fullname < other.m_fullname;
 }
 
-bool Doctor::operator>(const Doctor& other) const
-{
+bool Doctor::operator>(const Doctor& other) const {
     return !(*this < other) && (*this != other);
 }
 
-bool Doctor::operator<=(const Doctor& other) const
-{
+bool Doctor::operator<=(const Doctor& other) const {
     return *this < other || *this == other;
 }
 
-bool Doctor::operator>=(const Doctor& other) const
-{
+bool Doctor::operator>=(const Doctor& other) const {
     return *this > other || *this == other;
 }

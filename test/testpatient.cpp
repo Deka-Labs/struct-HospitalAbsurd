@@ -1,8 +1,8 @@
 #include "data/hospital/patient.hpp"
+
 #include <gtest/gtest.h>
 
-TEST(Patient, Setters)
-{
+TEST(Patient, Setters) {
     Patient pat;
     ASSERT_TRUE(pat.setRegID("12-345678"));
     ASSERT_TRUE(pat.setFullName("Иванов И.И."));
@@ -18,7 +18,7 @@ TEST(Patient, Setters)
 
     QString str;
 
-    //REGID
+    // REGID
 
     str.resize(MAX_PATIENT_REGID_STRING_SIZE + 1);
     str.fill('0');
@@ -29,26 +29,26 @@ TEST(Patient, Setters)
     ASSERT_FALSE(pat.setRegID("Wrong"));
     ASSERT_EQ(pat.regID(), "12-345678");
 
-    //FullName
+    // FullName
 
     str.resize(MAX_PATIENT_FULLNAME_STRING_SIZE + 1);
     str.fill('0');
     ASSERT_FALSE(pat.setFullName(str));
     ASSERT_EQ(pat.fullName(), "Иванов И.И.");
 
-    //Year
+    // Year
 
     ASSERT_FALSE(pat.setYearOfBirth(MAX_PATIENT_YEAR + 1));
     ASSERT_EQ(pat.yearOfBirth(), 2005);
 
-    //Address
+    // Address
 
     str.resize(MAX_PATIENT_ADDRESS_STRING_SIZE + 1);
     str.fill('0');
     ASSERT_FALSE(pat.setAddress(str));
     ASSERT_EQ(pat.address(), "г. Новосталинск. Ул. Сталина д. 45 к. 2 кв. 7");
 
-    //WorkPlace
+    // WorkPlace
 
     str.resize(MAX_PATIENT_WORKPLACE_STRING_SIZE + 1);
     str.fill('0');
@@ -56,8 +56,7 @@ TEST(Patient, Setters)
     ASSERT_EQ(pat.workPlace(), "ПАО Черный банк");
 }
 
-TEST(Patient, toDataObject)
-{
+TEST(Patient, toDataObject) {
     Patient pat;
     ASSERT_TRUE(pat.setRegID("12-345678"));
     ASSERT_TRUE(pat.setFullName("Иванов И.И."));
@@ -86,8 +85,7 @@ TEST(Patient, toDataObject)
     ASSERT_EQ(out, pat.workPlace());
 }
 
-TEST(Patient, fromDataObject)
-{
+TEST(Patient, fromDataObject) {
     Patient pat;
     ASSERT_TRUE(pat.setRegID("12-345678"));
     ASSERT_TRUE(pat.setFullName("Иванов И.И."));
@@ -112,7 +110,7 @@ TEST(Patient, fromDataObject)
     ASSERT_TRUE(fromData.fromDataObject(data));
     ASSERT_TRUE(pat == fromData);
 
-    //Filling with wrong data
+    // Filling with wrong data
     data.setType("aoa");
     ASSERT_FALSE(fromData.fromDataObject(data));
     resetData(data);
@@ -151,8 +149,7 @@ TEST(Patient, fromDataObject)
     resetData(data);
 }
 
-TEST(Patient, OperatorEqual)
-{
+TEST(Patient, OperatorEqual) {
     Patient pat;
     ASSERT_TRUE(pat.setRegID("12-345678"));
     ASSERT_TRUE(pat.setFullName("Иванов И.И."));

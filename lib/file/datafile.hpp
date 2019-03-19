@@ -3,6 +3,7 @@
 
 #include "dataobject.hpp"
 #include "statuscodes.hpp"
+
 #include <QFile>
 #include <QString>
 #include <QTextStream>
@@ -15,7 +16,7 @@
 #define DATA_CHAR_NEWLINE '\n'
 #define DATA_ENCODING "UTF-8"
 
-const QChar restrictedChars[] = { DATA_CHAR_EQUAL, DATA_CHAR_DIVIDER_ARG, DATA_CHAR_OPEN_OBJ, DATA_CHAR_CLOSE_OBJ };
+const QChar restrictedChars[] = {DATA_CHAR_EQUAL, DATA_CHAR_DIVIDER_ARG, DATA_CHAR_OPEN_OBJ, DATA_CHAR_CLOSE_OBJ};
 
 /*
 File template:
@@ -34,27 +35,27 @@ File template:
 */
 
 class DataFile {
-private:
-    QFile m_file;
+  private:
+    QFile       m_file;
     QTextStream m_stream;
-    bool m_forRead;
+    bool        m_forRead;
 
-public:
+  public:
     DataFile();
     DataFile(const DataFile& other) = delete;
     ~DataFile();
 
     StatusCodes open(const char* filename, bool forRead = true);
-    void close();
+    void        close();
 
     StatusCodes ReadNextObject(DataObject& obj);
-    void startOver();
+    void        startOver();
 
     bool insertObject(const DataObject& obj);
 
     bool atEOF() const;
 
-private:
+  private:
     StatusCodes validateFileStructure();
 
     bool readNext(QChar* ch);

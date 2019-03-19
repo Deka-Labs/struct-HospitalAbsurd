@@ -1,12 +1,12 @@
 
 #include "Windows/MainWindow.hpp"
+
 #include <QApplication>
 #include <QMessageBox>
 
 Database* g_DATABASE = nullptr;
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     try {
         QApplication app(argc, argv);
 

@@ -1,8 +1,8 @@
 #include "data/dataprocessingclasses/stack.hpp"
+
 #include "gtest/gtest.h"
 
-TEST(Stack, isEmpty)
-{
+TEST(Stack, isEmpty) {
     Stack<int> stack;
     ASSERT_TRUE(stack.isEmpty());
 
@@ -19,8 +19,7 @@ TEST(Stack, isEmpty)
     ASSERT_TRUE(stack.isEmpty());
 }
 
-TEST(Stack, PushAndPop)
-{
+TEST(Stack, PushAndPop) {
     Stack<int> stack;
 
     stack.push(2);

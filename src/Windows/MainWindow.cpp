@@ -1,13 +1,14 @@
 #include "MainWindow.hpp"
+
 #include "doctorlistwindow.hpp"
 #include "patientlistwindow.hpp"
 #include "referrallistwindow.hpp"
+
 #include <QMessageBox>
 
 MainWindow::MainWindow(QWidget* parent)
     : QWidget(parent)
-    , m_ui(nullptr)
-{
+    , m_ui(nullptr) {
     m_ui = new Ui::MainWindow();
     m_ui->setupUi(this);
 
@@ -22,42 +23,37 @@ MainWindow::MainWindow(QWidget* parent)
 
     auto code = g_DATABASE->loadData(SAVE_FILE);
     if (code != StatusCode_OK && code != StatusCode_File_NoObject) {
-        QMessageBox::warning(this, "Загрузка базы данных", "Файл БД найден, но не может быть загружен\n"
-                                                           "Сообщение от программы: "
-                + QString(g_STATUSCODES_MESSAGES[code]));
+        QMessageBox::warning(this, "Загрузка базы данных",
+                             "Файл БД найден, но не может быть загружен\n"
+                             "Сообщение от программы: " +
+                                 QString(g_STATUSCODES_MESSAGES[code]));
     }
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete m_ui;
 }
 
-void MainWindow::patientsButtonPressed()
-{
+void MainWindow::patientsButtonPressed() {
     PatientListWindow patWnd(this);
     patWnd.exec();
 }
 
-void MainWindow::doctorsButtonPressed()
-{
+void MainWindow::doctorsButtonPressed() {
     DoctorListWindow docWnd(this);
     docWnd.exec();
 }
 
-void MainWindow::referralsButtonPressed()
-{
+void MainWindow::referralsButtonPressed() {
     ReferralListWindow refWnd(this);
     refWnd.exec();
 }
 
-void MainWindow::exitButtonPressed()
-{
+void MainWindow::exitButtonPressed() {
     this->close();
 }
 
-void MainWindow::onClose()
-{
+void MainWindow::onClose() {
     auto res = QMessageBox::question(this, "Сохранить?", "Вы хотите сохранить изменения за текущий сеанс?");
     if (res == QMessageBox::Yes) {
         g_DATABASE->saveTo(SAVE_FILE);

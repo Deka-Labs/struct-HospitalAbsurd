@@ -2,17 +2,18 @@
 #define SEARCHDOCTORBYFULLNAME_HPP
 
 #include "../globaldatabase.hpp"
+
 #include <QAbstractTableModel>
 
 class SearchDoctorByFullname : public QAbstractTableModel {
     Q_OBJECT
-private:
+  private:
     struct {
-        Doctor doctor;
+        Doctor  doctor;
         QString referralsDoctorsFullname;
     } m_dataToDisplay;
 
-public:
+  public:
     SearchDoctorByFullname(const Doctor& doc, QObject* parent = nullptr);
     SearchDoctorByFullname(const SearchDoctorByFullname&) = delete;
     ~SearchDoctorByFullname();

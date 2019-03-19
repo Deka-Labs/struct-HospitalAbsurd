@@ -2,6 +2,7 @@
 #define DOCTOR_HPP
 
 #include "file/dataobject.hpp"
+
 #include <QString>
 
 #define MAX_DOCTOR_FULLNAME_STRING_SIZE 25
@@ -14,34 +15,36 @@
 #define MIN_DOCTOR_SCHEDULE_STRING_SIZE 0
 
 class Doctor {
-private:
-    QString m_fullname;
-    QString m_post;
+  private:
+    QString  m_fullname;
+    QString  m_post;
     unsigned m_cabinet;
-    QString m_schedule;
+    QString  m_schedule;
 
-public:
+  public:
     Doctor();
     Doctor(const Doctor& other);
     ~Doctor();
 
-    //Data
+    // Data
     DataObject toDataObject() const;
-    bool fromDataObject(const DataObject& object);
+    bool       fromDataObject(const DataObject& object);
 
-    //Set & Get
-    QString fullname() const;
-    bool setFullname(const QString& fullname);
-    QString post() const;
-    bool setPost(const QString& post);
+    // Set & Get
+    QString  fullname() const;
+    bool     setFullname(const QString& fullname);
+    QString  post() const;
+    bool     setPost(const QString& post);
     unsigned cabinet() const;
-    bool setCabinet(const unsigned& cabinet);
-    QString schedule() const;
-    bool setSchedule(const QString& schedule);
+    bool     setCabinet(const unsigned& cabinet);
+    QString  schedule() const;
+    bool     setSchedule(const QString& schedule);
 
-    QString key() const { return fullname(); }
+    QString key() const {
+        return fullname();
+    }
 
-    //operators Keys compare
+    // operators Keys compare
     bool operator==(const Doctor& other) const;
     bool operator!=(const Doctor& other) const;
     bool operator<(const Doctor& other) const;

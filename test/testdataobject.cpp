@@ -1,8 +1,8 @@
 #include "file/dataobject.hpp"
+
 #include "gtest/gtest.h"
 
-TEST(DataObject, SettersAndGetter)
-{
+TEST(DataObject, SettersAndGetter) {
     DataObject obj;
 
     ASSERT_NO_THROW(obj.setType("Test"));
@@ -21,8 +21,7 @@ TEST(DataObject, SettersAndGetter)
     ASSERT_EQ(out, "black");
 }
 
-TEST(DataObject, Delete)
-{
+TEST(DataObject, Delete) {
     DataObject obj;
 
     ASSERT_NO_THROW(obj.setType("Test"));

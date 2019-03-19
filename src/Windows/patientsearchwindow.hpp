@@ -2,23 +2,24 @@
 #define PATIENTSEARCHWINDOW_HPP
 
 #include "ui_searchform.h"
+
 #include <QDialog>
 
 class PatientSearchWindow : public QDialog {
     Q_OBJECT
-private:
+  private:
     Ui::PatientSearchForm* m_ui;
 
-public:
+  public:
     explicit PatientSearchWindow(QWidget* parent = nullptr);
     PatientSearchWindow(const PatientSearchWindow&) = delete;
     ~PatientSearchWindow();
 
-public slots:
+  public slots:
     void okButtonPressed();
     void comboBoxChanged(const QString& text);
 
-private:
+  private:
     bool validate();
 };
 

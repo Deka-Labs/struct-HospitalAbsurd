@@ -3,15 +3,12 @@
 Database::Database()
     : m_patients()
     , m_doctors()
-    , m_referrals()
-{
+    , m_referrals() {
 }
 
-Database::~Database()
-    = default;
+Database::~Database() = default;
 
-StatusCodes Database::loadData(const char* fileName)
-{
+StatusCodes Database::loadData(const char* fileName) {
     DataFile m_file;
 
     auto openCode = m_file.open(fileName, true);
@@ -20,14 +17,14 @@ StatusCodes Database::loadData(const char* fileName)
 
     while (!m_file.atEOF()) {
         DataObject obj;
-        auto code = m_file.ReadNextObject(obj);
+        auto       code = m_file.ReadNextObject(obj);
         switch (code) {
-        case StatusCode_File_NoObject:
-            continue;
-        case StatusCode_OK:
-            break;
-        default:
-            return code;
+            case StatusCode_File_NoObject:
+                continue;
+            case StatusCode_OK:
+                break;
+            default:
+                return code;
         };
 
         if (obj.getType() == "patient") {
@@ -57,14 +54,13 @@ StatusCodes Database::loadData(const char* fileName)
     return StatusCode_OK;
 }
 
-void Database::saveTo(const char* fileName)
-{
+void Database::saveTo(const char* fileName) {
     DataFile m_file;
 
     if (m_file.open(fileName, false) != StatusCode_OK)
         return;
 
-    //Adding patients
+    // Adding patients
     auto registedKeys = m_patients.m_registredKeys;
     auto sizePatients = registedKeys.size();
     for (unsigned pos = 0; pos < sizePatients; pos++) {
@@ -75,12 +71,12 @@ void Database::saveTo(const char* fileName)
         }
     }
 
-    //Adding doctors
-    auto doctors = m_doctors.m_listToDisplay;
+    // Adding doctors
+    auto doctors     = m_doctors.m_listToDisplay;
     auto sizeDoctors = doctors.size();
     for (unsigned pos = 0; pos < sizeDoctors; pos++) {
         try {
-            Doctor doc = m_doctors.m_binTree.find(doctors[pos].key());
+            Doctor     doc = m_doctors.m_binTree.find(doctors[pos].key());
             DataObject obj = doc.toDataObject();
             m_file.insertObject(obj);
         } catch (...) {
@@ -88,23 +84,21 @@ void Database::saveTo(const char* fileName)
         }
     }
 
-    //Adding referrals
-    auto referrals = m_referrals.m_list;
+    // Adding referrals
+    auto referrals     = m_referrals.m_list;
     auto sizeReferrals = referrals.size();
     for (unsigned pos = 0; pos < sizeReferrals; pos++) {
         const Referral& ref = referrals.at(pos);
-        DataObject obj = ref.toDataObject();
+        DataObject      obj = ref.toDataObject();
         m_file.insertObject(obj);
     }
 }
 
-StatusCodes Database::addPatient(const Patient& newPat)
-{
+StatusCodes Database::addPatient(const Patient& newPat) {
     return m_patients.addPatient(newPat);
 }
 
-void Database::delPatinet(const PatientHashKey& patientKey)
-{
+void Database::delPatinet(const PatientHashKey& patientKey) {
     auto list = m_referrals.getConnectedToPatient(patientKey);
 
     for (unsigned pos = 0; pos < list.size(); pos++) {
@@ -113,18 +107,15 @@ void Database::delPatinet(const PatientHashKey& patientKey)
     m_patients.delPatient(patientKey);
 }
 
-void Database::delAllPatients()
-{
+void Database::delAllPatients() {
     m_patients.delAll();
 }
 
-StatusCodes Database::addDoctor(const Doctor& newDoc)
-{
+StatusCodes Database::addDoctor(const Doctor& newDoc) {
     return m_doctors.addDoctor(newDoc);
 }
 
-void Database::delDoctor(const QString& docKey)
-{
+void Database::delDoctor(const QString& docKey) {
     auto list = m_referrals.getConnectedToDoctor(docKey);
 
     for (unsigned pos = 0; pos < list.size(); pos++) {
@@ -134,15 +125,13 @@ void Database::delDoctor(const QString& docKey)
     m_doctors.removeDoctor(docKey);
 }
 
-void Database::delAllDoctors()
-{
+void Database::delAllDoctors() {
     m_doctors.removeAll();
 }
 
-StatusCodes Database::addReferral(const Referral& newRef)
-{
+StatusCodes Database::addReferral(const Referral& newRef) {
     auto docName = newRef.doctorFullname();
-    auto patID = newRef.regID();
+    auto patID   = newRef.regID();
 
     if (!m_patients.getPatient(PatientHashKey(patID)))
         return StatusCode_InvalidObject;
@@ -161,12 +150,10 @@ StatusCodes Database::addReferral(const Referral& newRef)
     return StatusCode_OK;
 }
 
-void Database::delReferral(const Referral& ref)
-{
+void Database::delReferral(const Referral& ref) {
     m_referrals.removeReferral(ref);
 }
 
-void Database::delAllReferrals()
-{
+void Database::delAllReferrals() {
     m_referrals.removeAll();
 }

@@ -1,4 +1,5 @@
 #include "data/dataprocessingclasses/hashtable.hpp"
+
 #include <gtest/gtest.h>
 
 #define MAX_TEST_KEY 10000
@@ -7,45 +8,48 @@
 class TestKey : public IHashKey {
     unsigned m_key = 0;
 
-public:
+  public:
     explicit TestKey(const unsigned& key = 0)
-        : m_key(key)
-    {
+        : m_key(key) {
     }
 
-    unsigned hash() const override { return m_key % MAX_TEST_KEY; }
-    unsigned dopHash() const override { return m_key % MAX_DELTA + 1; }
-    bool validateKey() const override { return true; }
-    bool operator==(const IHashKey& other) const override
-    {
+    unsigned hash() const override {
+        return m_key % MAX_TEST_KEY;
+    }
+    unsigned dopHash() const override {
+        return m_key % MAX_DELTA + 1;
+    }
+    bool validateKey() const override {
+        return true;
+    }
+    bool operator==(const IHashKey& other) const override {
         const auto& o = dynamic_cast<const TestKey&>(other);
         return m_key == o.m_key;
     }
 };
 
 class TestHashClass {
-public:
+  public:
     unsigned m_key;
-    int someData;
+    int      someData;
 
-public:
+  public:
     TestHashClass()
-        : TestHashClass(0, 0)
-    {
+        : TestHashClass(0, 0) {
     }
-    //TestClass(const TestClass& other) = default;
+    // TestClass(const TestClass& other) = default;
     TestHashClass(unsigned k, int d)
         : m_key(k)
-        , someData(d)
-    {
+        , someData(d) {
     }
 
-    TestKey key() const { return TestKey(m_key); }
+    TestKey key() const {
+        return TestKey(m_key);
+    }
 };
 
-TEST(HashTable, AddingEqual)
-{
-    TestHashClass test(1, 1);
+TEST(HashTable, AddingEqual) {
+    TestHashClass            test(1, 1);
     HashTable<TestHashClass> table(MAX_TEST_KEY);
 
     ASSERT_EQ(table.add(test), StatusCode_OK);
@@ -53,13 +57,12 @@ TEST(HashTable, AddingEqual)
     ASSERT_EQ(table.add(test), StatusCode_AlreadyExist);
 }
 
-TEST(HashTable, AddingOverflow)
-{
+TEST(HashTable, AddingOverflow) {
     srand(unsigned(time(nullptr)));
     HashTable<TestHashClass> table(MAX_TEST_KEY);
 
     TestHashClass toAdd;
-    unsigned count = 0;
+    unsigned      count = 0;
 
     while (table.add(toAdd) == StatusCode_OK) {
         toAdd = TestHashClass(static_cast<unsigned>(rand()), rand());
@@ -70,13 +73,12 @@ TEST(HashTable, AddingOverflow)
     }
 }
 
-TEST(HashTable, Getting)
-{
+TEST(HashTable, Getting) {
     HashTable<TestHashClass> table(MAX_TEST_KEY);
 
-    const unsigned count = MAX_TEST_KEY;
-    const unsigned step = 3;
-    unsigned countOfInsertes = 0;
+    const unsigned count           = MAX_TEST_KEY;
+    const unsigned step            = 3;
+    unsigned       countOfInsertes = 0;
 
     for (unsigned i = 0; i < step * count; i += step) {
         auto toAdd = TestHashClass(static_cast<unsigned>(i), static_cast<int>(i));
@@ -96,16 +98,14 @@ TEST(HashTable, Getting)
     ASSERT_EQ(getted, countOfInsertes);
 }
 
-TEST(HashTable, Deleting)
-{
+TEST(HashTable, Deleting) {
     HashTable<TestHashClass> table(MAX_TEST_KEY);
 
-    const unsigned count = MAX_TEST_KEY;
-    const unsigned step = 3;
-    unsigned countOfInsertes = 0;
+    const unsigned count           = MAX_TEST_KEY;
+    const unsigned step            = 3;
+    unsigned       countOfInsertes = 0;
 
     for (unsigned i = 0; i < step * count; i += step) {
-
         auto toAdd = TestHashClass(static_cast<unsigned>(i), static_cast<int>(i));
         if (table.add(toAdd) == StatusCode_OK) {
             countOfInsertes++;

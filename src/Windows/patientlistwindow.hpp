@@ -2,19 +2,20 @@
 #define PATIENTLISTWINDOW_HPP
 
 #include "ui_listview.h"
+
 #include <QDialog>
 
 class PatientListWindow : public QDialog {
     Q_OBJECT
-private:
+  private:
     Ui::ListForm* m_ui;
 
-public:
+  public:
     explicit PatientListWindow(QWidget* parent = nullptr);
     PatientListWindow(const PatientListWindow&) = delete;
     ~PatientListWindow();
 
-public slots:
+  public slots:
     void addButtonPressed();
     void deleteButtonPressed();
     void searchButtonPressed();

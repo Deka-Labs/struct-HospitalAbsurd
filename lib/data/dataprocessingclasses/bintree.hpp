@@ -3,18 +3,19 @@
 
 #include "statuscodes.hpp"
 #include "twowaylist.hpp"
+
 #include <QString>
 #include <stdexcept>
 
-template <class TypeData>
+template<class TypeData>
 struct BinTreeNode {
-    TypeData data;
-    BinTreeNode* left = nullptr;
-    BinTreeNode* right = nullptr;
+    TypeData     data;
+    BinTreeNode* left   = nullptr;
+    BinTreeNode* right  = nullptr;
     BinTreeNode* parent = nullptr;
 
-    int height = 1;
-    bool mark = false;
+    int  height = 1;
+    bool mark   = false;
 };
 /**
  * \brief BinTree шаблонный класс для реализации бинарного дерева
@@ -24,21 +25,22 @@ struct BinTreeNode {
  * \pre Класс TypeKey должен иметь операторы сравнения и равенства
  */
 
-template <class TypeData, class TypeKey>
+template<class TypeData, class TypeKey>
 class BinTree {
-private:
+  private:
     BinTreeNode<TypeData>* m_root; ///< корневой элемент
 
-public:
-    BinTree(); ///< Создает пустое дерево
+  public:
+    BinTree();                              ///< Создает пустое дерево
     BinTree(const BinTree& other) = delete; ///< Копирование запрещено
-    ~BinTree(); ///< Удаляет все узлы
+    ~BinTree();                             ///< Удаляет все узлы
 
     /**
      * \brief add добавляет элемент в дерево
      * \param [in] data элемент для добавления
      * \return код статуса добавления
-     * \remark Нельзя добавить элемент с ключом, который уже существует. Функция вернет StatusCode_AlreadyExist и не добавит его.
+     * \remark Нельзя добавить элемент с ключом, который уже существует. Функция вернет StatusCode_AlreadyExist и не
+     * добавит его.
      */
     StatusCodes add(const TypeData& data);
 
@@ -61,14 +63,18 @@ public:
      * \brief isEmpty проверят пустое ли дерево
      * \return true если дерево пусто, иначе false
      */
-    bool isEmpty() const { return !m_root; }
+    bool isEmpty() const {
+        return !m_root;
+    }
 
     /**
      * \brief root возвращает корень дерева
      * \return корень дерева
      * \remark Функция используется в тестировании. Не стоит ей пользоваться.
      */
-    BinTreeNode<TypeData>* root() const { return m_root; }
+    BinTreeNode<TypeData>* root() const {
+        return m_root;
+    }
 
     /**
      * \brief getListInOrder получает список элементов дерева в симметричном обходе
@@ -81,7 +87,7 @@ public:
      */
     unsigned size() const;
 
-private:
+  private:
     /**
      * \brief isLeaf проверяет является ли указанный узел листом
      * \param [in] node узел для проверки
@@ -133,32 +139,30 @@ private:
      */
     void normalize(BinTreeNode<TypeData>* node);
 
-    void bigLeftTurn(BinTreeNode<TypeData>* node); ///< Большой левый поворот
-    void bigRightTurn(BinTreeNode<TypeData>* node); ///< Большой правый поворот
-    void smallLeftTurn(BinTreeNode<TypeData>* node); ///< Малый левый поворот
+    void bigLeftTurn(BinTreeNode<TypeData>* node);    ///< Большой левый поворот
+    void bigRightTurn(BinTreeNode<TypeData>* node);   ///< Большой правый поворот
+    void smallLeftTurn(BinTreeNode<TypeData>* node);  ///< Малый левый поворот
     void smallRightTurn(BinTreeNode<TypeData>* node); ///< Малый правый поворот
 };
 
-//Realization
+// Realization
 
-template <class TypeData, class TypeKey>
+template<class TypeData, class TypeKey>
 BinTree<TypeData, TypeKey>::BinTree()
     : m_root(nullptr)
 
 {
 }
 
-template <class TypeData, class TypeKey>
-BinTree<TypeData, TypeKey>::~BinTree()
-{
+template<class TypeData, class TypeKey>
+BinTree<TypeData, TypeKey>::~BinTree() {
     while (!isEmpty())
         removeNode(m_root);
 }
 
-template <class TypeData, class TypeKey>
-StatusCodes BinTree<TypeData, TypeKey>::add(const TypeData& data)
-{
-    auto newNode = new BinTreeNode<TypeData>();
+template<class TypeData, class TypeKey>
+StatusCodes BinTree<TypeData, TypeKey>::add(const TypeData& data) {
+    auto newNode  = new BinTreeNode<TypeData>();
     newNode->data = data;
 
     if (isEmpty()) {
@@ -176,7 +180,7 @@ StatusCodes BinTree<TypeData, TypeKey>::add(const TypeData& data)
                 continue;
             } else {
                 currentNode->left = newNode;
-                newNode->parent = currentNode;
+                newNode->parent   = currentNode;
                 break;
             }
         } else if (data.key() > currentNode->data.key()) {
@@ -185,7 +189,7 @@ StatusCodes BinTree<TypeData, TypeKey>::add(const TypeData& data)
                 continue;
             } else {
                 currentNode->right = newNode;
-                newNode->parent = currentNode;
+                newNode->parent    = currentNode;
                 break;
             }
         } else {
@@ -199,33 +203,30 @@ StatusCodes BinTree<TypeData, TypeKey>::add(const TypeData& data)
     return StatusCode_OK;
 }
 
-template <class TypeData, class TypeKey>
-const TypeData& BinTree<TypeData, TypeKey>::find(const TypeKey& key) const
-{
+template<class TypeData, class TypeKey>
+const TypeData& BinTree<TypeData, TypeKey>::find(const TypeKey& key) const {
     BinTreeNode<TypeData>* node = findNode(key);
     if (node)
         return node->data;
     throw std::invalid_argument("There's no object with that key");
 }
 
-template <class TypeData, class TypeKey>
-void BinTree<TypeData, TypeKey>::remove(const TypeKey& key)
-{
+template<class TypeData, class TypeKey>
+void BinTree<TypeData, TypeKey>::remove(const TypeKey& key) {
     BinTreeNode<TypeData>* node = findNode(key);
     if (node)
         removeNode(node);
 }
 
-template <class TypeData, class TypeKey>
-TwoWayList<TypeData> BinTree<TypeData, TypeKey>::getListInOrder() const
-{
+template<class TypeData, class TypeKey>
+TwoWayList<TypeData> BinTree<TypeData, TypeKey>::getListInOrder() const {
     TwoWayList<TypeData> listOut;
 
     if (isEmpty())
         return listOut;
 
     auto currentNode = m_root;
-    bool marked = !currentNode->mark;
+    bool marked      = !currentNode->mark;
 
     while (currentNode) {
         while (currentNode->left && currentNode->left->mark != marked) {
@@ -249,18 +250,16 @@ TwoWayList<TypeData> BinTree<TypeData, TypeKey>::getListInOrder() const
     return listOut;
 }
 
-template <class TypeData, class TypeKey>
-bool BinTree<TypeData, TypeKey>::isLeaf(BinTreeNode<TypeData>* node) const
-{
+template<class TypeData, class TypeKey>
+bool BinTree<TypeData, TypeKey>::isLeaf(BinTreeNode<TypeData>* node) const {
     if (!node)
         throw std::invalid_argument("Nullptr passed to BinTree::isLeaf()");
 
     return !node->right && !node->left;
 }
 
-template <class TypeData, class TypeKey>
-BinTreeNode<TypeData>* BinTree<TypeData, TypeKey>::findNode(const TypeKey& key) const
-{
+template<class TypeData, class TypeKey>
+BinTreeNode<TypeData>* BinTree<TypeData, TypeKey>::findNode(const TypeKey& key) const {
     if (isEmpty())
         return nullptr;
 
@@ -284,9 +283,8 @@ BinTreeNode<TypeData>* BinTree<TypeData, TypeKey>::findNode(const TypeKey& key) 
     return nullptr;
 }
 
-template <class TypeData, class TypeKey>
-void BinTree<TypeData, TypeKey>::removeNode(BinTreeNode<TypeData>* node)
-{
+template<class TypeData, class TypeKey>
+void BinTree<TypeData, TypeKey>::removeNode(BinTreeNode<TypeData>* node) {
     if (!node)
         return;
 
@@ -296,7 +294,7 @@ void BinTree<TypeData, TypeKey>::removeNode(BinTreeNode<TypeData>* node)
             m_root = nullptr;
         else {
             auto parent = node->parent;
-            int code = parentTo(parent, node);
+            int  code   = parentTo(parent, node);
 
             if (code == -1)
                 parent->left = nullptr;
@@ -317,8 +315,8 @@ void BinTree<TypeData, TypeKey>::removeNode(BinTreeNode<TypeData>* node)
         removeNode(node);
     } else {
         //Удаляем м поднимаем левое поддерево
-        auto newNode = node->left;
-        auto parent = node->parent;
+        auto newNode    = node->left;
+        auto parent     = node->parent;
         newNode->parent = parent;
 
         if (!parent)
@@ -330,8 +328,7 @@ void BinTree<TypeData, TypeKey>::removeNode(BinTreeNode<TypeData>* node)
             } else if (code == 1) {
                 parent->right = newNode;
             } else {
-                throw std::runtime_error(
-                    "Imposible to have no parent at this situation");
+                throw std::runtime_error("Imposible to have no parent at this situation");
             }
         }
 
@@ -340,9 +337,8 @@ void BinTree<TypeData, TypeKey>::removeNode(BinTreeNode<TypeData>* node)
     }
 }
 
-template <class TypeData, class TypeKey>
-void BinTree<TypeData, TypeKey>::swap(BinTreeNode<TypeData>* node1, BinTreeNode<TypeData>* node2)
-{
+template<class TypeData, class TypeKey>
+void BinTree<TypeData, TypeKey>::swap(BinTreeNode<TypeData>* node1, BinTreeNode<TypeData>* node2) {
     if (node1 == node2)
         return;
 
@@ -357,8 +353,7 @@ void BinTree<TypeData, TypeKey>::swap(BinTreeNode<TypeData>* node1, BinTreeNode<
         else if (code == 1)
             parent1->right = node2;
         else
-            throw std::runtime_error(
-                "Imposible to have no parent at this situation");
+            throw std::runtime_error("Imposible to have no parent at this situation");
     } else {
         m_root = node2;
     }
@@ -371,8 +366,7 @@ void BinTree<TypeData, TypeKey>::swap(BinTreeNode<TypeData>* node1, BinTreeNode<
         else if (code == 1)
             parent2->right = node1;
         else
-            throw std::runtime_error(
-                "Imposible to have no parent at this situation");
+            throw std::runtime_error("Imposible to have no parent at this situation");
     } else {
         m_root = node1;
     }
@@ -385,9 +379,9 @@ void BinTree<TypeData, TypeKey>::swap(BinTreeNode<TypeData>* node1, BinTreeNode<
     auto node2L = node2->left;
     auto node2R = node2->right;
 
-    node1->left = node2L;
+    node1->left  = node2L;
     node1->right = node2R;
-    node2->left = node1L;
+    node2->left  = node1L;
     node2->right = node1R;
 
     if (node1L)
@@ -400,9 +394,8 @@ void BinTree<TypeData, TypeKey>::swap(BinTreeNode<TypeData>* node1, BinTreeNode<
         node2R->parent = node1;
 }
 
-template <class TypeData, class TypeKey>
-short BinTree<TypeData, TypeKey>::parentTo(BinTreeNode<TypeData>* parent, BinTreeNode<TypeData>* node) const
-{
+template<class TypeData, class TypeKey>
+short BinTree<TypeData, TypeKey>::parentTo(BinTreeNode<TypeData>* parent, BinTreeNode<TypeData>* node) const {
     if (!parent || !node || (!parent->left && !parent->right))
         return 0;
     if (parent->left == node) {
@@ -414,9 +407,8 @@ short BinTree<TypeData, TypeKey>::parentTo(BinTreeNode<TypeData>* parent, BinTre
     }
 }
 
-template <class TypeData, class TypeKey>
-int BinTree<TypeData, TypeKey>::balance(BinTreeNode<TypeData>* node) const
-{
+template<class TypeData, class TypeKey>
+int BinTree<TypeData, TypeKey>::balance(BinTreeNode<TypeData>* node) const {
     if (!node)
         return 0;
     auto rHeight = (node->right) ? node->right->height : 0;
@@ -424,13 +416,12 @@ int BinTree<TypeData, TypeKey>::balance(BinTreeNode<TypeData>* node) const
     return rHeight - lHeight;
 }
 
-template <class TypeData, class TypeKey>
-void BinTree<TypeData, TypeKey>::recalcHeight(BinTreeNode<TypeData>* node)
-{
+template<class TypeData, class TypeKey>
+void BinTree<TypeData, TypeKey>::recalcHeight(BinTreeNode<TypeData>* node) {
     if (!node)
         return;
 
-    int leftHeight = 0;
+    int leftHeight  = 0;
     int rightHeight = 0;
 
     if (node->left) {
@@ -451,16 +442,14 @@ void BinTree<TypeData, TypeKey>::recalcHeight(BinTreeNode<TypeData>* node)
     }
 }
 
-template <class TypeData, class TypeKey>
-void BinTree<TypeData, TypeKey>::normalize(BinTreeNode<TypeData>* node)
-{
+template<class TypeData, class TypeKey>
+void BinTree<TypeData, TypeKey>::normalize(BinTreeNode<TypeData>* node) {
     if (!node)
         return;
 
     auto curNode = node;
 
     while (curNode) {
-
         recalcHeight(curNode);
 
         if (balance(curNode) == -2) {
@@ -469,7 +458,6 @@ void BinTree<TypeData, TypeKey>::normalize(BinTreeNode<TypeData>* node)
             else
                 bigRightTurn(curNode);
         } else if (balance(curNode) == 2) {
-
             if (balance(curNode->right) >= 0)
                 smallLeftTurn(curNode);
             else
@@ -480,9 +468,8 @@ void BinTree<TypeData, TypeKey>::normalize(BinTreeNode<TypeData>* node)
     }
 }
 
-template <class TypeData, class TypeKey>
-void BinTree<TypeData, TypeKey>::bigLeftTurn(BinTreeNode<TypeData>* node)
-{
+template<class TypeData, class TypeKey>
+void BinTree<TypeData, TypeKey>::bigLeftTurn(BinTreeNode<TypeData>* node) {
     auto nodeA = node;
     auto nodeB = node->right;
     auto nodeC = nodeB->left;
@@ -495,9 +482,8 @@ void BinTree<TypeData, TypeKey>::bigLeftTurn(BinTreeNode<TypeData>* node)
     recalcHeight(nodeC);
 }
 
-template <class TypeData, class TypeKey>
-void BinTree<TypeData, TypeKey>::bigRightTurn(BinTreeNode<TypeData>* node)
-{
+template<class TypeData, class TypeKey>
+void BinTree<TypeData, TypeKey>::bigRightTurn(BinTreeNode<TypeData>* node) {
     auto nodeA = node;
     auto nodeB = node->left;
     auto nodeC = nodeB->right;
@@ -510,18 +496,17 @@ void BinTree<TypeData, TypeKey>::bigRightTurn(BinTreeNode<TypeData>* node)
     recalcHeight(nodeC);
 }
 
-template <class TypeData, class TypeKey>
-void BinTree<TypeData, TypeKey>::smallLeftTurn(BinTreeNode<TypeData>* node)
-{
-    auto nodeA = node;
+template<class TypeData, class TypeKey>
+void BinTree<TypeData, TypeKey>::smallLeftTurn(BinTreeNode<TypeData>* node) {
+    auto nodeA  = node;
     auto parent = node->parent;
-    auto nodeB = nodeA->right;
+    auto nodeB  = nodeA->right;
 
     nodeA->right = nodeB->left;
     if (nodeA->right)
         nodeA->right->parent = nodeA;
     nodeA->parent = nodeB;
-    nodeB->left = nodeA;
+    nodeB->left   = nodeA;
     nodeB->parent = parent;
 
     recalcHeight(nodeA);
@@ -534,22 +519,20 @@ void BinTree<TypeData, TypeKey>::smallLeftTurn(BinTreeNode<TypeData>* node)
     else if (nodeA == parent->right)
         parent->right = nodeB;
     else
-        throw std::runtime_error(
-            "Imposible to have no parent at this situation");
+        throw std::runtime_error("Imposible to have no parent at this situation");
 }
 
-template <class TypeData, class TypeKey>
-void BinTree<TypeData, TypeKey>::smallRightTurn(BinTreeNode<TypeData>* node)
-{
-    auto nodeA = node;
+template<class TypeData, class TypeKey>
+void BinTree<TypeData, TypeKey>::smallRightTurn(BinTreeNode<TypeData>* node) {
+    auto nodeA  = node;
     auto parent = node->parent;
-    auto nodeB = nodeA->left;
+    auto nodeB  = nodeA->left;
 
     nodeA->left = nodeB->right;
     if (nodeA->left)
         nodeA->left->parent = nodeA;
     nodeA->parent = nodeB;
-    nodeB->right = nodeA;
+    nodeB->right  = nodeA;
     nodeB->parent = parent;
 
     recalcHeight(nodeA);
@@ -562,8 +545,7 @@ void BinTree<TypeData, TypeKey>::smallRightTurn(BinTreeNode<TypeData>* node)
     else if (nodeA == parent->right)
         parent->right = nodeB;
     else
-        throw std::runtime_error(
-            "Imposible to have no parent at this situation");
+        throw std::runtime_error("Imposible to have no parent at this situation");
 }
 
 #endif // BINTREE_HPP

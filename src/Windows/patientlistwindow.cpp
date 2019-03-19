@@ -1,15 +1,16 @@
 #include "patientlistwindow.hpp"
+
 #include "../globaldatabase.hpp"
 #include "newpatientwindow.hpp"
 #include "patientsearchwindow.hpp"
+
 #include <QMessageBox>
 #include <stdexcept>
 
 PatientListWindow::PatientListWindow(QWidget* parent)
     : QDialog(parent)
 
-    , m_ui(nullptr)
-{
+    , m_ui(nullptr) {
     m_ui = new Ui::ListForm();
     m_ui->setupUi(this);
 
@@ -23,22 +24,20 @@ PatientListWindow::PatientListWindow(QWidget* parent)
     connect(m_ui->pushButton_purgeAll, &QPushButton::clicked, this, &PatientListWindow::purgeAllButtonPressed);
 }
 
-PatientListWindow::~PatientListWindow()
-{
+PatientListWindow::~PatientListWindow() {
     delete m_ui;
 }
 
-void PatientListWindow::addButtonPressed()
-{
+void PatientListWindow::addButtonPressed() {
     NewPatientWindow wnd(this);
     wnd.exec();
 }
 
-void PatientListWindow::deleteButtonPressed()
-{
+void PatientListWindow::deleteButtonPressed() {
     auto index = m_ui->tableView->currentIndex();
     if (index.isValid()) {
-        if (QMessageBox::question(this, "Удалить?", "Вы действительно хотите удалить эту запись?") == QMessageBox::Yes) {
+        if (QMessageBox::question(this, "Удалить?", "Вы действительно хотите удалить эту запись?") ==
+            QMessageBox::Yes) {
             auto toDel = g_DATABASE->getPatientsModel().getPatient(index);
             g_DATABASE->delPatinet(toDel.key());
         }
@@ -47,15 +46,14 @@ void PatientListWindow::deleteButtonPressed()
     }
 }
 
-void PatientListWindow::searchButtonPressed()
-{
+void PatientListWindow::searchButtonPressed() {
     PatientSearchWindow wnd(this);
     wnd.exec();
 }
 
-void PatientListWindow::purgeAllButtonPressed()
-{
-    if (QMessageBox::question(this, "Очистить все?", "Вы действительно хотите удалить все записи?") == QMessageBox::Yes) {
+void PatientListWindow::purgeAllButtonPressed() {
+    if (QMessageBox::question(this, "Очистить все?", "Вы действительно хотите удалить все записи?") ==
+        QMessageBox::Yes) {
         g_DATABASE->delAllPatients();
     }
 }

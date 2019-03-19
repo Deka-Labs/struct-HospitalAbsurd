@@ -5,16 +5,17 @@
 #include "data/hospital/referral.hpp"
 #include "doctorbintree.hpp"
 #include "patienthashtable.hpp"
+
 #include <QAbstractTableModel>
 
 class Database;
 
 class ReferralList : public QAbstractTableModel {
     Q_OBJECT
-private:
+  private:
     TwoWayList<Referral> m_list;
 
-public:
+  public:
     explicit ReferralList(QObject* parent = nullptr);
     ReferralList(const ReferralList&) = delete;
     ~ReferralList();
@@ -32,7 +33,7 @@ public:
     TwoWayList<Referral> getConnectedToPatient(const PatientHashKey& patRegID);
     TwoWayList<Referral> getConnectedToDoctor(const QString& docFullname);
 
-private:
+  private:
     bool addReferral(const Referral& newRef);
     void removeReferral(const Referral& ref);
     void removeAll();

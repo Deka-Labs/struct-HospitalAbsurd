@@ -2,25 +2,26 @@
 #define DATAOBJECT_HPP
 
 #include "data/dataprocessingclasses/twowaylist.hpp"
+
 #include <QString>
 
 class DataFile;
 
 class DataObject {
-private:
+  private:
     struct info {
         QString name;
         QString value;
     };
 
-    QString m_type;
+    QString          m_type;
     TwoWayList<info> m_attributes;
 
-public:
+  public:
     explicit DataObject(QString getType = "Unknown");
     DataObject(const DataObject&);
 
-    void setType(const QString& getType);
+    void    setType(const QString& getType);
     QString getType() const;
 
     void setValue(const QString& name, const QString& value);

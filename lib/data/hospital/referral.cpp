@@ -1,27 +1,24 @@
 #include "referral.hpp"
+
 #include "utils.hpp"
 
 Referral::Referral()
     : m_regID("00-000000")
     , m_doctorFullname("")
     , m_date("00.00.0000")
-    , m_time("00:00")
-{
+    , m_time("00:00") {
 }
 
 Referral::Referral(const Referral& other)
     : m_regID(other.regID())
     , m_doctorFullname(other.doctorFullname())
     , m_date(other.date())
-    , m_time(other.time())
-{
+    , m_time(other.time()) {
 }
 
-Referral::~Referral()
-= default;
+Referral::~Referral() = default;
 
-DataObject Referral::toDataObject() const
-{
+DataObject Referral::toDataObject() const {
     DataObject out;
 
     out.setType("referral");
@@ -33,8 +30,7 @@ DataObject Referral::toDataObject() const
     return out;
 }
 
-bool Referral::fromDataObject(const DataObject& obj)
-{
+bool Referral::fromDataObject(const DataObject& obj) {
     QString new_regID, new_docfullname, new_data, new_time;
 
     if (obj.getType() != "referral")
@@ -61,13 +57,11 @@ bool Referral::fromDataObject(const DataObject& obj)
     return true;
 }
 
-QString Referral::regID() const
-{
+QString Referral::regID() const {
     return m_regID;
 }
 
-bool Referral::setRegID(const QString& regID)
-{
+bool Referral::setRegID(const QString& regID) {
     if (regID.size() > MAX_PATIENT_REGID_STRING_SIZE)
         return false;
 
@@ -78,13 +72,11 @@ bool Referral::setRegID(const QString& regID)
     return true;
 }
 
-QString Referral::doctorFullname() const
-{
+QString Referral::doctorFullname() const {
     return m_doctorFullname;
 }
 
-bool Referral::setDoctorFullname(const QString& doctorFullname)
-{
+bool Referral::setDoctorFullname(const QString& doctorFullname) {
     if (doctorFullname.size() > MAX_DOCTOR_FULLNAME_STRING_SIZE)
         return false;
     if (haveRestrictedChars(doctorFullname))
@@ -94,13 +86,11 @@ bool Referral::setDoctorFullname(const QString& doctorFullname)
     return true;
 }
 
-QString Referral::date() const
-{
+QString Referral::date() const {
     return m_date;
 }
 
-bool Referral::setDate(const QString& date)
-{
+bool Referral::setDate(const QString& date) {
     if (date.size() > MAX_DATE_STRING_SIZE)
         return false;
 
@@ -111,13 +101,11 @@ bool Referral::setDate(const QString& date)
     return true;
 }
 
-QString Referral::time() const
-{
+QString Referral::time() const {
     return m_time;
 }
 
-bool Referral::setTime(const QString& time)
-{
+bool Referral::setTime(const QString& time) {
     if (time.size() > MAX_TIME_STRING_SIZE)
         return false;
 
@@ -128,37 +116,31 @@ bool Referral::setTime(const QString& time)
     return true;
 }
 
-bool Referral::isEqual(const Referral& other) const
-{
-    return m_regID == other.m_regID && m_doctorFullname == other.m_doctorFullname && m_date == other.m_date && m_time == other.m_time;
+bool Referral::isEqual(const Referral& other) const {
+    return m_regID == other.m_regID && m_doctorFullname == other.m_doctorFullname && m_date == other.m_date &&
+           m_time == other.m_time;
 }
 
-bool Referral::operator==(const Referral& other) const
-{
+bool Referral::operator==(const Referral& other) const {
     return m_doctorFullname == other.m_doctorFullname;
 }
 
-bool Referral::operator!=(const Referral& other) const
-{
+bool Referral::operator!=(const Referral& other) const {
     return !(*this == other);
 }
 
-bool Referral::operator<(const Referral& other) const
-{
+bool Referral::operator<(const Referral& other) const {
     return m_doctorFullname < other.m_doctorFullname;
 }
 
-bool Referral::operator>(const Referral& other) const
-{
+bool Referral::operator>(const Referral& other) const {
     return !(*this < other) && (*this != other);
 }
 
-bool Referral::operator<=(const Referral& other) const
-{
+bool Referral::operator<=(const Referral& other) const {
     return *this < other || *this == other;
 }
 
-bool Referral::operator>=(const Referral& other) const
-{
+bool Referral::operator>=(const Referral& other) const {
     return *this > other || *this == other;
 }

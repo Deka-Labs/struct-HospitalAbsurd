@@ -2,19 +2,20 @@
 #define REFERRALLISTWINDOW_HPP
 
 #include "ui_referralslist.h"
+
 #include <QDialog>
 
 class ReferralListWindow : public QDialog {
     Q_OBJECT
-private:
+  private:
     Ui::ReferralsForm* m_ui;
 
-public:
+  public:
     explicit ReferralListWindow(QWidget* parent = nullptr);
     ReferralListWindow(const ReferralListWindow&) = delete;
     ~ReferralListWindow();
 
-public slots:
+  public slots:
     void addButtonPressed();
     void deleteButtonPressed();
 };

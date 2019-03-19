@@ -1,34 +1,33 @@
 #include "data/dataprocessingclasses/bintree.hpp"
 #include "data/dataprocessingclasses/twowaylist.hpp"
+
 #include <gtest/gtest.h>
 
 class TestClass {
-public:
+  public:
     unsigned m_key;
-    int someData;
+    int      someData;
 
-public:
+  public:
     TestClass()
-        : TestClass(0, 0)
-    {
+        : TestClass(0, 0) {
     }
     TestClass(const TestClass& other) = default;
     TestClass(unsigned k, int d)
         : m_key(k)
-        , someData(d)
-    {
+        , someData(d) {
     }
 
-    unsigned key() const { return m_key; }
+    unsigned key() const {
+        return m_key;
+    }
 };
 
-bool operator==(const TestClass& left, const TestClass& right)
-{
+bool operator==(const TestClass& left, const TestClass& right) {
     return (right.m_key == left.m_key) && (right.someData == left.someData);
 }
 
-void printTree(BinTreeNode<TestClass>* p, int indent = 0)
-{
+void printTree(BinTreeNode<TestClass>* p, int indent = 0) {
     if (p != nullptr) {
         if (p->right) {
             printTree(p->right, indent + 4);
@@ -37,8 +36,7 @@ void printTree(BinTreeNode<TestClass>* p, int indent = 0)
             std::cout << std::setw(indent) << ' ';
         }
         if (p->right)
-            std::cout << " /\n"
-                      << std::setw(indent) << ' ';
+            std::cout << " /\n" << std::setw(indent) << ' ';
         std::cout << p->data.key() << "\n ";
         if (p->left) {
             std::cout << std::setw(indent) << ' ' << " \\\n";
@@ -47,12 +45,11 @@ void printTree(BinTreeNode<TestClass>* p, int indent = 0)
     }
 }
 
-TEST(BinTree, AddingAndFinding)
-{
+TEST(BinTree, AddingAndFinding) {
     BinTree<TestClass, unsigned> tree;
 
     const unsigned count = 1000;
-    const int begin = count;
+    const int      begin = count;
 
     for (unsigned i = 0; i < count; i++) {
         auto testClass = TestClass(i, begin + int(i));
@@ -67,14 +64,13 @@ TEST(BinTree, AddingAndFinding)
     }
 }
 
-TEST(BinTree, Removing)
-{
+TEST(BinTree, Removing) {
     srand(unsigned(time(nullptr)));
 
     BinTree<TestClass, unsigned> tree;
 
     const unsigned count = 1000;
-    const int begin = count;
+    const int      begin = count;
 
     for (unsigned i = 0; i < count; i++) {
         auto testClass = TestClass(i, begin + int(i));
@@ -97,8 +93,7 @@ TEST(BinTree, Removing)
     ASSERT_TRUE(tree.isEmpty());
 }
 
-TEST(BinTree, Balancing)
-{
+TEST(BinTree, Balancing) {
     srand(unsigned(time(nullptr)));
 
     {
@@ -197,7 +192,6 @@ TEST(BinTree, Balancing)
 
     //Случайное добавление
     {
-
         BinTree<TestClass, unsigned> tree;
 
         const unsigned count = 1000;
@@ -245,8 +239,7 @@ TEST(BinTree, Balancing)
     }
 }
 
-TEST(BinTree, AddingSameElements)
-{
+TEST(BinTree, AddingSameElements) {
     BinTree<TestClass, unsigned> tree;
 
     const unsigned count = 1000;
@@ -260,8 +253,7 @@ TEST(BinTree, AddingSameElements)
     }
 }
 
-TEST(BinTree, InOrderList)
-{
+TEST(BinTree, InOrderList) {
     BinTree<TestClass, unsigned> tree;
 
     auto list = tree.getListInOrder();

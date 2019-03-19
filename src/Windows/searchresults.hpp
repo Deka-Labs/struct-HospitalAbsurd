@@ -2,15 +2,16 @@
 #define SEARCHRESULTS_HPP
 
 #include "ui_searchresults.h"
+
 #include <QAbstractTableModel>
 #include <QDialog>
 
 class SearchResults : public QDialog {
     Q_OBJECT
-private:
+  private:
     Ui::SearchResultForm* m_ui;
 
-public:
+  public:
     SearchResults(const QString& title, QAbstractTableModel* model, QWidget* parent = nullptr);
     SearchResults(const SearchResults&) = delete;
     ~SearchResults();

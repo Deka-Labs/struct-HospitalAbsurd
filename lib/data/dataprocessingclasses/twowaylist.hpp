@@ -3,7 +3,7 @@
 
 #include "stack.hpp"
 
-template <class T>
+template<class T>
 struct TwoWayNode {
     TwoWayNode<T>* next = nullptr;
     TwoWayNode<T>* prev = nullptr;
@@ -18,21 +18,20 @@ struct TwoWayNode {
  * \pre Класс, используемый в шаблоне должен поддерживать операторы сравнения и равенства,
  *  иметь возможность копирования и использование оператора =
  */
-template <typename T>
+template<typename T>
 class TwoWayList {
-
     TwoWayNode<T>* m_first; ///< Опорный элемент. Стоит на позиции 0
-    unsigned m_size; ///< Размер списка
+    unsigned       m_size;  ///< Размер списка
 
     //В целях быстрой работы в циклах for и прочих будем хранить эти значения:
-    unsigned m_currentPos; ///< Текущая позиция
+    unsigned       m_currentPos;  ///< Текущая позиция
     TwoWayNode<T>* m_currentNode; ///< Текущий узел для обработки
 
-public:
-    TwoWayList(); ///< Создает пустой список
+  public:
+    TwoWayList();                           ///< Создает пустой список
     TwoWayList(const TwoWayList<T>& other); ///< Копирует список
-    TwoWayList(TwoWayList<T>&& other); ///<Перемещает список
-    ~TwoWayList(); ///< Очищает список
+    TwoWayList(TwoWayList<T>&& other);      ///<Перемещает список
+    ~TwoWayList();                          ///< Очищает список
 
     /**
      * \brief push_back вставляет элемент в конец
@@ -119,7 +118,7 @@ public:
      */
     unsigned size() const;
 
-private:
+  private:
     /**
      * \brief getNode получает узел элемента в определенной позиции
      * \param [in] pos позиция
@@ -145,55 +144,50 @@ private:
     unsigned splitPosition(unsigned medPos, unsigned begin, unsigned end);
 };
 
-template <typename T>
+template<typename T>
 TwoWayList<T>::TwoWayList()
     : m_first(nullptr)
     , m_size(0)
     , m_currentPos(0)
-    , m_currentNode(nullptr)
-{
+    , m_currentNode(nullptr) {
 }
 
-template <typename T>
+template<typename T>
 TwoWayList<T>::TwoWayList(const TwoWayList<T>& other)
-    : TwoWayList()
-{
+    : TwoWayList() {
     for (unsigned i = 0; i < other.size(); i++) {
         push_back(other.at(i));
     }
 }
 
-template <typename T>
+template<typename T>
 TwoWayList<T>::TwoWayList(TwoWayList<T>&& other)
-    : TwoWayList()
-{
+    : TwoWayList() {
     std::swap(m_first, other.m_first);
     std::swap(m_size, other.m_size);
     std::swap(m_currentPos, other.m_currentPos);
     std::swap(m_currentNode, other.m_currentNode);
 }
 
-template <typename T>
-TwoWayList<T>::~TwoWayList()
-{
+template<typename T>
+TwoWayList<T>::~TwoWayList() {
     while (m_size != 0) {
         remove(0);
     }
 }
 
-template <typename T>
-void TwoWayList<T>::push_back(const T& data)
-{
+template<typename T>
+void TwoWayList<T>::push_back(const T& data) {
     if (!m_first) {
-        m_first = new TwoWayNode<T>;
+        m_first       = new TwoWayNode<T>;
         m_first->data = data;
 
         m_currentNode = m_first;
-        m_currentPos = 0;
+        m_currentPos  = 0;
     } else {
         auto currentNode = getNode(m_size - 1);
 
-        auto newNode = new TwoWayNode<T>;
+        auto newNode  = new TwoWayNode<T>;
         newNode->data = data;
         newNode->prev = currentNode;
         if (currentNode)
@@ -203,33 +197,31 @@ void TwoWayList<T>::push_back(const T& data)
     m_size++;
 }
 
-template <typename T>
-void TwoWayList<T>::push_first(const T& data)
-{
+template<typename T>
+void TwoWayList<T>::push_first(const T& data) {
     if (!m_first) {
-        m_first = new TwoWayNode<T>;
+        m_first       = new TwoWayNode<T>;
         m_first->data = data;
     } else {
-        auto newNode = new TwoWayNode<T>;
+        auto newNode  = new TwoWayNode<T>;
         newNode->data = data;
         newNode->next = m_first;
         m_first->prev = newNode;
-        m_first = newNode;
+        m_first       = newNode;
     }
     m_currentNode = m_first;
-    m_currentPos = 0;
+    m_currentPos  = 0;
     m_size++;
 }
 
-template <typename T>
-void TwoWayList<T>::insert(unsigned pos, const T& data)
-{
+template<typename T>
+void TwoWayList<T>::insert(unsigned pos, const T& data) {
     if (!m_first) {
-        m_first = new TwoWayNode<T>;
+        m_first       = new TwoWayNode<T>;
         m_first->data = data;
 
         m_currentNode = m_first;
-        m_currentPos = 0;
+        m_currentPos  = 0;
     } else {
         auto currentNode = getNode(pos);
 
@@ -238,10 +230,10 @@ void TwoWayList<T>::insert(unsigned pos, const T& data)
 
         auto nextNode = currentNode->next;
 
-        auto newNode = new TwoWayNode<T>;
-        newNode->data = data;
-        newNode->next = nextNode;
-        newNode->prev = currentNode;
+        auto newNode      = new TwoWayNode<T>;
+        newNode->data     = data;
+        newNode->next     = nextNode;
+        newNode->prev     = currentNode;
         currentNode->next = newNode;
         if (nextNode)
             nextNode->prev = newNode;
@@ -249,15 +241,14 @@ void TwoWayList<T>::insert(unsigned pos, const T& data)
     m_size++;
 }
 
-template <typename T>
-void TwoWayList<T>::remove(unsigned pos)
-{
+template<typename T>
+void TwoWayList<T>::remove(unsigned pos) {
     if (pos == 0 && m_size == 1) {
         delete m_first;
         m_first = nullptr;
         m_size--;
         m_currentNode = nullptr;
-        m_currentPos = 0;
+        m_currentPos  = 0;
     } else if (m_size > 1) {
         auto nodeToDelete = getNode(pos);
 
@@ -278,7 +269,7 @@ void TwoWayList<T>::remove(unsigned pos)
 
         if (m_currentNode == nodeToDelete) {
             m_currentNode = m_first;
-            m_currentPos = 0;
+            m_currentPos  = 0;
         }
 
         delete nodeToDelete;
@@ -286,19 +277,17 @@ void TwoWayList<T>::remove(unsigned pos)
     }
 }
 
-template <typename T>
-void TwoWayList<T>::removeAll(const T& value)
-{
-    T val = T(value);
+template<typename T>
+void TwoWayList<T>::removeAll(const T& value) {
+    T        val = T(value);
     unsigned pos = 0;
     while (search(val, &pos)) {
         remove(pos);
     }
 }
 
-template <typename T>
-void TwoWayList<T>::sort()
-{
+template<typename T>
+void TwoWayList<T>::sort() {
     Stack<unsigned> beginStack;
     Stack<unsigned> endStack;
     beginStack.push(0);
@@ -306,7 +295,7 @@ void TwoWayList<T>::sort()
 
     while (!beginStack.isEmpty()) {
         auto begin = beginStack.pop();
-        auto end = endStack.pop();
+        auto end   = endStack.pop();
 
         if (begin >= end)
             continue;
@@ -325,11 +314,10 @@ void TwoWayList<T>::sort()
     }
 }
 
-template <typename T>
-bool TwoWayList<T>::search(const T& search, unsigned* outPos)
-{
-    auto currentNode = m_first;
-    unsigned pos = 0;
+template<typename T>
+bool TwoWayList<T>::search(const T& search, unsigned* outPos) {
+    auto     currentNode = m_first;
+    unsigned pos         = 0;
     while (currentNode) {
         if (search == currentNode->data) {
             if (outPos)
@@ -342,9 +330,8 @@ bool TwoWayList<T>::search(const T& search, unsigned* outPos)
     return false;
 }
 
-template <typename T>
-const T& TwoWayList<T>::at(unsigned pos) const
-{
+template<typename T>
+const T& TwoWayList<T>::at(unsigned pos) const {
     auto node = getNode(pos);
 
     if (node) {
@@ -354,18 +341,16 @@ const T& TwoWayList<T>::at(unsigned pos) const
     throw std::invalid_argument("Incorrect position in TwoWayList::at()");
 }
 
-template <typename T>
-T& TwoWayList<T>::operator[](unsigned pos)
-{
+template<typename T>
+T& TwoWayList<T>::operator[](unsigned pos) {
     auto node = getNode(pos);
     if (node)
         return node->data;
     throw std::invalid_argument("Incorrect position in TwoWayList::[])");
 }
 
-template <typename T>
-void TwoWayList<T>::operator=(const TwoWayList<T>& other)
-{
+template<typename T>
+void TwoWayList<T>::operator=(const TwoWayList<T>& other) {
     while (m_size != 0) {
         remove(0);
     }
@@ -377,25 +362,21 @@ void TwoWayList<T>::operator=(const TwoWayList<T>& other)
     m_size = other.m_size;
 }
 
-template <typename T>
-void TwoWayList<T>::operator=(TwoWayList<T>&& other)
-{
+template<typename T>
+void TwoWayList<T>::operator=(TwoWayList<T>&& other) {
     std::swap(m_first, other.m_first);
     std::swap(m_size, other.m_size);
     std::swap(m_currentPos, other.m_currentPos);
     std::swap(m_currentNode, other.m_currentNode);
 }
 
-template <typename T>
-unsigned TwoWayList<T>::size() const
-{
+template<typename T>
+unsigned TwoWayList<T>::size() const {
     return m_size;
 }
 
-template <typename T>
-TwoWayNode<T>* TwoWayList<T>::getNode(unsigned pos) const
-{
-
+template<typename T>
+TwoWayNode<T>* TwoWayList<T>::getNode(unsigned pos) const {
     if (pos < m_size) {
         long delta = static_cast<long>(pos) - static_cast<long>(m_currentPos);
 
@@ -418,9 +399,8 @@ TwoWayNode<T>* TwoWayList<T>::getNode(unsigned pos) const
     return nullptr;
 }
 
-template <typename T>
-void TwoWayList<T>::swap(unsigned pos1, unsigned pos2)
-{
+template<typename T>
+void TwoWayList<T>::swap(unsigned pos1, unsigned pos2) {
     if (pos1 == pos2)
         return;
     if (pos1 > pos2) {
@@ -437,7 +417,7 @@ void TwoWayList<T>::swap(unsigned pos1, unsigned pos2)
     //Алгоритм для близстоящих
     if (pos1 == pos2 - 1) {
         auto before_nodes = node1->prev;
-        auto after_nodes = node2->next;
+        auto after_nodes  = node2->next;
 
         node1->next = after_nodes;
         node1->prev = node2;
@@ -452,8 +432,8 @@ void TwoWayList<T>::swap(unsigned pos1, unsigned pos2)
         //Алгоритм для стоящих на далеких расстояниях
         auto before_node1 = node1->prev;
         auto before_node2 = node2->prev;
-        auto after_node1 = node1->next;
-        auto after_node2 = node2->next;
+        auto after_node1  = node1->next;
+        auto after_node2  = node2->next;
 
         node1->next = after_node2;
         node1->prev = before_node2;
@@ -481,33 +461,30 @@ void TwoWayList<T>::swap(unsigned pos1, unsigned pos2)
         m_currentPos = pos1;
     }
 
-    //auto tmp = node1->data;
-    //node1->data = node2->data;
-    //node2->data = tmp;
+    // auto tmp = node1->data;
+    // node1->data = node2->data;
+    // node2->data = tmp;
 }
 
-template <typename T>
-bool TwoWayList<T>::findMedIndex(unsigned& out, unsigned begin, unsigned end)
-{
+template<typename T>
+bool TwoWayList<T>::findMedIndex(unsigned& out, unsigned begin, unsigned end) {
     if (begin == end)
         return false;
     out = begin + (end - begin) / 2;
     return true;
 }
 
-template <typename T>
-unsigned TwoWayList<T>::splitPosition(unsigned medPos, unsigned begin, unsigned end)
-{
-
+template<typename T>
+unsigned TwoWayList<T>::splitPosition(unsigned medPos, unsigned begin, unsigned end) {
     if (begin >= end)
         return 0;
 
     T medData = this->at(medPos);
 
-    auto leftPos = begin;
+    auto leftPos  = begin;
     auto rightPos = end;
 
-    auto left = getNode(leftPos);
+    auto left  = getNode(leftPos);
     auto right = getNode(rightPos);
 
     while (true) {
@@ -525,8 +502,8 @@ unsigned TwoWayList<T>::splitPosition(unsigned medPos, unsigned begin, unsigned 
 
         if (left->data != right->data) {
             auto tmp = right;
-            right = left;
-            left = tmp;
+            right    = left;
+            left     = tmp;
             swap(leftPos, rightPos);
         } else {
             left = left->next;

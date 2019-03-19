@@ -1,5 +1,7 @@
 #include "newdoctorwindow.hpp"
+
 #include "../globaldatabase.hpp"
+
 #include <QMessageBox>
 #include <stdexcept>
 
@@ -7,46 +9,48 @@ NewDoctorWindow::NewDoctorWindow(QWidget* parent)
     : QDialog(parent)
     , m_ui(nullptr)
     , m_toEdit()
-    , m_errMsg("")
-{
+    , m_errMsg("") {
     m_ui = new Ui::NewDoctorForm;
     m_ui->setupUi(this);
 
     connect(m_ui->pushButton_ok, &QPushButton::clicked, this, &NewDoctorWindow::okButtonPressed);
 
     m_ui->lineEdit_fullName->setMaxLength(MAX_DOCTOR_FULLNAME_STRING_SIZE);
-    m_ui->lineEdit_fullName->setToolTip("Строка размером от " + QString("%1").arg(MIN_DOCTOR_FULLNAME_STRING_SIZE) + " до " + QString("%1").arg(MAX_DOCTOR_FULLNAME_STRING_SIZE));
+    m_ui->lineEdit_fullName->setToolTip("Строка размером от " + QString("%1").arg(MIN_DOCTOR_FULLNAME_STRING_SIZE) +
+                                        " до " + QString("%1").arg(MAX_DOCTOR_FULLNAME_STRING_SIZE));
 
     m_ui->lineEdit_post->setMaxLength(MAX_DOCTOR_POST_STRING_SIZE);
-    m_ui->lineEdit_post->setToolTip("Строка размером от " + QString("%1").arg(MIN_DOCTOR_POST_STRING_SIZE) + " до " + QString("%1").arg(MAX_DOCTOR_POST_STRING_SIZE));
+    m_ui->lineEdit_post->setToolTip("Строка размером от " + QString("%1").arg(MIN_DOCTOR_POST_STRING_SIZE) + " до " +
+                                    QString("%1").arg(MAX_DOCTOR_POST_STRING_SIZE));
 
     m_ui->spinBox_cabNumber->setMinimum(MIN_DOCTOR_CABINET);
     m_ui->spinBox_cabNumber->setMaximum(MAX_DOCTOR_CABINET);
-    m_ui->spinBox_cabNumber->setToolTip("Число от " + QString("%1").arg(MIN_DOCTOR_CABINET) + " до " + QString("%1").arg(MAX_DOCTOR_CABINET));
+    m_ui->spinBox_cabNumber->setToolTip("Число от " + QString("%1").arg(MIN_DOCTOR_CABINET) + " до " +
+                                        QString("%1").arg(MAX_DOCTOR_CABINET));
 
     m_ui->lineEdit_grafik->setMaxLength(MAX_DOCTOR_SCHEDULE_STRING_SIZE);
-    m_ui->lineEdit_grafik->setToolTip("Строка размером от " + QString("%1").arg(MIN_DOCTOR_SCHEDULE_STRING_SIZE) + " до " + QString("%1").arg(MAX_DOCTOR_SCHEDULE_STRING_SIZE));
+    m_ui->lineEdit_grafik->setToolTip("Строка размером от " + QString("%1").arg(MIN_DOCTOR_SCHEDULE_STRING_SIZE) +
+                                      " до " + QString("%1").arg(MAX_DOCTOR_SCHEDULE_STRING_SIZE));
 }
 
-NewDoctorWindow::~NewDoctorWindow()
-{
+NewDoctorWindow::~NewDoctorWindow() {
     delete m_ui;
 }
 
-void NewDoctorWindow::okButtonPressed()
-{
+void NewDoctorWindow::okButtonPressed() {
     if (validate()) {
         auto res = g_DATABASE->addDoctor(m_toEdit);
         switch (res) {
-        case StatusCode_OK:
-            accept();
-            return;
-        case StatusCode_AlreadyExist:
-            QMessageBox::warning(this, "Ошибка добавления в БД", "Доктор с таким полем ФИО уже существует.\n"
-                                                                 "Увольте старого доктора или откажите в приеме новому доктору.\n");
-            return;
-        default:
-            throw std::runtime_error("Not implemented");
+            case StatusCode_OK:
+                accept();
+                return;
+            case StatusCode_AlreadyExist:
+                QMessageBox::warning(this, "Ошибка добавления в БД",
+                                     "Доктор с таким полем ФИО уже существует.\n"
+                                     "Увольте старого доктора или откажите в приеме новому доктору.\n");
+                return;
+            default:
+                throw std::runtime_error("Not implemented");
         }
 
     } else {
@@ -54,10 +58,9 @@ void NewDoctorWindow::okButtonPressed()
     }
 }
 
-bool NewDoctorWindow::validate()
-{
+bool NewDoctorWindow::validate() {
     bool result = true;
-    m_errMsg = "";
+    m_errMsg    = "";
 
     if (!m_toEdit.setFullname(m_ui->lineEdit_fullName->text())) {
         m_errMsg += "Неверно указано имя\n";

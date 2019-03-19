@@ -9,20 +9,20 @@
  *  хранить некоторые данные и извлекать их по принципу LIFO
  * \pre шаблонный класс обязан иметь конструктор копирования и оператор =
  */
-template <class T>
+template<class T>
 class Stack {
-private:
+  private:
     struct StackNode {
-        T data = 0;
+        T          data = 0;
         StackNode* next = nullptr;
     };
 
     StackNode* m_top;
 
-public:
-    Stack(); ///< Создает пустой стек
+  public:
+    Stack();                      ///< Создает пустой стек
     Stack(const Stack&) = delete; ///< Конструктор копирования недоступен
-    ~Stack(); ///< Деструктор
+    ~Stack();                     ///< Деструктор
 
     /**
      * \brief push - добавляет элемент в стек
@@ -44,24 +44,21 @@ public:
     bool isEmpty() const;
 };
 
-template <class T>
+template<class T>
 Stack<T>::Stack()
-    : m_top(nullptr)
-{
+    : m_top(nullptr) {
 }
 
-template <class T>
-Stack<T>::~Stack()
-{
+template<class T>
+Stack<T>::~Stack() {
     while (m_top) {
         pop();
     }
 }
 
-template <class T>
-void Stack<T>::push(const T& data)
-{
-    auto new_node = new StackNode;
+template<class T>
+void Stack<T>::push(const T& data) {
+    auto new_node  = new StackNode;
     new_node->data = data;
     if (!m_top) {
         new_node->next = nullptr;
@@ -71,12 +68,11 @@ void Stack<T>::push(const T& data)
     m_top = new_node;
 }
 
-template <class T>
-T Stack<T>::pop()
-{
+template<class T>
+T Stack<T>::pop() {
     if (!m_top)
         throw std::runtime_error("Poping from empty stack");
-    T out = m_top->data;
+    T          out     = m_top->data;
     StackNode* our_top = m_top;
     if (our_top->next) {
         m_top = our_top->next;
@@ -88,9 +84,8 @@ T Stack<T>::pop()
     return out;
 }
 
-template <class T>
-bool Stack<T>::isEmpty() const
-{
+template<class T>
+bool Stack<T>::isEmpty() const {
     return !m_top;
 }
 

@@ -1,15 +1,16 @@
 #include "doctorsearchwindow.hpp"
+
 #include "../models/searchdoctorbyfullname.hpp"
 #include "../models/searchdoctorbypost.hpp"
 #include "data/hospital/doctor.hpp"
 #include "searchresults.hpp"
 #include "utils.hpp"
+
 #include <QMessageBox>
 
 DoctorSearchWindow::DoctorSearchWindow(QWidget* parent)
     : QDialog(parent)
-    , m_ui(nullptr)
-{
+    , m_ui(nullptr) {
     m_ui = new Ui::PatientSearchForm;
     m_ui->setupUi(this);
 
@@ -22,56 +23,51 @@ DoctorSearchWindow::DoctorSearchWindow(QWidget* parent)
     m_ui->comboBox_type->setCurrentIndex(0); //Обновляем поле ввода
 }
 
-DoctorSearchWindow::~DoctorSearchWindow()
-{
+DoctorSearchWindow::~DoctorSearchWindow() {
     delete m_ui;
 }
 
-void DoctorSearchWindow::okButtonPressed()
-{
+void DoctorSearchWindow::okButtonPressed() {
     if (validate()) {
         auto request = m_ui->lineEdit_request->text();
-        auto id = m_ui->comboBox_type->currentIndex();
+        auto id      = m_ui->comboBox_type->currentIndex();
         switch (id) {
-        case 0: {
-            Doctor doc;
-            if (g_DATABASE->getDoctorsModel().getDoctor(request, &doc)) {
-                SearchDoctorByFullname model(doc);
-                SearchResults resWindow("Результаты поиска доктора по ФИО", &model, this);
-                resWindow.exec();
-            } else {
-                QMessageBox::warning(this, "Поиск не успешен", "Поиск не дал результатов");
-            }
-            break;
-        }
-        case 1: {
-            auto list = g_DATABASE->getDoctorsModel().getAllDoctors();
-            for (unsigned pos = 0; pos < list.size(); pos++) {
-                if (!QStringSearch(request, list.at(pos).post())) {
-                    list.remove(pos);
-                    pos--; //Возвращаемся назад, чтобы не проскачить элемент
+            case 0: {
+                Doctor doc;
+                if (g_DATABASE->getDoctorsModel().getDoctor(request, &doc)) {
+                    SearchDoctorByFullname model(doc);
+                    SearchResults resWindow("Результаты поиска доктора по ФИО", &model, this);
+                    resWindow.exec();
+                } else {
+                    QMessageBox::warning(this, "Поиск не успешен", "Поиск не дал результатов");
                 }
+                break;
             }
-            if (list.size() > 0) {
-                SearchDoctorByPost model(std::move(list));
-                SearchResults resWindow("Результаты поиска доктора по фрагмента должности", &model);
-                resWindow.exec();
-            } else {
-                QMessageBox::warning(this, "Поиск не успешен", "Поиск не дал результатов");
+            case 1: {
+                auto list = g_DATABASE->getDoctorsModel().getAllDoctors();
+                for (unsigned pos = 0; pos < list.size(); pos++) {
+                    if (!QStringSearch(request, list.at(pos).post())) {
+                        list.remove(pos);
+                        pos--; //Возвращаемся назад, чтобы не проскачить элемент
+                    }
+                }
+                if (list.size() > 0) {
+                    SearchDoctorByPost model(std::move(list));
+                    SearchResults resWindow("Результаты поиска доктора по фрагмента должности", &model);
+                    resWindow.exec();
+                } else {
+                    QMessageBox::warning(this, "Поиск не успешен", "Поиск не дал результатов");
+                }
+                break;
             }
-            break;
-        }
-        default: {
-            break;
-        }
+            default: { break; }
         }
     } else {
         QMessageBox::warning(this, "Неверный ввод", "Поле поиска не соотвествует формату записи");
     }
 }
 
-void DoctorSearchWindow::comboBoxChanged(const QString& text)
-{
+void DoctorSearchWindow::comboBoxChanged(const QString& text) {
     if (text == "ФИО") {
         m_ui->lineEdit_request->setMaxLength(MAX_DOCTOR_FULLNAME_STRING_SIZE);
     } else if (text == "Должность") {
@@ -79,7 +75,6 @@ void DoctorSearchWindow::comboBoxChanged(const QString& text)
     }
 }
 
-bool DoctorSearchWindow::validate()
-{
+bool DoctorSearchWindow::validate() {
     return true;
 }

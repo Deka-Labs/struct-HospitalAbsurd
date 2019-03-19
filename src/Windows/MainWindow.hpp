@@ -4,21 +4,22 @@
 #include "../globaldatabase.hpp"
 #include "database.hpp"
 #include "ui_mainwindow.h"
+
 #include <QWidget>
 
 #define SAVE_FILE "db"
 
 class MainWindow : public QWidget {
     Q_OBJECT
-private:
+  private:
     Ui::MainWindow* m_ui;
 
-public:
+  public:
     explicit MainWindow(QWidget* parent = nullptr);
     MainWindow(const MainWindow&) = delete;
     ~MainWindow();
 
-public slots:
+  public slots:
     void patientsButtonPressed();
     void doctorsButtonPressed();
     void referralsButtonPressed();
@@ -27,4 +28,4 @@ public slots:
     void onClose();
 };
 
-#endif //!MAINWINDOW_HPP
+#endif //! MAINWINDOW_HPP

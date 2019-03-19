@@ -1,13 +1,14 @@
 #include "newreferralwindow.hpp"
+
 #include "../globaldatabase.hpp"
+
 #include <QMessageBox>
 
 NewReferralWindow::NewReferralWindow(QWidget* parent)
     : QDialog(parent)
     , m_ui(nullptr)
     , m_toEdit()
-    , m_errMsg("")
-{
+    , m_errMsg("") {
     m_ui = new Ui::NewReferralForm;
     m_ui->setupUi(this);
 
@@ -29,36 +30,35 @@ NewReferralWindow::NewReferralWindow(QWidget* parent)
     m_ui->timeEdit->setToolTip("Время направления");
 }
 
-NewReferralWindow::~NewReferralWindow()
-{
+NewReferralWindow::~NewReferralWindow() {
     delete m_ui;
 }
 
-void NewReferralWindow::okButtonPressed()
-{
+void NewReferralWindow::okButtonPressed() {
     if (validate()) {
         auto res = g_DATABASE->addReferral(m_toEdit);
         switch (res) {
-        case StatusCode_OK:
-            this->accept();
-            return;
-        case StatusCode_InvalidObject:
-            QMessageBox::warning(this, "Не удалось добавить запись", "Неверно указан регистрационный номер или ФИО врача.");
-            return;
-        case StatusCode_AlreadyExist:
-            QMessageBox::warning(this, "Не удалось добавить запись", "На эту дату и время к этому врачу уже назначен пациент");
-            return;
-        default:
-            throw std::runtime_error("Not implemented");
+            case StatusCode_OK:
+                this->accept();
+                return;
+            case StatusCode_InvalidObject:
+                QMessageBox::warning(this, "Не удалось добавить запись",
+                                     "Неверно указан регистрационный номер или ФИО врача.");
+                return;
+            case StatusCode_AlreadyExist:
+                QMessageBox::warning(this, "Не удалось добавить запись",
+                                     "На эту дату и время к этому врачу уже назначен пациент");
+                return;
+            default:
+                throw std::runtime_error("Not implemented");
         }
     } else {
         QMessageBox::warning(this, "Неверный ввод", m_errMsg + "\nПовторите ввод.");
     }
 }
 
-bool NewReferralWindow::validate()
-{
-    m_errMsg = "";
+bool NewReferralWindow::validate() {
+    m_errMsg    = "";
     bool result = true;
 
     if (!m_toEdit.setRegID(m_ui->comboBox_regID->currentText())) {

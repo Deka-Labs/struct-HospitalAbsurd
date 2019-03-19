@@ -1,9 +1,9 @@
 #include "data/hospital/doctor.hpp"
 #include "file/dataobject.hpp"
+
 #include <gtest/gtest.h>
 
-TEST(Doctor, Setters)
-{
+TEST(Doctor, Setters) {
     Doctor doc;
     ASSERT_TRUE(doc.setFullname("Иванов И. И"));
     ASSERT_TRUE(doc.setPost("Психолог"));
@@ -17,25 +17,25 @@ TEST(Doctor, Setters)
 
     QString str;
 
-    //FULLNAME
+    // FULLNAME
     str.resize(MAX_DOCTOR_FULLNAME_STRING_SIZE + 1);
     str.fill('0');
 
     ASSERT_FALSE(doc.setFullname(str));
     ASSERT_EQ(doc.fullname(), "Иванов И. И");
 
-    //POST
+    // POST
     str.resize(MAX_DOCTOR_POST_STRING_SIZE + 1);
     str.fill('0');
 
     ASSERT_FALSE(doc.setPost(str));
     ASSERT_EQ(doc.post(), "Психолог");
 
-    //CABINET
+    // CABINET
     ASSERT_FALSE(doc.setCabinet(MAX_DOCTOR_CABINET + 1));
     ASSERT_EQ(doc.cabinet(), 13);
 
-    //SCHEDULE
+    // SCHEDULE
     str.resize(MAX_DOCTOR_SCHEDULE_STRING_SIZE + 1);
     str.fill('0');
 
@@ -43,8 +43,7 @@ TEST(Doctor, Setters)
     ASSERT_EQ(doc.schedule(), "ПН: 11-16; ПТ: 16-19");
 }
 
-TEST(Doctor, toDataObject)
-{
+TEST(Doctor, toDataObject) {
     Doctor doc;
     ASSERT_TRUE(doc.setFullname("Иванов И. И"));
     ASSERT_TRUE(doc.setPost("Психолог"));
@@ -69,8 +68,7 @@ TEST(Doctor, toDataObject)
     ASSERT_EQ(out, doc.schedule());
 }
 
-TEST(Doctor, fromDataObject)
-{
+TEST(Doctor, fromDataObject) {
     Doctor doc;
     ASSERT_TRUE(doc.setFullname("Иванов И. И"));
     ASSERT_TRUE(doc.setPost("Психолог"));
@@ -121,8 +119,7 @@ TEST(Doctor, fromDataObject)
     resetData(data);
 }
 
-TEST(Doctor, OperatorCompare)
-{
+TEST(Doctor, OperatorCompare) {
     Doctor doc;
     ASSERT_TRUE(doc.setFullname("Иванов И. И"));
     ASSERT_TRUE(doc.setPost("Психолог"));

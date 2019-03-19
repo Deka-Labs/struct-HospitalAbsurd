@@ -2,16 +2,18 @@
 #define HASHTABLE_HPP
 
 #include "statuscodes.hpp"
+
 #include <stdexcept>
 
 class IHashKey {
-public:
-    virtual ~IHashKey() {}
+  public:
+    virtual ~IHashKey() {
+    }
 
-    virtual unsigned hash() const = 0;
-    virtual unsigned dopHash() const = 0;
-    virtual bool validateKey() const = 0;
-    virtual bool operator==(const IHashKey& other) const = 0;
+    virtual unsigned hash() const                            = 0;
+    virtual unsigned dopHash() const                         = 0;
+    virtual bool     validateKey() const                     = 0;
+    virtual bool     operator==(const IHashKey& other) const = 0;
 };
 
 /**
@@ -20,19 +22,19 @@ public:
  * \pre Класс TypeData должен иметь метод key() const, возвращающий наследуемый от IHashKey объект;
  * \pre Класс TypeData должен иметь конструктор копирования и копирующий оператор =
  */
-template <class TypeData>
+template<class TypeData>
 class HashTable {
     TypeData** m_dataArray; ///< Хэш-таблицы
-    unsigned m_maxSize; ///< Максимально допустимый размер
+    unsigned   m_maxSize;   ///< Максимально допустимый размер
 
-public:
+  public:
     /**
      * \brief HashTable создает хэш таблицу размером maxSize
      * \param [in] maxSize максимальное число элементов
      */
     explicit HashTable(const unsigned maxSize);
     HashTable(const HashTable&) = delete; ///< Копирование таблиц запрещено
-    ~HashTable(); ///< Деструктор
+    ~HashTable();                         ///< Деструктор
 
     /**
      * \brief add добавляет элемент в хэш таблицу
@@ -46,7 +48,8 @@ public:
     /**
      * \brief get получает элемент из таблицы
      * \param [in] key ключ элемента
-     * \param [out] dataToAssign указатель на элемент, в который атрибуты запишутся. Может быть nullptr если результат не нужен
+     * \param [out] dataToAssign указатель на элемент, в который атрибуты запишутся. Может быть nullptr если результат
+     * не нужен
      * \return true - если элемент найдет, иначе false
      */
     bool get(const IHashKey& key, TypeData* dataToAssign = nullptr) const;
@@ -57,7 +60,7 @@ public:
      */
     void del(const IHashKey& key);
 
-private:
+  private:
     /**
      * \brief getEmptyCellFor получает первую ячейку, в которую можно записать новый элемент
      * \param [in] key ключ элемента, для которого надо найти пустое место
@@ -76,20 +79,18 @@ private:
     bool getCell(const IHashKey& key, unsigned* outPos = nullptr) const;
 };
 
-template <class TypeData>
+template<class TypeData>
 HashTable<TypeData>::HashTable(const unsigned maxSize)
     : m_dataArray(nullptr)
-    , m_maxSize(maxSize)
-{
+    , m_maxSize(maxSize) {
     m_dataArray = new TypeData*[maxSize];
     for (unsigned pos = 0; pos < m_maxSize; pos++) {
         m_dataArray[pos] = nullptr;
     }
 }
 
-template <class TypeData>
-HashTable<TypeData>::~HashTable()
-{
+template<class TypeData>
+HashTable<TypeData>::~HashTable() {
     for (unsigned pos = 0; pos < m_maxSize; pos++) {
         if (m_dataArray[pos]) {
             delete m_dataArray[pos];
@@ -100,9 +101,8 @@ HashTable<TypeData>::~HashTable()
     delete[] m_dataArray;
 }
 
-template <class TypeData>
-StatusCodes HashTable<TypeData>::add(const TypeData& data)
-{
+template<class TypeData>
+StatusCodes HashTable<TypeData>::add(const TypeData& data) {
     unsigned cell = 0;
 
     if (getCell(data.key()))
@@ -116,9 +116,8 @@ StatusCodes HashTable<TypeData>::add(const TypeData& data)
     }
 }
 
-template <class TypeData>
-bool HashTable<TypeData>::get(const IHashKey& key, TypeData* dataToAssign) const
-{
+template<class TypeData>
+bool HashTable<TypeData>::get(const IHashKey& key, TypeData* dataToAssign) const {
     unsigned cell = 0;
 
     if (getCell(key, &cell)) {
@@ -130,9 +129,8 @@ bool HashTable<TypeData>::get(const IHashKey& key, TypeData* dataToAssign) const
     }
 }
 
-template <class TypeData>
-void HashTable<TypeData>::del(const IHashKey& key)
-{
+template<class TypeData>
+void HashTable<TypeData>::del(const IHashKey& key) {
     unsigned cell = 0;
 
     if (getCell(key, &cell)) {
@@ -141,9 +139,8 @@ void HashTable<TypeData>::del(const IHashKey& key)
     }
 }
 
-template <class TypeData>
-bool HashTable<TypeData>::getEmptyCellFor(const IHashKey& key, unsigned* outPos) const
-{
+template<class TypeData>
+bool HashTable<TypeData>::getEmptyCellFor(const IHashKey& key, unsigned* outPos) const {
     if (!key.validateKey())
         return false;
 
@@ -179,9 +176,8 @@ bool HashTable<TypeData>::getEmptyCellFor(const IHashKey& key, unsigned* outPos)
     return false;
 }
 
-template <class TypeData>
-bool HashTable<TypeData>::getCell(const IHashKey& key, unsigned* outPos) const
-{
+template<class TypeData>
+bool HashTable<TypeData>::getCell(const IHashKey& key, unsigned* outPos) const {
     if (!key.validateKey())
         return false;
 

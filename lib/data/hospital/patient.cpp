@@ -1,5 +1,7 @@
 #include "patient.hpp"
+
 #include "utils.hpp"
+
 #include <stdexcept>
 
 Patient::Patient()
@@ -7,8 +9,7 @@ Patient::Patient()
     , m_fullName("Unnamed")
     , m_yearOfBirth(0)
     , m_address("-")
-    , m_workPlace("-")
-{
+    , m_workPlace("-") {
 }
 
 Patient::Patient(const Patient& other)
@@ -16,19 +17,16 @@ Patient::Patient(const Patient& other)
     , m_fullName(other.fullName())
     , m_yearOfBirth(other.yearOfBirth())
     , m_address(other.address())
-    , m_workPlace(other.workPlace())
-{
+    , m_workPlace(other.workPlace()) {
 }
 
 Patient::~Patient() = default;
 
-QString Patient::regID() const
-{
+QString Patient::regID() const {
     return m_regID;
 }
 
-bool Patient::setRegID(const QString& regID)
-{
+bool Patient::setRegID(const QString& regID) {
     if (regID.size() < MIN_PATIENT_REGID_STRING_SIZE || MAX_PATIENT_REGID_STRING_SIZE < regID.size())
         return false;
 
@@ -39,13 +37,11 @@ bool Patient::setRegID(const QString& regID)
     return true;
 }
 
-QString Patient::fullName() const
-{
+QString Patient::fullName() const {
     return m_fullName;
 }
 
-bool Patient::setFullName(const QString& fullName)
-{
+bool Patient::setFullName(const QString& fullName) {
     if (fullName.size() < MIN_PATIENT_FULLNAME_STRING_SIZE || MAX_PATIENT_FULLNAME_STRING_SIZE < fullName.size())
         return false;
 
@@ -56,13 +52,11 @@ bool Patient::setFullName(const QString& fullName)
     return true;
 }
 
-unsigned Patient::yearOfBirth() const
-{
+unsigned Patient::yearOfBirth() const {
     return m_yearOfBirth;
 }
 
-bool Patient::setYearOfBirth(const unsigned& yearOfBirth)
-{
+bool Patient::setYearOfBirth(const unsigned& yearOfBirth) {
     if (yearOfBirth < MIN_PATIENT_YEAR || MAX_PATIENT_YEAR < yearOfBirth)
         return false;
 
@@ -70,13 +64,11 @@ bool Patient::setYearOfBirth(const unsigned& yearOfBirth)
     return true;
 }
 
-QString Patient::address() const
-{
+QString Patient::address() const {
     return m_address;
 }
 
-bool Patient::setAddress(const QString& address)
-{
+bool Patient::setAddress(const QString& address) {
     if (address.size() < MIN_PATIENT_ADDRESS_STRING_SIZE || MAX_PATIENT_ADDRESS_STRING_SIZE < address.size())
         return false;
 
@@ -87,13 +79,11 @@ bool Patient::setAddress(const QString& address)
     return true;
 }
 
-QString Patient::workPlace() const
-{
+QString Patient::workPlace() const {
     return m_workPlace;
 }
 
-bool Patient::setWorkPlace(const QString& workPlace)
-{
+bool Patient::setWorkPlace(const QString& workPlace) {
     if (workPlace.size() < MIN_PATIENT_WORKPLACE_STRING_SIZE || MAX_PATIENT_WORKPLACE_STRING_SIZE < workPlace.size())
         return false;
 
@@ -104,18 +94,16 @@ bool Patient::setWorkPlace(const QString& workPlace)
     return true;
 }
 
-bool Patient::operator==(const Patient& other)
-{
-    return m_regID == other.regID() && m_fullName == other.fullName() && m_yearOfBirth == other.yearOfBirth() && m_address == other.address() && m_workPlace == other.workPlace();
+bool Patient::operator==(const Patient& other) {
+    return m_regID == other.regID() && m_fullName == other.fullName() && m_yearOfBirth == other.yearOfBirth() &&
+           m_address == other.address() && m_workPlace == other.workPlace();
 }
 
-bool Patient::operator!=(const Patient& other)
-{
+bool Patient::operator!=(const Patient& other) {
     return !(*this == other);
 }
 
-DataObject Patient::toDataObject() const
-{
+DataObject Patient::toDataObject() const {
     DataObject out;
     out.setType("patient");
     out.setValue("regid", m_regID);
@@ -126,8 +114,7 @@ DataObject Patient::toDataObject() const
     return out;
 }
 
-bool Patient::fromDataObject(const DataObject& object)
-{
+bool Patient::fromDataObject(const DataObject& object) {
     QString new_regID, new_fullname, new_yearText, new_address, new_workplace;
 
     if (object.getType() != "patient")
@@ -141,7 +128,7 @@ bool Patient::fromDataObject(const DataObject& object)
 
     if (!object.getValue("year", new_yearText))
         return false;
-    bool ok = false;
+    bool     ok              = false;
     unsigned new_yearOfBirth = new_yearText.toUInt(&ok);
     if (!ok)
         return false;

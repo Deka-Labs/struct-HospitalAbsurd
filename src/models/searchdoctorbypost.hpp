@@ -3,14 +3,15 @@
 
 #include "../globaldatabase.hpp"
 #include "data/dataprocessingclasses/twowaylist.hpp"
+
 #include <QAbstractTableModel>
 
 class SearchDoctorByPost : public QAbstractTableModel {
     Q_OBJECT
-private:
+  private:
     TwoWayList<Doctor> m_results;
 
-public:
+  public:
     SearchDoctorByPost(TwoWayList<Doctor>&& results, QObject* parent = nullptr);
     SearchDoctorByPost(const SearchDoctorByPost&) = delete;
     ~SearchDoctorByPost();

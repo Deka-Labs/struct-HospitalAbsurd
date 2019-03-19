@@ -1,8 +1,8 @@
 #include "utils.hpp"
+
 #include "file/datafile.hpp"
 
-bool QStringSearch(const QString& request, const QString& string)
-{
+bool QStringSearch(const QString& request, const QString& string) {
     auto sizeR = request.size();
     auto sizeS = string.size();
 
@@ -25,8 +25,7 @@ bool QStringSearch(const QString& request, const QString& string)
     return false;
 }
 
-bool TemplateValidate(const QString& templ, const QString& str)
-{
+bool TemplateValidate(const QString& templ, const QString& str) {
     if (templ.size() != str.size())
         return false;
 
@@ -44,8 +43,7 @@ bool TemplateValidate(const QString& templ, const QString& str)
     return true;
 }
 
-bool haveRestrictedChars(const QString& str)
-{
+bool haveRestrictedChars(const QString& str) {
     for (QChar ch : restrictedChars) {
         if (QStringSearch(ch, str)) {
             return true;

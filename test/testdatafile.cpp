@@ -1,12 +1,12 @@
 #include "file/datafile.hpp"
+
 #include <fstream>
 #include <gtest/gtest.h>
 
-TEST(DataFile, ReadingNormal)
-{
-    const char* testFile = "testReading.file";
+TEST(DataFile, ReadingNormal) {
+    const char*  testFile = "testReading.file";
     std::fstream file;
-    DataFile df;
+    DataFile     df;
 
     file.open(testFile, std::ios_base::out | std::ios_base::trunc);
     ASSERT_TRUE(file.is_open());
@@ -35,13 +35,12 @@ TEST(DataFile, ReadingNormal)
     }
 }
 
-TEST(DataFile, ReadingEmpty)
-{
+TEST(DataFile, ReadingEmpty) {
     std::fstream file;
-    DataFile df;
-    const char* testFile = "testReadingEmpty.file";
+    DataFile     df;
+    const char*  testFile = "testReadingEmpty.file";
 
-    //Testing empty file
+    // Testing empty file
     file.open(testFile, std::ios_base::out | std::ios_base::trunc);
     ASSERT_TRUE(file.is_open());
     file.close();
@@ -49,50 +48,53 @@ TEST(DataFile, ReadingEmpty)
     ASSERT_EQ(df.open(testFile, true), StatusCode_File_NoObject);
 }
 
-TEST(DataFile, ReadingBrokenStructure)
-{
+TEST(DataFile, ReadingBrokenStructure) {
     std::fstream file;
-    DataFile df;
-    const char* testFile = "testReadingBrokenStructure.file";
+    DataFile     df;
+    const char*  testFile = "testReadingBrokenStructure.file";
 
-    //Testing file with broken '<' '>' structure
-    //1 obj, opening
+    // Testing file with broken '<' '>' structure
+    // 1 obj, opening
     file.open(testFile, std::ios_base::out | std::ios_base::trunc);
     ASSERT_TRUE(file.is_open());
-    file << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
+    file << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1"
+         << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
     file.close();
 
     ASSERT_EQ(df.open(testFile, true), StatusCode_File_NoObject);
     df.close();
 
-    //1 obj, closing
+    // 1 obj, closing
     file.open(testFile, std::ios_base::out | std::ios_base::trunc);
     ASSERT_TRUE(file.is_open());
-    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG;
+    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG
+         << "1" << DATA_CHAR_DIVIDER_ARG;
     file.close();
 
     ASSERT_EQ(df.open(testFile, true), StatusCode_File_NoObject);
     df.close();
 
-    //3 obj
+    // 3 obj
     file.open(testFile, std::ios_base::out | std::ios_base::trunc);
     ASSERT_TRUE(file.is_open());
-    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
-    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG;
-    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
+    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG
+         << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
+    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG
+         << "1" << DATA_CHAR_DIVIDER_ARG;
+    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG
+         << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
     file.close();
 
     ASSERT_EQ(df.open(testFile, true), StatusCode_File_InvalidFormat);
     df.close();
 }
 
-TEST(DataFile, ReadingPlainText)
-{
+TEST(DataFile, ReadingPlainText) {
     std::fstream file;
-    DataFile df;
-    const char* testFile = "testReadingPlainText.file";
+    DataFile     df;
+    const char*  testFile = "testReadingPlainText.file";
 
-    //Testing file with plain text
+    // Testing file with plain text
     file.open(testFile, std::ios_base::out | std::ios_base::trunc);
     ASSERT_TRUE(file.is_open());
     file << "The quick brown fox jumps over the lazy dog\n"
@@ -104,18 +106,19 @@ TEST(DataFile, ReadingPlainText)
     df.close();
 }
 
-TEST(DataFile, ReadingBrokenObject)
-{
+TEST(DataFile, ReadingBrokenObject) {
     std::fstream file;
-    DataFile df;
-    const char* testFile = "testReadingBrokenObject.file";
+    DataFile     df;
+    const char*  testFile = "testReadingBrokenObject.file";
 
-    //Testing file with plain text
+    // Testing file with plain text
     file.open(testFile, std::ios_base::out | std::ios_base::trunc);
     ASSERT_TRUE(file.is_open());
-    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
+    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG
+         << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
     file << DATA_CHAR_OPEN_OBJ << "Trust me! I'm object" << DATA_CHAR_CLOSE_OBJ;
-    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
+    file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG
+         << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
 
     file.close();
 
@@ -130,10 +133,9 @@ TEST(DataFile, ReadingBrokenObject)
     df.close();
 }
 
-TEST(DataFile, Writing)
-{
+TEST(DataFile, Writing) {
     const char* testFile = "testWriting.file";
-    DataFile df;
+    DataFile    df;
 
     ASSERT_EQ(df.open(testFile, false), StatusCode_OK);
 
@@ -164,10 +166,9 @@ TEST(DataFile, Writing)
     }
 }
 
-TEST(DataFile, RussianLoc)
-{
+TEST(DataFile, RussianLoc) {
     const char* testFile = "testRussian.file";
-    DataFile df;
+    DataFile    df;
 
     ASSERT_EQ(df.open(testFile, false), StatusCode_OK);
 

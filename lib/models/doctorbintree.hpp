@@ -4,17 +4,18 @@
 #include "data/dataprocessingclasses/bintree.hpp"
 #include "data/dataprocessingclasses/twowaylist.hpp"
 #include "data/hospital/doctor.hpp"
+
 #include <QAbstractTableModel>
 
 class Database;
 
 class DoctorBinTree : public QAbstractTableModel {
     Q_OBJECT
-private:
+  private:
     BinTree<Doctor, QString> m_binTree;
-    TwoWayList<Doctor> m_listToDisplay;
+    TwoWayList<Doctor>       m_listToDisplay;
 
-public:
+  public:
     explicit DoctorBinTree(QObject* parent = nullptr);
     DoctorBinTree(const DoctorBinTree&) = delete;
     ~DoctorBinTree();
@@ -25,17 +26,17 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
-    Doctor getDoctor(const QModelIndex& index) const;
+    Doctor             getDoctor(const QModelIndex& index) const;
     TwoWayList<Doctor> getAllDoctors() const;
-    bool getDoctor(const QString& key, Doctor* structToFill = nullptr) const;
+    bool               getDoctor(const QString& key, Doctor* structToFill = nullptr) const;
 
     friend class Database;
 
-private:
+  private:
     void updateList();
 
     StatusCodes addDoctor(const Doctor& other);
-    void removeDoctor(const QString& key);
+    void        removeDoctor(const QString& key);
 
     void removeAll();
 };

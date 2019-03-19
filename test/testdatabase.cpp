@@ -1,8 +1,8 @@
 #include "database.hpp"
+
 #include <gtest/gtest.h>
 
-TEST(Database, Loading)
-{
+TEST(Database, Loading) {
     srand(static_cast<unsigned>(time(nullptr)));
 
     auto generateRegID = []() -> QString {
@@ -18,9 +18,7 @@ TEST(Database, Loading)
             .arg(rand() % MAX_PATIENT_YEAR, 4, 10, QLatin1Char('0'));
     };
     auto generateTime = []() -> QString {
-        return QString("%1:%2")
-            .arg(rand() % 24, 2, 10, QLatin1Char('0'))
-            .arg(rand() % 60, 2, 10, QLatin1Char('0'));
+        return QString("%1:%2").arg(rand() % 24, 2, 10, QLatin1Char('0')).arg(rand() % 60, 2, 10, QLatin1Char('0'));
     };
 
     auto generatePatinet = [=]() -> Patient {
@@ -51,13 +49,13 @@ TEST(Database, Loading)
         return ref;
     };
 
-    const unsigned count = 250;
-    const char* filename = "testDB.txt";
+    const unsigned count    = 250;
+    const char*    filename = "testDB.txt";
 
     DataFile df;
     df.open(filename, false);
 
-    TwoWayList<QString> m_doctorsKeyList;
+    TwoWayList<QString>        m_doctorsKeyList;
     TwoWayList<PatientHashKey> m_patsKeysList;
 
     for (unsigned i = 0; i < MAX_PATIENTS / 2; i++) {

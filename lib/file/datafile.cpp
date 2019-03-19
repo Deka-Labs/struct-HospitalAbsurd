@@ -3,17 +3,14 @@
 DataFile::DataFile()
     : m_file()
     , m_stream()
-    , m_forRead(false)
-{
+    , m_forRead(false) {
 }
 
-DataFile::~DataFile()
-{
+DataFile::~DataFile() {
     close();
 }
 
-StatusCodes DataFile::open(const char* filename, bool forRead)
-{
+StatusCodes DataFile::open(const char* filename, bool forRead) {
     close();
 
     m_file.setFileName(filename);
@@ -39,20 +36,18 @@ StatusCodes DataFile::open(const char* filename, bool forRead)
     return validateCode;
 }
 
-void DataFile::close()
-{
+void DataFile::close() {
     m_stream.setDevice(nullptr);
     if (m_file.isOpen())
         m_file.close();
 }
 
-StatusCodes DataFile::ReadNextObject(DataObject& obj)
-{
+StatusCodes DataFile::ReadNextObject(DataObject& obj) {
     if (!m_forRead)
         return StatusCode_WrongMode;
     //Ищем первый символ открытия объекта
     QChar currentSymbol = '\0';
-    auto code = readNext(&currentSymbol);
+    auto  code          = readNext(&currentSymbol);
     if (!code)
         return StatusCode_File_NoObject;
     while (currentSymbol != DATA_CHAR_OPEN_OBJ) {
@@ -127,15 +122,13 @@ StatusCodes DataFile::ReadNextObject(DataObject& obj)
     return StatusCode_OK;
 }
 
-void DataFile::startOver()
-{
+void DataFile::startOver() {
     m_stream.seek(0);
     if (m_file.isOpen())
         m_file.seek(0);
 }
 
-bool DataFile::insertObject(const DataObject& obj)
-{
+bool DataFile::insertObject(const DataObject& obj) {
     if (m_forRead)
         return false;
 
@@ -152,23 +145,21 @@ bool DataFile::insertObject(const DataObject& obj)
     return true;
 }
 
-bool DataFile::atEOF() const
-{
+bool DataFile::atEOF() const {
     if (!m_file.isOpen())
         return true;
     return m_stream.atEnd();
 }
 
-StatusCodes DataFile::validateFileStructure()
-{
+StatusCodes DataFile::validateFileStructure() {
     if (!m_file.isOpen())
         return StatusCodes_File_NotOpened;
     startOver();
     //Просто считаем некоторые характеристики без подробного анализа.
 
-    QChar prevChar = '\0';
+    QChar prevChar    = '\0';
     QChar currentChar = '\0';
-    bool code = readNext(&currentChar);
+    bool  code        = readNext(&currentChar);
 
     unsigned countOfOpen = 0, countOfClose = 0;
 
@@ -183,7 +174,7 @@ StatusCodes DataFile::validateFileStructure()
             return StatusCode_File_InvalidFormat;
 
         prevChar = currentChar;
-        code = readNext(&currentChar);
+        code     = readNext(&currentChar);
     }
 
     startOver();
@@ -195,8 +186,7 @@ StatusCodes DataFile::validateFileStructure()
     return StatusCode_OK;
 }
 
-bool DataFile::readNext(QChar* ch)
-{
+bool DataFile::readNext(QChar* ch) {
     if (!m_file.isOpen() || atEOF())
         return false;
 

@@ -3,24 +3,25 @@
 
 #include "data/hospital/referral.hpp"
 #include "ui_newreferral.h"
+
 #include <QDialog>
 
 class NewReferralWindow : public QDialog {
     Q_OBJECT
-private:
+  private:
     Ui::NewReferralForm* m_ui;
-    Referral m_toEdit;
-    QString m_errMsg;
+    Referral             m_toEdit;
+    QString              m_errMsg;
 
-public:
+  public:
     explicit NewReferralWindow(QWidget* widget = nullptr);
     NewReferralWindow(const NewReferralWindow&) = delete;
     ~NewReferralWindow();
 
-public slots:
+  public slots:
     void okButtonPressed();
 
-private:
+  private:
     bool validate();
 };
 

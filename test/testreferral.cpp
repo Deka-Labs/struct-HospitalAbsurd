@@ -1,8 +1,8 @@
 #include "data/hospital/referral.hpp"
+
 #include <gtest/gtest.h>
 
-TEST(Referral, Setters)
-{
+TEST(Referral, Setters) {
     Referral ref;
     ASSERT_TRUE(ref.setRegID("12-456789"));
     ASSERT_TRUE(ref.setDoctorFullname("Иванов И. И."));
@@ -16,7 +16,7 @@ TEST(Referral, Setters)
 
     QString str;
 
-    //RegID
+    // RegID
 
     str.resize(MAX_PATIENT_REGID_STRING_SIZE + 1);
     str.fill('0');
@@ -27,7 +27,7 @@ TEST(Referral, Setters)
     ASSERT_FALSE(ref.setRegID("Wrong"));
     ASSERT_EQ(ref.regID(), "12-456789");
 
-    //Doctor's fullname
+    // Doctor's fullname
 
     str.resize(MAX_DOCTOR_FULLNAME_STRING_SIZE + 1);
     str.fill('0');
@@ -35,7 +35,7 @@ TEST(Referral, Setters)
     ASSERT_FALSE(ref.setDoctorFullname(str));
     ASSERT_EQ(ref.doctorFullname(), "Иванов И. И.");
 
-    //Date
+    // Date
 
     str.resize(MAX_DATE_STRING_SIZE + 1);
     str.fill('0');
@@ -43,7 +43,7 @@ TEST(Referral, Setters)
     ASSERT_FALSE(ref.setDate(str));
     ASSERT_EQ(ref.date(), "10.02.2018");
 
-    //Time
+    // Time
 
     str.resize(MAX_TIME_STRING_SIZE + 1);
     str.fill('0');
@@ -52,8 +52,7 @@ TEST(Referral, Setters)
     ASSERT_EQ(ref.time(), "10:15");
 }
 
-TEST(Referral, toDataObject)
-{
+TEST(Referral, toDataObject) {
     Referral ref;
     ASSERT_TRUE(ref.setRegID("12-456789"));
     ASSERT_TRUE(ref.setDoctorFullname("Иванов И. И."));
@@ -78,8 +77,7 @@ TEST(Referral, toDataObject)
     ASSERT_EQ(out, ref.time());
 }
 
-TEST(Referral, fromDataObject)
-{
+TEST(Referral, fromDataObject) {
     Referral ref;
     ASSERT_TRUE(ref.setRegID("12-456789"));
     ASSERT_TRUE(ref.setDoctorFullname("Иванов И. И."));
@@ -143,8 +141,7 @@ TEST(Referral, fromDataObject)
     resetData(data);
 }
 
-TEST(Referral, OperationCompare)
-{
+TEST(Referral, OperationCompare) {
     Referral ref;
     ASSERT_TRUE(ref.setRegID("12-456789"));
     ASSERT_TRUE(ref.setDoctorFullname("0"));

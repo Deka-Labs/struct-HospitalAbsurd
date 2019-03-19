@@ -3,24 +3,25 @@
 
 #include "data/hospital/doctor.hpp"
 #include "ui_newdoctor.h"
+
 #include <QDialog>
 
 class NewDoctorWindow : public QDialog {
     Q_OBJECT
-private:
+  private:
     Ui::NewDoctorForm* m_ui;
-    Doctor m_toEdit;
-    QString m_errMsg;
+    Doctor             m_toEdit;
+    QString            m_errMsg;
 
-public:
+  public:
     explicit NewDoctorWindow(QWidget* parent = nullptr);
     NewDoctorWindow(const NewDoctorWindow&) = delete;
     ~NewDoctorWindow();
 
-public slots:
+  public slots:
     void okButtonPressed();
 
-private:
+  private:
     bool validate();
 };
 

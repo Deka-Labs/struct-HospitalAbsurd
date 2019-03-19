@@ -1,21 +1,21 @@
 #include "data/dataprocessingclasses/twowaylist.hpp"
 #include "data/hospital/patienthashkey.hpp"
+
 #include <QFile>
 #include <gtest/gtest.h>
 
-TEST(PatientHashKey, TestWithOut)
-{
-    const unsigned count = 1000;
+TEST(PatientHashKey, TestWithOut) {
+    const unsigned             count = 1000;
     TwoWayList<PatientHashKey> m_keys;
-    unsigned m_firstHashes[MAX_PATIENTS] = { 0 };
-    unsigned m_secondHashes[MAX_PATIENT_HASH_STEP + 1] = { 0 };
+    unsigned                   m_firstHashes[MAX_PATIENTS]               = {0};
+    unsigned                   m_secondHashes[MAX_PATIENT_HASH_STEP + 1] = {0};
 
     for (unsigned i = 0; i < count; i++) {
         QString str;
         do {
-            QString first = QString("%1").arg(rand() % 100);
+            QString first  = QString("%1").arg(rand() % 100);
             QString second = QString("%1").arg(rand() % 1000000);
-            str = QString("%1-%2").arg(first, 2, '0').arg(second, 6, '0');
+            str            = QString("%1-%2").arg(first, 2, '0').arg(second, 6, '0');
         } while (m_keys.search(PatientHashKey(str)));
 
         m_keys.push_back(PatientHashKey(str));
@@ -47,8 +47,7 @@ TEST(PatientHashKey, TestWithOut)
     }
 }
 
-TEST(PatientHashKey, OutOfRange)
-{
+TEST(PatientHashKey, OutOfRange) {
     srand(unsigned(time(nullptr)));
     const unsigned count = 100000;
 

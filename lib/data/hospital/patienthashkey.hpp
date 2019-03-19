@@ -2,6 +2,7 @@
 #define PATIENTHASHKEY_HPP
 
 #include "data/dataprocessingclasses/hashtable.hpp"
+
 #include <QString>
 
 #define MAX_PATIENTS 100
@@ -21,14 +22,14 @@
 class PatientHashKey : public IHashKey {
     QString m_key;
 
-public:
+  public:
     explicit PatientHashKey(QString key = "");
 
     unsigned hash() const;
     unsigned dopHash() const;
-    bool validateKey() const;
+    bool     validateKey() const;
 
-    bool operator==(const IHashKey& key) const;
+    bool    operator==(const IHashKey& key) const;
     QString key() const;
 };
 

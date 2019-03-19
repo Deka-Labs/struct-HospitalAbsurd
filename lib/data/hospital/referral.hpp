@@ -12,29 +12,29 @@
 #define TIME_STRING_PATTERN "dd:dd"
 
 class Referral {
-private:
+  private:
     QString m_regID;
     QString m_doctorFullname;
     QString m_date;
     QString m_time;
 
-public:
+  public:
     Referral();
     Referral(const Referral& other);
     ~Referral();
 
     DataObject toDataObject() const;
-    bool fromDataObject(const DataObject& obj);
+    bool       fromDataObject(const DataObject& obj);
 
-    //Setters and getters
+    // Setters and getters
     QString regID() const;
-    bool setRegID(const QString& regID);
+    bool    setRegID(const QString& regID);
     QString doctorFullname() const;
-    bool setDoctorFullname(const QString& doctorFullname);
+    bool    setDoctorFullname(const QString& doctorFullname);
     QString date() const;
-    bool setDate(const QString& date);
+    bool    setDate(const QString& date);
     QString time() const;
-    bool setTime(const QString& time);
+    bool    setTime(const QString& time);
 
     bool isEqual(const Referral& other) const;
 

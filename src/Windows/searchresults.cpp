@@ -2,8 +2,7 @@
 
 SearchResults::SearchResults(const QString& title, QAbstractTableModel* model, QWidget* parent)
     : QDialog(parent)
-    , m_ui(nullptr)
-{
+    , m_ui(nullptr) {
     m_ui = new Ui::SearchResultForm;
     m_ui->setupUi(this);
 
@@ -11,7 +10,6 @@ SearchResults::SearchResults(const QString& title, QAbstractTableModel* model, Q
     m_ui->tableView->setModel(model);
 }
 
-SearchResults::~SearchResults()
-{
+SearchResults::~SearchResults() {
     delete m_ui;
 }

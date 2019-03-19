@@ -2,17 +2,18 @@
 #define SEARCHPATIENTBYREGID_HPP
 
 #include "../globaldatabase.hpp"
+
 #include <QAbstractTableModel>
 
 class SearchPatientByRegID : public QAbstractTableModel {
     Q_OBJECT
-private:
+  private:
     struct {
         Patient patient;
         QString referralsDoctorsFullname;
     } m_dataToDisplay;
 
-public:
+  public:
     SearchPatientByRegID(const Patient& pat, QObject* parent = nullptr);
     SearchPatientByRegID(const SearchPatientByRegID&) = delete;
     ~SearchPatientByRegID();

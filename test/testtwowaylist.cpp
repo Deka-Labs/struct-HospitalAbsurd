@@ -1,9 +1,9 @@
 #include "data/dataprocessingclasses/twowaylist.hpp"
+
 #include "gtest/gtest.h"
 
-TEST(TwoWayList, Copying)
-{
-    TwoWayList<int> first = TwoWayList<int>();
+TEST(TwoWayList, Copying) {
+    TwoWayList<int> first  = TwoWayList<int>();
     TwoWayList<int> second = TwoWayList<int>();
 
     ASSERT_NO_THROW(second = TwoWayList<int>(first));
@@ -17,7 +17,7 @@ TEST(TwoWayList, Copying)
     ASSERT_EQ(first.at(0), second.at(0));
     ASSERT_EQ(first.at(1), second.at(1));
 
-    first = TwoWayList<int>();
+    first  = TwoWayList<int>();
     second = TwoWayList<int>();
     ASSERT_EQ(first.size(), 0);
     ASSERT_EQ(second.size(), 0);
@@ -39,8 +39,7 @@ TEST(TwoWayList, Copying)
     }
 }
 
-TEST(TwoWayList, Sizeing)
-{
+TEST(TwoWayList, Sizeing) {
     TwoWayList<int> list = TwoWayList<int>();
 
     ASSERT_EQ(list.size(), 0);
@@ -59,8 +58,7 @@ TEST(TwoWayList, Sizeing)
     ASSERT_EQ(list.size(), 0);
 }
 
-TEST(TwoWayList, PushBack)
-{
+TEST(TwoWayList, PushBack) {
     TwoWayList<unsigned> list = TwoWayList<unsigned>();
 
     const unsigned count = 1000;
@@ -74,8 +72,7 @@ TEST(TwoWayList, PushBack)
     }
 }
 
-TEST(TwoWayList, PushFirst)
-{
+TEST(TwoWayList, PushFirst) {
     TwoWayList<unsigned> list = TwoWayList<unsigned>();
 
     const unsigned count = 1000;
@@ -89,8 +86,7 @@ TEST(TwoWayList, PushFirst)
     }
 }
 
-TEST(TwoWayList, Insert)
-{
+TEST(TwoWayList, Insert) {
     TwoWayList<unsigned> list = TwoWayList<unsigned>();
 
     const unsigned count = 1000;
@@ -109,8 +105,7 @@ TEST(TwoWayList, Insert)
     ASSERT_EQ(list.at(count), count);
 }
 
-TEST(TwoWayList, Removing)
-{
+TEST(TwoWayList, Removing) {
     srand(unsigned(time(nullptr)));
     TwoWayList<unsigned> list = TwoWayList<unsigned>();
     ASSERT_NO_THROW(list.remove(0));
@@ -128,8 +123,7 @@ TEST(TwoWayList, Removing)
     }
 }
 
-TEST(TwoWayList, Swapping)
-{
+TEST(TwoWayList, Swapping) {
     TwoWayList<unsigned> list = TwoWayList<unsigned>();
 
     const unsigned count = 1000;
@@ -168,7 +162,7 @@ TEST(TwoWayList, Swapping)
         ASSERT_EQ(list.at(unsigned(i)), i);
     }
 
-    //Near elements
+    // Near elements
     list.swap(0, 1);
     ASSERT_EQ(list.at(0), 1);
     ASSERT_EQ(list.at(1), 0);
@@ -205,8 +199,7 @@ TEST(TwoWayList, Swapping)
     }
 }
 
-TEST(TwoWayList, Sorting)
-{
+TEST(TwoWayList, Sorting) {
     srand(unsigned(time(nullptr)));
     TwoWayList<unsigned> list = TwoWayList<unsigned>();
 
@@ -224,20 +217,19 @@ TEST(TwoWayList, Sorting)
     }
 }
 
-TEST(TwoWayList, Searching)
-{
+TEST(TwoWayList, Searching) {
     srand(unsigned(time(nullptr)));
     TwoWayList<int> list;
-    const unsigned count = 1000;
+    const unsigned  count = 1000;
 
     for (unsigned i = 0; i < count; i++) {
         list.push_back(rand());
         ASSERT_EQ(list.size(), i + 1);
     }
 
-    list[0] = -1;
+    list[0]                                  = -1;
     list[unsigned(rand()) % (count - 2) + 1] = -2;
-    list[count - 1] = -3;
+    list[count - 1]                          = -3;
 
     ASSERT_TRUE(list.search(-1));
     ASSERT_TRUE(list.search(-2));
@@ -245,12 +237,11 @@ TEST(TwoWayList, Searching)
     ASSERT_FALSE(list.search((-(unsigned(rand()) % count)) - 4));
 }
 
-TEST(TwoWayList, RemoveAll)
-{
+TEST(TwoWayList, RemoveAll) {
     srand(unsigned(time(nullptr)));
     TwoWayList<int> list;
-    const unsigned count = 1000;
-    const int maxValue = 10;
+    const unsigned  count    = 1000;
+    const int       maxValue = 10;
 
     for (unsigned i = 0; i < count; i++) {
         list.push_back(rand() % maxValue);

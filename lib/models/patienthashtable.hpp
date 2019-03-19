@@ -4,6 +4,7 @@
 #include "data/dataprocessingclasses/hashtable.hpp"
 #include "data/dataprocessingclasses/twowaylist.hpp"
 #include "data/hospital/patient.hpp"
+
 #include <QAbstractTableModel>
 #include <QFile>
 #include <QString>
@@ -13,11 +14,11 @@ class Database;
 class PatientHashTable : public QAbstractTableModel {
     Q_OBJECT
 
-private:
-    HashTable<Patient> m_hashTable;
+  private:
+    HashTable<Patient>         m_hashTable;
     TwoWayList<PatientHashKey> m_registredKeys;
 
-public:
+  public:
     explicit PatientHashTable(QObject* parent = nullptr);
     PatientHashTable(const PatientHashTable& other) = delete;
     ~PatientHashTable();
@@ -28,13 +29,13 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
-    Patient getPatient(const QModelIndex& index) const;
+    Patient             getPatient(const QModelIndex& index) const;
     TwoWayList<Patient> getAllPatients() const;
-    bool getPatient(const PatientHashKey& key, Patient* structToAssign = nullptr) const;
+    bool                getPatient(const PatientHashKey& key, Patient* structToAssign = nullptr) const;
 
     friend class Database;
 
-private:
+  private:
     StatusCodes addPatient(const Patient& patinet);
 
     void delPatient(const PatientHashKey& key);
