@@ -18,7 +18,7 @@ public:
     Database(const Database&) = delete;
     ~Database();
 
-    bool loadData(const char* fileName);
+    StatusCodes loadData(const char* fileName);
     void saveTo(const char* fileName);
 
     PatientHashTable& getPatientsModel() { return m_patients; }

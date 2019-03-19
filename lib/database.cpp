@@ -10,12 +10,13 @@ Database::Database()
 Database::~Database()
     = default;
 
-bool Database::loadData(const char* fileName)
+StatusCodes Database::loadData(const char* fileName)
 {
     DataFile m_file;
 
-    if (!m_file.open(fileName, true))
-        return false;
+    auto openCode = m_file.open(fileName, true);
+    if (openCode != StatusCode_OK)
+        return openCode;
 
     while (!m_file.atEOF()) {
         DataObject obj;
@@ -26,39 +27,41 @@ bool Database::loadData(const char* fileName)
         case StatusCode_OK:
             break;
         default:
-            return false;
+            return code;
         };
 
         if (obj.getType() == "patient") {
             Patient pat;
             if (!pat.fromDataObject(obj))
-                return false;
-            if (m_patients.addPatient(pat) != StatusCode_OK)
-                return false;
+                return StatusCode_InvalidObject;
+            auto codeAdd = m_patients.addPatient(pat);
+            if (codeAdd != StatusCode_OK)
+                return codeAdd;
         } else if (obj.getType() == "referral") {
             Referral ref;
             if (!ref.fromDataObject(obj))
-                return false;
+                return StatusCode_InvalidObject;
             if (!m_referrals.addReferral(ref))
-                return false;
+                return StatusCode_UNKNOWN;
         } else if (obj.getType() == "doctor") {
             Doctor doc;
             if (!doc.fromDataObject(obj))
-                return false;
-            if (m_doctors.addDoctor(doc) != StatusCode_OK)
-                return false;
+                return StatusCode_InvalidObject;
+            auto codeAdd = m_doctors.addDoctor(doc);
+            if (codeAdd != StatusCode_OK)
+                return codeAdd;
         } else {
-            return false;
+            return StatusCode_InvalidObject;
         }
     }
-    return true;
+    return StatusCode_OK;
 }
 
 void Database::saveTo(const char* fileName)
 {
     DataFile m_file;
 
-    if (!m_file.open(fileName, false))
+    if (m_file.open(fileName, false) != StatusCode_OK)
         return;
 
     //Adding patients

@@ -44,7 +44,7 @@ public:
     DataFile(const DataFile& other) = delete;
     ~DataFile();
 
-    bool open(const char* filename, bool forRead = true);
+    StatusCodes open(const char* filename, bool forRead = true);
     void close();
 
     StatusCodes ReadNextObject(DataObject& obj);
@@ -55,7 +55,7 @@ public:
     bool atEOF() const;
 
 private:
-    bool validateFileStructure();
+    StatusCodes validateFileStructure();
 
     bool readNext(QChar* ch);
 };

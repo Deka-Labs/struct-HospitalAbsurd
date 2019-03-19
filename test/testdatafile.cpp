@@ -21,7 +21,7 @@ TEST(DataFile, ReadingNormal)
     }
     file.close();
 
-    ASSERT_TRUE(df.open(testFile, true));
+    ASSERT_EQ(df.open(testFile, true), StatusCode_OK);
 
     for (int i = 0; i < count; i++) {
         DataObject obj;
@@ -46,7 +46,7 @@ TEST(DataFile, ReadingEmpty)
     ASSERT_TRUE(file.is_open());
     file.close();
 
-    ASSERT_FALSE(df.open(testFile, true));
+    ASSERT_EQ(df.open(testFile, true), StatusCode_File_NoObject);
 }
 
 TEST(DataFile, ReadingBrokenStructure)
@@ -62,7 +62,7 @@ TEST(DataFile, ReadingBrokenStructure)
     file << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
     file.close();
 
-    ASSERT_FALSE(df.open(testFile, true));
+    ASSERT_EQ(df.open(testFile, true), StatusCode_File_NoObject);
     df.close();
 
     //1 obj, closing
@@ -71,7 +71,7 @@ TEST(DataFile, ReadingBrokenStructure)
     file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG;
     file.close();
 
-    ASSERT_FALSE(df.open(testFile, true));
+    ASSERT_EQ(df.open(testFile, true), StatusCode_File_NoObject);
     df.close();
 
     //3 obj
@@ -82,7 +82,7 @@ TEST(DataFile, ReadingBrokenStructure)
     file << DATA_CHAR_OPEN_OBJ << "object" << DATA_CHAR_SPACE << "att" << DATA_CHAR_EQUAL << DATA_CHAR_DIVIDER_ARG << "1" << DATA_CHAR_DIVIDER_ARG << DATA_CHAR_CLOSE_OBJ;
     file.close();
 
-    ASSERT_FALSE(df.open(testFile, true));
+    ASSERT_EQ(df.open(testFile, true), StatusCode_File_InvalidFormat);
     df.close();
 }
 
@@ -100,7 +100,7 @@ TEST(DataFile, ReadingPlainText)
             "В чащах юга жил бы цитрус? Да, но фальшивый экземпляр!\n"
             "The five boxing wizards jump quickly.";
 
-    ASSERT_FALSE(df.open(testFile, true));
+    ASSERT_EQ(df.open(testFile, true), StatusCode_File_NoObject);
     df.close();
 }
 
@@ -119,7 +119,7 @@ TEST(DataFile, ReadingBrokenObject)
 
     file.close();
 
-    ASSERT_TRUE(df.open(testFile, true));
+    ASSERT_EQ(df.open(testFile, true), StatusCode_OK);
 
     DataObject obj;
 
@@ -135,7 +135,7 @@ TEST(DataFile, Writing)
     const char* testFile = "testWriting.file";
     DataFile df;
 
-    ASSERT_TRUE(df.open(testFile, false));
+    ASSERT_EQ(df.open(testFile, false), StatusCode_OK);
 
     const int count = 1000;
 
@@ -150,7 +150,7 @@ TEST(DataFile, Writing)
 
     df.close();
 
-    ASSERT_TRUE(df.open(testFile, true));
+    ASSERT_EQ(df.open(testFile, true), StatusCode_OK);
 
     for (int i = 0; i < count; i++) {
         DataObject obj;
@@ -169,7 +169,7 @@ TEST(DataFile, RussianLoc)
     const char* testFile = "testRussian.file";
     DataFile df;
 
-    ASSERT_TRUE(df.open(testFile, false));
+    ASSERT_EQ(df.open(testFile, false), StatusCode_OK);
 
     DataObject obj;
     obj.setType("объект");
@@ -180,7 +180,7 @@ TEST(DataFile, RussianLoc)
 
     df.close();
 
-    ASSERT_TRUE(df.open(testFile, true));
+    ASSERT_EQ(df.open(testFile, true), StatusCode_OK);
 
     ASSERT_EQ(df.ReadNextObject(obj), StatusCode_OK);
     ASSERT_EQ(obj.getType(), "объект");

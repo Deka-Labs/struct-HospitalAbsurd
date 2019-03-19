@@ -12,7 +12,7 @@ DataFile::~DataFile()
     close();
 }
 
-bool DataFile::open(const char* filename, bool forRead)
+StatusCodes DataFile::open(const char* filename, bool forRead)
 {
     close();
 
@@ -28,12 +28,15 @@ bool DataFile::open(const char* filename, bool forRead)
         m_forRead = false;
     }
 
-    if (m_file.isOpen()) {
-        if (!m_forRead || validateFileStructure())
-            return true;
+    if (!m_file.isOpen()) {
+        return StatusCodes_File_NotOpened;
     }
-    close();
-    return false;
+
+    if (!m_forRead)
+        return StatusCode_OK;
+
+    auto validateCode = validateFileStructure();
+    return validateCode;
 }
 
 void DataFile::close()
@@ -156,10 +159,10 @@ bool DataFile::atEOF() const
     return m_stream.atEnd();
 }
 
-bool DataFile::validateFileStructure()
+StatusCodes DataFile::validateFileStructure()
 {
     if (!m_file.isOpen())
-        return false;
+        return StatusCodes_File_NotOpened;
     startOver();
     //Просто считаем некоторые характеристики без подробного анализа.
 
@@ -175,9 +178,9 @@ bool DataFile::validateFileStructure()
         if (currentChar == DATA_CHAR_CLOSE_OBJ)
             countOfClose++;
         if (prevChar == DATA_CHAR_EQUAL && currentChar != DATA_CHAR_DIVIDER_ARG)
-            return false;
+            return StatusCode_File_InvalidFormat;
         if (prevChar == DATA_CHAR_OPEN_OBJ && !currentChar.isLetterOrNumber())
-            return false;
+            return StatusCode_File_InvalidFormat;
 
         prevChar = currentChar;
         code = readNext(&currentChar);
@@ -186,10 +189,10 @@ bool DataFile::validateFileStructure()
     startOver();
 
     if (countOfOpen == 0 || countOfClose == 0)
-        return false;
+        return StatusCode_File_NoObject;
     if (countOfOpen != countOfClose)
-        return false;
-    return true;
+        return StatusCode_File_InvalidFormat;
+    return StatusCode_OK;
 }
 
 bool DataFile::readNext(QChar* ch)
