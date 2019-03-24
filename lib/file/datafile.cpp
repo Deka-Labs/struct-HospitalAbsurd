@@ -16,10 +16,10 @@ StatusCodes DataFile::open(const char* filename, bool forRead) {
     m_file.setFileName(filename);
     m_stream.setCodec(DATA_ENCODING);
 
-    if (!m_file.exists())
-        return StatusCodes_File_NotExist;
-
     if (forRead) {
+        if (!m_file.exists())
+            return StatusCodes_File_NotExist;
+
         m_file.open(QIODevice::ReadOnly);
         m_stream.setDevice(&m_file);
         m_forRead = true;
