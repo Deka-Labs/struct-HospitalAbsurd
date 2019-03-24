@@ -12,6 +12,7 @@ enum StatusCodes {
     StatusCode_InvalidObject,      ///< Объект имеет наверные данные
     StatusCode_File_InvalidFormat, ///< Неверный формат файла
     StatusCodes_File_NotOpened,    ///< Файл не был открыт
+    StatusCodes_File_NotExist,     ///< Файл не найден
     StatusCodes_SIZE
 };
 
@@ -25,7 +26,8 @@ static const char* g_STATUSCODES_MESSAGES[StatusCodes_SIZE] = {
     "Нет объекта для чтения",       ///< StatusCode_File_NoObject
     "Неверный объект",              ///< StatusCode_InvalidObject
     "Неверный формат файла",        ///< StatusCode_File_InvalidFormat
-    "Файл не было открыт"           ///< StatusCodes_File_NotOpened
+    "Файл не был открыт",           ///< StatusCodes_File_NotOpened
+    "Файл не найден"                ///< StatusCodes_File_NotExist
 };
 
 #endif // STATUSCODES_HPP
