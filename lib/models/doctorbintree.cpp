@@ -2,10 +2,8 @@
 
 DoctorBinTree::DoctorBinTree(QObject* parent)
     : QAbstractTableModel(parent)
-    , m_binTree() {
+    , TypeTree() {
 }
-
-DoctorBinTree::~DoctorBinTree() = default;
 
 QVariant DoctorBinTree::headerData(int section, Qt::Orientation orientation, int role) const {
     if (orientation == Qt::Horizontal) {
@@ -66,7 +64,7 @@ Doctor DoctorBinTree::getDoctor(const QModelIndex& index) const {
         throw std::runtime_error("Wrong index in DoctorBinTree::getDoctor");
 
     auto   key = m_listToDisplay.at(static_cast<unsigned>(index.row())).key();
-    Doctor out = m_binTree.find(key);
+    Doctor out = TypeTree::find(key);
     return out;
 }
 
@@ -74,23 +72,9 @@ TwoWayList<Doctor> DoctorBinTree::getAllDoctors() const {
     return m_listToDisplay;
 }
 
-StatusCodes DoctorBinTree::addDoctor(const Doctor& other) {
-    auto result = m_binTree.add(other);
-    if (result == StatusCode_OK) {
-        updateList();
-    }
-
-    return result;
-}
-
-void DoctorBinTree::removeDoctor(const QString& key) {
-    m_binTree.remove(key);
-    updateList();
-}
-
 bool DoctorBinTree::getDoctor(const QString& key, Doctor* structToFill) const {
     try {
-        Doctor doc = m_binTree.find(key);
+        Doctor doc = TypeTree::find(key);
         if (structToFill)
             *structToFill = doc;
         return true;
@@ -99,17 +83,30 @@ bool DoctorBinTree::getDoctor(const QString& key, Doctor* structToFill) const {
     }
 }
 
-void DoctorBinTree::removeAll() {
-    while (!m_binTree.isEmpty()) {
-        removeDoctor(m_listToDisplay[0].key());
-    }
-}
-
 void DoctorBinTree::updateList() {
     beginResetModel();
 
-    m_listToDisplay = m_binTree.getListInOrder();
-    // m_listToDisplay.sort();
+    m_listToDisplay = TypeTree::getListInOrder();
 
     endResetModel();
+}
+
+StatusCodes DoctorBinTree::add(const Doctor& other) {
+    auto result = TypeTree::add(other);
+    if (result == StatusCode_OK) {
+        updateList();
+    }
+
+    return result;
+}
+
+void DoctorBinTree::remove(const QString& key) {
+    TypeTree::remove(key);
+    updateList();
+}
+
+void DoctorBinTree::removeAll() {
+    while (!TypeTree::isEmpty()) {
+        remove(m_listToDisplay[0].key());
+    }
 }

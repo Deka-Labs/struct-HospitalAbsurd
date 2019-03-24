@@ -212,9 +212,9 @@ void BinTree<TypeData, TypeKey>::remove(const TypeKey& key) {
 
 template<class TypeData, class TypeKey>
 TwoWayList<TypeData> BinTree<TypeData, TypeKey>::getListInOrder() const {
-    TwoWayList<TypeData>         list;
-    Stack<BinTreeNode<TypeData>> stack;
-    BinTreeNode<TypeData>*       node = m_root;
+    TwoWayList<TypeData>          list;
+    Stack<BinTreeNode<TypeData>*> stack;
+    BinTreeNode<TypeData>*        node = m_root;
 
     while (!stack.isEmpty() || node != nullptr) {
         if (node != nullptr) {

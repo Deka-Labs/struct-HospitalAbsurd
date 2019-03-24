@@ -44,7 +44,7 @@ StatusCodes Database::loadData(const char* fileName) {
             Doctor doc;
             if (!doc.fromDataObject(obj))
                 return StatusCode_InvalidObject;
-            auto codeAdd = m_doctors.addDoctor(doc);
+            auto codeAdd = m_doctors.add(doc);
             if (codeAdd != StatusCode_OK)
                 return codeAdd;
         } else {
@@ -76,7 +76,7 @@ void Database::saveTo(const char* fileName) {
     auto sizeDoctors = doctors.size();
     for (unsigned pos = 0; pos < sizeDoctors; pos++) {
         try {
-            Doctor     doc = m_doctors.m_binTree.find(doctors[pos].key());
+            Doctor     doc = m_doctors.find(doctors[pos].key());
             DataObject obj = doc.toDataObject();
             m_file.insertObject(obj);
         } catch (...) {
@@ -112,7 +112,7 @@ void Database::delAllPatients() {
 }
 
 StatusCodes Database::addDoctor(const Doctor& newDoc) {
-    return m_doctors.addDoctor(newDoc);
+    return m_doctors.add(newDoc);
 }
 
 void Database::delDoctor(const QString& docKey) {
@@ -122,7 +122,7 @@ void Database::delDoctor(const QString& docKey) {
         m_referrals.removeReferral(list.at(pos));
     }
 
-    m_doctors.removeDoctor(docKey);
+    m_doctors.remove(docKey);
 }
 
 void Database::delAllDoctors() {

@@ -9,22 +9,25 @@
 
 class Database;
 
-class DoctorBinTree : public QAbstractTableModel {
+class DoctorBinTree
+    : public QAbstractTableModel
+    , public BinTree<Doctor, QString> {
     Q_OBJECT
   private:
-    BinTree<Doctor, QString> m_binTree;
-    TwoWayList<Doctor>       m_listToDisplay;
+    TwoWayList<Doctor> m_listToDisplay;
+
+    typedef BinTree<Doctor, QString> TypeTree;
 
   public:
     explicit DoctorBinTree(QObject* parent = nullptr);
     DoctorBinTree(const DoctorBinTree&) = delete;
-    ~DoctorBinTree();
+    ~DoctorBinTree() override           = default;
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
-    int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
     Doctor             getDoctor(const QModelIndex& index) const;
     TwoWayList<Doctor> getAllDoctors() const;
@@ -35,10 +38,9 @@ class DoctorBinTree : public QAbstractTableModel {
   private:
     void updateList();
 
-    StatusCodes addDoctor(const Doctor& other);
-    void        removeDoctor(const QString& key);
-
-    void removeAll();
+    StatusCodes add(const Doctor& other) override;
+    void        remove(const QString& key) override;
+    void        removeAll();
 };
 
 #endif // DOCTORBINTREE_HPP
