@@ -1,7 +1,7 @@
 #include "database.hpp"
 
 #include <gtest/gtest.h>
-
+/*
 TEST(Database, Loading) {
     srand(static_cast<unsigned>(time(nullptr)));
 
@@ -88,3 +88,4 @@ TEST(Database, Loading) {
     Database newDB;
     ASSERT_TRUE(newDB.loadData("testDB.txt"));
 }
+*/
