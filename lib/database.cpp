@@ -85,10 +85,9 @@ void Database::saveTo(const char* fileName) {
     }
 
     // Adding referrals
-    auto referrals     = m_referrals.m_list;
-    auto sizeReferrals = referrals.size();
+    auto sizeReferrals = m_referrals.size();
     for (unsigned pos = 0; pos < sizeReferrals; pos++) {
-        const Referral& ref = referrals.at(pos);
+        const Referral& ref = m_referrals.at(pos);
         DataObject      obj = ref.toDataObject();
         m_file.insertObject(obj);
     }

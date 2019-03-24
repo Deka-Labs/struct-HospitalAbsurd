@@ -10,21 +10,23 @@
 
 class Database;
 
-class ReferralList : public QAbstractTableModel {
+class ReferralList
+    : public QAbstractTableModel
+    , private TwoWayList<Referral> {
     Q_OBJECT
   private:
-    TwoWayList<Referral> m_list;
+    typedef TwoWayList<Referral> TypeList;
 
   public:
     explicit ReferralList(QObject* parent = nullptr);
     ReferralList(const ReferralList&) = delete;
-    ~ReferralList();
+    ~ReferralList() override          = default;
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
-    int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
     friend class Database;
 

@@ -4,8 +4,6 @@ ReferralList::ReferralList(QObject* parent)
     : QAbstractTableModel(parent) {
 }
 
-ReferralList::~ReferralList() = default;
-
 QVariant ReferralList::headerData(int section, Qt::Orientation orientation, int role) const {
     if (orientation == Qt::Horizontal) {
         if (role == Qt::DisplayRole) {
@@ -31,7 +29,7 @@ QVariant ReferralList::data(const QModelIndex& index, int role) const {
         return QVariant();
 
     if (role == Qt::DisplayRole) {
-        Referral ref = m_list.at(static_cast<unsigned>(index.row()));
+        Referral ref = TypeList::at(static_cast<unsigned>(index.row()));
         switch (index.column()) {
             case 0:
                 return ref.regID();
@@ -51,7 +49,7 @@ QVariant ReferralList::data(const QModelIndex& index, int role) const {
 
 int ReferralList::rowCount(const QModelIndex& parent) const {
     (void)parent;
-    return static_cast<int>(m_list.size());
+    return static_cast<int>(TypeList::size());
 }
 
 int ReferralList::columnCount(const QModelIndex& parent) const {
@@ -64,13 +62,13 @@ Referral ReferralList::getReferral(const QModelIndex& index) const {
     if (!index.isValid())
         throw std::runtime_error("Wrong index in ReferralList::getReferral");
 
-    return m_list.at(static_cast<unsigned>(index.row()));
+    return TypeList::at(static_cast<unsigned>(index.row()));
 }
 
 TwoWayList<Referral> ReferralList::getConnectedToPatient(const PatientHashKey& patRegID) {
     TwoWayList<Referral> listOut;
-    for (unsigned pos = 0; pos < m_list.size(); pos++) {
-        auto ref = m_list.at(pos);
+    for (unsigned pos = 0; pos < TypeList::size(); pos++) {
+        auto ref = TypeList::at(pos);
         if (ref.regID() == patRegID.key()) {
             listOut.push_back(ref);
         }
@@ -81,8 +79,8 @@ TwoWayList<Referral> ReferralList::getConnectedToPatient(const PatientHashKey& p
 
 TwoWayList<Referral> ReferralList::getConnectedToDoctor(const QString& docFullname) {
     TwoWayList<Referral> listOut;
-    for (unsigned pos = 0; pos < m_list.size(); pos++) {
-        auto ref = m_list.at(pos);
+    for (unsigned pos = 0; pos < TypeList::size(); pos++) {
+        auto ref = TypeList::at(pos);
         if (ref.doctorFullname() == docFullname) {
             listOut.push_back(ref);
         }
@@ -93,8 +91,8 @@ TwoWayList<Referral> ReferralList::getConnectedToDoctor(const QString& docFullna
 
 bool ReferralList::addReferral(const Referral& newRef) {
     beginResetModel();
-    m_list.push_back(newRef);
-    m_list.sort();
+    TypeList::push_back(newRef);
+    TypeList::sort();
     endResetModel();
     return true;
 }
@@ -102,9 +100,9 @@ bool ReferralList::addReferral(const Referral& newRef) {
 void ReferralList::removeReferral(const Referral& ref) {
     beginResetModel();
     //Так как == перегружен для сравнения по ключу обходим список вручную
-    for (unsigned pos = 0; pos < m_list.size(); pos++) {
-        if (m_list.at(pos).isEqual(ref)) {
-            m_list.remove(pos);
+    for (unsigned pos = 0; pos < TypeList::size(); pos++) {
+        if (TypeList::at(pos).isEqual(ref)) {
+            TypeList::remove(pos);
             pos--;
         }
     }
@@ -112,7 +110,7 @@ void ReferralList::removeReferral(const Referral& ref) {
 }
 
 void ReferralList::removeAll() {
-    while (m_list.size() != 0) {
-        removeReferral(m_list.at(0));
+    while (TypeList::size() != 0) {
+        removeReferral(TypeList::at(0));
     }
 }
