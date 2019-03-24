@@ -65,7 +65,7 @@ void Database::saveTo(const char* fileName) {
     auto sizePatients = registedKeys.size();
     for (unsigned pos = 0; pos < sizePatients; pos++) {
         Patient pat;
-        if (m_patients.m_hashTable.get(registedKeys[pos], &pat)) {
+        if (m_patients.get(registedKeys[pos], &pat)) {
             DataObject obj = pat.toDataObject();
             m_file.insertObject(obj);
         }

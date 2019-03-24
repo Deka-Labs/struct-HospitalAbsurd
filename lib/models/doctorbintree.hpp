@@ -11,7 +11,7 @@ class Database;
 
 class DoctorBinTree
     : public QAbstractTableModel
-    , public BinTree<Doctor, QString> {
+    , private BinTree<Doctor, QString> {
     Q_OBJECT
   private:
     TwoWayList<Doctor> m_listToDisplay;

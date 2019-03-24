@@ -24,7 +24,7 @@ class IHashKey {
  */
 template<class TypeData>
 class HashTable {
-    TypeData** m_dataArray; ///< Хэш-таблицы
+    TypeData** m_dataArray; ///< Хэш-таблица
     unsigned   m_maxSize;   ///< Максимально допустимый размер
 
   public:

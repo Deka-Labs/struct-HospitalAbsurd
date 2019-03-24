@@ -6,10 +6,8 @@
 
 PatientHashTable::PatientHashTable(QObject* parent)
     : QAbstractTableModel(parent)
-    , m_hashTable(MAX_PATIENTS) {
+    , HashTable<Patient>(MAX_PATIENTS) {
 }
-
-PatientHashTable::~PatientHashTable() = default;
 
 QVariant PatientHashTable::headerData(int section, Qt::Orientation orientation, int role) const {
     if (orientation == Qt::Horizontal) {
@@ -40,7 +38,7 @@ QVariant PatientHashTable::data(const QModelIndex& index, int role) const {
     if (role == Qt::DisplayRole) {
         auto    regid = m_registredKeys.at(static_cast<unsigned>(index.row()));
         Patient patient;
-        if (!m_hashTable.get(regid, &patient))
+        if (!TypeTable::get(regid, &patient))
             return QVariant();
         switch (index.column()) {
             case 0:
@@ -78,7 +76,7 @@ Patient PatientHashTable::getPatient(const QModelIndex& index) const {
 
     auto    key = m_registredKeys.at(static_cast<unsigned>(index.row()));
     Patient out;
-    if (m_hashTable.get(key, &out)) {
+    if (TypeTable::get(key, &out)) {
         return out;
     }
     throw std::runtime_error("PatientHashTable::getPatient - Looks like, the tableview is not updated");
@@ -88,7 +86,7 @@ TwoWayList<Patient> PatientHashTable::getAllPatients() const {
     TwoWayList<Patient> out;
     for (unsigned pos = 0; pos < m_registredKeys.size(); pos++) {
         Patient newPat;
-        if (m_hashTable.get(m_registredKeys.at(pos), &newPat))
+        if (TypeTable::get(m_registredKeys.at(pos), &newPat))
             out.push_back(newPat);
     }
     return out;
@@ -97,7 +95,7 @@ TwoWayList<Patient> PatientHashTable::getAllPatients() const {
 StatusCodes PatientHashTable::addPatient(const Patient& patinet) {
     beginResetModel();
 
-    auto res = m_hashTable.add(patinet);
+    auto res = TypeTable::add(patinet);
     if (res == StatusCode_OK) {
         m_registredKeys.push_back(patinet.key());
     }
@@ -107,13 +105,13 @@ StatusCodes PatientHashTable::addPatient(const Patient& patinet) {
 }
 
 bool PatientHashTable::getPatient(const PatientHashKey& key, Patient* structToAssign) const {
-    return m_hashTable.get(key, structToAssign);
+    return TypeTable::get(key, structToAssign);
 }
 
 void PatientHashTable::delPatient(const PatientHashKey& key) {
     beginResetModel();
 
-    m_hashTable.del(key);
+    TypeTable::del(key);
     m_registredKeys.removeAll(key);
 
     endResetModel();

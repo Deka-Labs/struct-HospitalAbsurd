@@ -11,23 +11,26 @@
 
 class Database;
 
-class PatientHashTable : public QAbstractTableModel {
+class PatientHashTable
+    : public QAbstractTableModel
+    , private HashTable<Patient> {
     Q_OBJECT
 
   private:
-    HashTable<Patient>         m_hashTable;
     TwoWayList<PatientHashKey> m_registredKeys;
+
+    typedef HashTable<Patient> TypeTable;
 
   public:
     explicit PatientHashTable(QObject* parent = nullptr);
     PatientHashTable(const PatientHashTable& other) = delete;
-    ~PatientHashTable();
+    ~PatientHashTable() override                    = default;
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
-    int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
     Patient             getPatient(const QModelIndex& index) const;
     TwoWayList<Patient> getAllPatients() const;
