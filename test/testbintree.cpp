@@ -76,24 +76,18 @@ class TestBinTree : public BinTree<TestClass, unsigned> {
     }
 
     TwoWayList<TestBinTreeNode*> getNodesInOrder() {
-        TwoWayList<BinTreeNode<TestClass>*> list;
+        TwoWayList<TestBinTreeNode*> list;
+        Stack<TestBinTreeNode*>      stack;
+        TestBinTreeNode*             node = m_root;
 
-        auto currentNode = m_root;
-
-        while (currentNode) {
-            while (currentNode->left && !list.search(currentNode->left)) {
-                currentNode = currentNode->left;
-            };
-
-            if (!list.search(currentNode))
-                list.push_back(currentNode);
-
-            if (currentNode->right && !list.search(currentNode->right)) {
-                currentNode = currentNode->right;
+        while (!stack.isEmpty() || node != nullptr) {
+            if (node != nullptr) {
+                stack.push(node);
+                node = node->left;
             } else {
-                while (list.search(currentNode)) {
-                    currentNode = currentNode->parent;
-                }
+                node = stack.pop();
+                list.push_back(node);
+                node = node->right;
             }
         }
         return list;

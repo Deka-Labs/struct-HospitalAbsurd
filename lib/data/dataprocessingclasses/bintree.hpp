@@ -14,8 +14,7 @@ struct BinTreeNode {
     BinTreeNode* right  = nullptr;
     BinTreeNode* parent = nullptr;
 
-    int  height = 1;
-    bool mark   = false;
+    int height = 1;
 };
 /**
  * \brief BinTree шаблонный класс для реализации бинарного дерева
@@ -163,7 +162,6 @@ StatusCodes BinTree<TypeData, TypeKey>::add(const TypeData& data) {
         m_root = newNode;
         return StatusCode_OK;
     }
-    newNode->mark = m_root->mark;
 
     auto currentNode = m_root;
 
@@ -214,34 +212,21 @@ void BinTree<TypeData, TypeKey>::remove(const TypeKey& key) {
 
 template<class TypeData, class TypeKey>
 TwoWayList<TypeData> BinTree<TypeData, TypeKey>::getListInOrder() const {
-    TwoWayList<TypeData> listOut;
+    TwoWayList<TypeData>         list;
+    Stack<BinTreeNode<TypeData>> stack;
+    BinTreeNode<TypeData>*       node = m_root;
 
-    if (isEmpty())
-        return listOut;
-
-    auto currentNode = m_root;
-    bool marked      = !currentNode->mark;
-
-    while (currentNode) {
-        while (currentNode->left && currentNode->left->mark != marked) {
-            currentNode = currentNode->left;
-        };
-
-        if (currentNode->mark != marked) {
-            listOut.push_back(currentNode->data);
-            currentNode->mark = marked;
-        }
-
-        if (currentNode->right && currentNode->right->mark != marked) {
-            currentNode = currentNode->right;
+    while (!stack.isEmpty() || node != nullptr) {
+        if (node != nullptr) {
+            stack.push(node);
+            node = node->left;
         } else {
-            while (currentNode && currentNode->mark == marked) {
-                currentNode = currentNode->parent;
-            }
+            node = stack.pop();
+            list.push_back(node->data);
+            node = node->right;
         }
     }
-
-    return listOut;
+    return list;
 }
 
 template<class TypeData, class TypeKey>
