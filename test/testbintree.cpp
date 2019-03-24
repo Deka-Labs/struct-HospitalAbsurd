@@ -3,6 +3,10 @@
 
 #include <gtest/gtest.h>
 
+///
+/// Классы и объявления для тестов
+///
+
 class TestClass {
   public:
     unsigned m_key;
@@ -27,6 +31,75 @@ bool operator==(const TestClass& left, const TestClass& right) {
     return (right.m_key == left.m_key) && (right.someData == left.someData);
 }
 
+typedef BinTreeNode<TestClass> TestBinTreeNode;
+
+class TestBinTree : public BinTree<TestClass, unsigned> {
+  public:
+    virtual ~TestBinTree() {
+    }
+
+    //Проверяет дерево насбалансированость
+    bool validateBalance() {
+        postOrderRecalcHeight();
+        auto nodes = getNodesInOrder();
+
+        for (unsigned pos = 0; pos < nodes.size(); pos++) {
+            int balance = this->balance(nodes[pos]);
+            if (balance <= -2 || 2 <= balance) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    //Перераcсчет высот поддеревьев в обратном порядке
+    void postOrderRecalcHeight() {
+        Stack<TestBinTreeNode*> stack;
+        TestBinTreeNode*        lastVisited = nullptr;
+        TestBinTreeNode*        node        = m_root;
+        while (!stack.isEmpty() || node != nullptr) {
+            if (node != nullptr) {
+                stack.push(node);
+                node = node->left;
+            } else {
+                auto popedNode = stack.pop();
+                stack.push(popedNode);
+                if (popedNode->right != nullptr && lastVisited != popedNode->right)
+                    node = popedNode->right;
+                else {
+                    lastVisited = stack.pop();
+                    recalcHeight(node);
+                }
+            }
+        }
+    }
+
+    TwoWayList<TestBinTreeNode*> getNodesInOrder() {
+        TwoWayList<BinTreeNode<TestClass>*> list;
+
+        auto currentNode = m_root;
+
+        while (currentNode) {
+            while (currentNode->left && !list.search(currentNode->left)) {
+                currentNode = currentNode->left;
+            };
+
+            if (!list.search(currentNode))
+                list.push_back(currentNode);
+
+            if (currentNode->right && !list.search(currentNode->right)) {
+                currentNode = currentNode->right;
+            } else {
+                while (list.search(currentNode)) {
+                    currentNode = currentNode->parent;
+                }
+            }
+        }
+        return list;
+    }
+};
+
 void printTree(BinTreeNode<TestClass>* p, int indent = 0) {
     if (p != nullptr) {
         if (p->right) {
@@ -45,8 +118,12 @@ void printTree(BinTreeNode<TestClass>* p, int indent = 0) {
     }
 }
 
+///
+/// Тестирование
+///
+
 TEST(BinTree, AddingAndFinding) {
-    BinTree<TestClass, unsigned> tree;
+    TestBinTree tree;
 
     const unsigned count = 1000;
     const int      begin = count;
@@ -67,7 +144,7 @@ TEST(BinTree, AddingAndFinding) {
 TEST(BinTree, Removing) {
     srand(unsigned(time(nullptr)));
 
-    BinTree<TestClass, unsigned> tree;
+    TestBinTree tree;
 
     const unsigned count = 1000;
     const int      begin = count;
@@ -93,154 +170,72 @@ TEST(BinTree, Removing) {
     ASSERT_TRUE(tree.isEmpty());
 }
 
-TEST(BinTree, Balancing) {
+TEST(BinTree, BalancingSerial) {
+    TestBinTree tree;
+
+    const unsigned count = 1000;
+
+    for (unsigned i = 0; i < count; i++) {
+        tree.add(TestClass(i, int(i)));
+    }
+
+    ASSERT_TRUE(tree.validateBalance());
+
+    //Удаление
+    const unsigned toDelete = 500;
+    ASSERT_LE(toDelete, count);
+
+    for (unsigned id = 0; id < count; id += count / toDelete) {
+        tree.remove(id);
+    }
+
+    //Проверяем баланс
+    ASSERT_TRUE(tree.validateBalance());
+}
+
+TEST(BinTree, BalancingRandom) {
     srand(unsigned(time(nullptr)));
 
-    {
-        BinTree<TestClass, unsigned> tree;
+    TestBinTree tree;
 
-        for (unsigned i = 1; i <= 5; i++) {
-            tree.add(TestClass(i, int(i)));
-        }
+    //Добавление
+    const unsigned count = 1000;
 
-        auto root = tree.root();
-
-        ASSERT_EQ(root->data.key(), 2);
-        ASSERT_EQ(root->left->data.key(), 1);
-        ASSERT_EQ(root->right->data.key(), 4);
-        ASSERT_EQ(root->right->left->data.key(), 3);
-        ASSERT_EQ(root->right->right->data.key(), 5);
+    for (unsigned i = 0; i < count; i++) {
+        unsigned val = 0;
+        do {
+            val = unsigned(rand()) % count;
+        } while (tree.add(TestClass(val, int(i))) != StatusCode_OK);
     }
 
-    auto checkBalance = [=](BinTreeNode<TestClass>* node) -> bool {
-        if (!node)
-            return false;
-        auto rHeight = (node->right) ? node->right->height : 0;
-        auto lHeight = (node->left) ? node->left->height : 0;
-        auto balance = rHeight - lHeight;
-        return !(balance >= 2 || balance <= -2);
-    };
+    auto listNodes = tree.getNodesInOrder();
+    ASSERT_EQ(listNodes.size(), count);
 
-    auto makeListInOrder = [=](const BinTree<TestClass, unsigned>& tree) -> TwoWayList<BinTreeNode<TestClass>*> {
-        TwoWayList<BinTreeNode<TestClass>*> list;
+    ASSERT_TRUE(tree.validateBalance());
 
-        auto currentNode = tree.root();
-
-        while (currentNode) {
-            while (currentNode->left && !list.search(currentNode->left)) {
-                currentNode = currentNode->left;
-            };
-
-            if (!list.search(currentNode))
-                list.push_back(currentNode);
-
-            if (currentNode->right && !list.search(currentNode->right)) {
-                currentNode = currentNode->right;
-            } else {
-                while (list.search(currentNode)) {
-                    currentNode = currentNode->parent;
-                }
-            }
-        }
-        return list;
-    };
-
-    //Последовательное добавление
-    {
-        BinTree<TestClass, unsigned> tree;
-
-        const unsigned count = 1000;
-
-        for (unsigned i = 0; i < count; i++) {
-            tree.add(TestClass(i, int(i)));
-        }
-
-        auto listNodes = makeListInOrder(tree);
-        ASSERT_EQ(listNodes.size(), count);
-
-        for (unsigned id = 0; id < listNodes.size(); id++) {
-            auto node = listNodes.at(id);
-            ASSERT_TRUE(checkBalance(node));
-        }
-
-        //Случайное удаление
-        //Создаем список ключей
-        TwoWayList<unsigned> keys;
-        for (unsigned id = 0; id < count; id++) {
-            keys.push_back(listNodes.at(id)->data.key());
-        }
-
-        for (unsigned id = 0; id < count / 2; id++) {
-            auto pos = unsigned(rand()) % keys.size();
-            auto key = keys.at(pos);
-            tree.remove(key);
-            keys.remove(pos);
-        }
-
-        ASSERT_EQ(keys.size(), count / 2);
-
-        //Проверяем баланс
-
-        listNodes = makeListInOrder(tree);
-        ASSERT_EQ(listNodes.size(), count / 2);
-
-        for (unsigned id = 0; id < listNodes.size(); id++) {
-            auto node = listNodes.at(id);
-            ASSERT_TRUE(checkBalance(node));
-        }
+    //Случайное удаление
+    //Создаем список ключей
+    TwoWayList<unsigned> keys;
+    for (unsigned id = 0; id < count; id++) {
+        keys.push_back(listNodes.at(id)->data.key());
     }
 
-    //Случайное добавление
-    {
-        BinTree<TestClass, unsigned> tree;
-
-        const unsigned count = 1000;
-
-        for (unsigned i = 0; i < count; i++) {
-            unsigned val = 0;
-            do {
-                val = unsigned(rand()) % count;
-            } while (tree.add(TestClass(val, int(i))) != StatusCode_OK);
-        }
-
-        auto listNodes = makeListInOrder(tree);
-        ASSERT_EQ(listNodes.size(), count);
-
-        for (unsigned id = 0; id < listNodes.size(); id++) {
-            auto node = listNodes.at(id);
-            ASSERT_TRUE(checkBalance(node));
-        }
-
-        //Случайное удаление
-        //Создаем список ключей
-        TwoWayList<unsigned> keys;
-        for (unsigned id = 0; id < count; id++) {
-            keys.push_back(listNodes.at(id)->data.key());
-        }
-
-        for (unsigned id = 0; id < count / 2; id++) {
-            auto pos = unsigned(rand()) % keys.size();
-            auto key = keys.at(pos);
-            tree.remove(key);
-            keys.remove(pos);
-        }
-
-        ASSERT_EQ(keys.size(), count / 2);
-
-        //Проверяем баланс
-
-        listNodes = makeListInOrder(tree);
-        ASSERT_EQ(listNodes.size(), count / 2);
-
-        for (unsigned id = 0; id < listNodes.size(); id++) {
-            auto node = listNodes.at(id);
-            ASSERT_TRUE(checkBalance(node));
-        }
+    const unsigned toDelete = 500;
+    ASSERT_LT(toDelete, count);
+    for (unsigned id = 0; id < count; id += count / toDelete) {
+        auto pos = unsigned(rand()) % keys.size();
+        auto key = keys.at(pos);
+        tree.remove(key);
+        keys.remove(pos);
     }
+
+    //Проверяем баланс
+
+    ASSERT_TRUE(tree.validateBalance());
 }
 
 TEST(BinTree, AddingSameElements) {
-    BinTree<TestClass, unsigned> tree;
+    TestBinTree tree;
 
     const unsigned count = 1000;
 
@@ -254,7 +249,7 @@ TEST(BinTree, AddingSameElements) {
 }
 
 TEST(BinTree, InOrderList) {
-    BinTree<TestClass, unsigned> tree;
+    TestBinTree tree;
 
     auto list = tree.getListInOrder();
     ASSERT_EQ(list.size(), 0);

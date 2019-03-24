@@ -27,7 +27,7 @@ struct BinTreeNode {
 
 template<class TypeData, class TypeKey>
 class BinTree {
-  private:
+  protected:
     BinTreeNode<TypeData>* m_root; ///< корневой элемент
 
   public:
@@ -42,7 +42,7 @@ class BinTree {
      * \remark Нельзя добавить элемент с ключом, который уже существует. Функция вернет StatusCode_AlreadyExist и не
      * добавит его.
      */
-    StatusCodes add(const TypeData& data);
+    virtual StatusCodes add(const TypeData& data);
 
     /**
      * \brief find ищет элемент по ключу и возвращает его
@@ -51,13 +51,13 @@ class BinTree {
      * \throw std::invalid_argument если элемента с данным ключом нет
      * \remark полученное значение нельзя менять
      */
-    const TypeData& find(const TypeKey& key) const;
+    virtual const TypeData& find(const TypeKey& key) const;
 
     /**
      * \brief remove удаляет элемент с установленным ключом, если он есть
      * \param [in] key ключ элемента
      */
-    void remove(const TypeKey& key);
+    virtual void remove(const TypeKey& key);
 
     /**
      * \brief isEmpty проверят пустое ли дерево
@@ -65,15 +65,6 @@ class BinTree {
      */
     bool isEmpty() const {
         return !m_root;
-    }
-
-    /**
-     * \brief root возвращает корень дерева
-     * \return корень дерева
-     * \remark Функция используется в тестировании. Не стоит ей пользоваться.
-     */
-    BinTreeNode<TypeData>* root() const {
-        return m_root;
     }
 
     /**
@@ -87,14 +78,7 @@ class BinTree {
      */
     unsigned size() const;
 
-  private:
-    /**
-     * \brief isLeaf проверяет является ли указанный узел листом
-     * \param [in] node узел для проверки
-     * \return true если лист, false - нет
-     */
-    bool isLeaf(BinTreeNode<TypeData>* node) const;
-
+  protected:
     /**
      * \brief findNode находит узел по ключу
      * \param [in] key ключ элемента
@@ -107,6 +91,27 @@ class BinTree {
      * \param [in] node узел для удаления
      */
     void removeNode(BinTreeNode<TypeData>* node);
+
+    /**
+     * \brief balance вычисляет баланс в указаном узле
+     * \param [in] node узел
+     * \return баланс
+     */
+    int balance(BinTreeNode<TypeData>* node) const;
+
+    /**
+     * \brief recalcHeight перерассчитывает высоту указанного узла на основе присоединеных к нему узлах
+     * \param [in] node узел
+     */
+    void recalcHeight(BinTreeNode<TypeData>* node);
+
+  private:
+    /**
+     * \brief isLeaf проверяет является ли указанный узел листом
+     * \param [in] node узел для проверки
+     * \return true если лист, false - нет
+     */
+    bool isLeaf(BinTreeNode<TypeData>* node) const;
 
     /**
      * \brief swap меняет местами два узла
@@ -122,17 +127,6 @@ class BinTree {
      */
     short parentTo(BinTreeNode<TypeData>* parent, BinTreeNode<TypeData>* node) const;
 
-    /**
-     * \brief balance вычисляет баланс в указаном узле
-     * \param [in] node узел
-     * \return баланс
-     */
-    int balance(BinTreeNode<TypeData>* node) const;
-    /**
-     * \brief recalcHeight перерассчитывает высоту указанного узла на основе присоединеных к нему узлах
-     * \param [in] node узел
-     */
-    void recalcHeight(BinTreeNode<TypeData>* node);
     /**
      * \brief normalize выравнивает высоту дерева
      * \param [in] node узел
