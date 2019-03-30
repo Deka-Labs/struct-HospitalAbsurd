@@ -5,6 +5,7 @@
 #include "twowaylist.hpp"
 
 #include <QString>
+#include <functional>
 #include <stdexcept>
 
 template<class TypeData>
@@ -71,6 +72,12 @@ class BinTree {
      * \return список элементов дерева в симметричном обходе
      */
     TwoWayList<TypeData> getListInOrder() const;
+
+    /**
+     * \brief processInOrder вызывает указанную функцию с аргументом типа TypeData в симметричном обходе
+     * \param function функция для вызова
+     */
+    void processInOrder(std::function<void(const TypeData&)> function) const;
 
     /**
      * \brief size возвращает число элементов в дереве
@@ -212,7 +219,17 @@ void BinTree<TypeData, TypeKey>::remove(const TypeKey& key) {
 
 template<class TypeData, class TypeKey>
 TwoWayList<TypeData> BinTree<TypeData, TypeKey>::getListInOrder() const {
-    TwoWayList<TypeData>          list;
+    TwoWayList<TypeData> list;
+
+    auto addToList = [&list](const TypeData& data) { list.push_back(data); };
+
+    processInOrder(addToList);
+
+    return list;
+}
+
+template<class TypeData, class TypeKey>
+void BinTree<TypeData, TypeKey>::processInOrder(std::function<void(const TypeData&)> function) const {
     Stack<BinTreeNode<TypeData>*> stack;
     BinTreeNode<TypeData>*        node = m_root;
 
@@ -222,11 +239,12 @@ TwoWayList<TypeData> BinTree<TypeData, TypeKey>::getListInOrder() const {
             node = node->left;
         } else {
             node = stack.pop();
-            list.push_back(node->data);
+            // Process
+            function(node->data);
+            //
             node = node->right;
         }
     }
-    return list;
 }
 
 template<class TypeData, class TypeKey>
