@@ -47,13 +47,7 @@ void PatientSearchWindow::okButtonPressed() {
             }
 
             case 1: {
-                auto list = g_DATABASE->getPatientsModel().getAllPatients();
-                for (unsigned pos = 0; pos < list.size(); pos++) {
-                    if (list.at(pos).fullName() != request) {
-                        list.remove(pos);
-                        pos--; //Возвращаемся назад, чтобы не проскачить элемент
-                    }
-                }
+                auto list = g_DATABASE->getPatientsModel().getAllPatientsWithName(request);
                 if (list.size() > 0) {
                     SearchPatientByFullname model(std::move(list));
                     SearchResults resWindow("Результаты поиска пациента по ФИО", &model);

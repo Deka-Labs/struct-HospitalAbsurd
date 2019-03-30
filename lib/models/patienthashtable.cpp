@@ -92,6 +92,18 @@ TwoWayList<Patient> PatientHashTable::getAllPatients() const {
     return out;
 }
 
+TwoWayList<Patient> PatientHashTable::getAllPatientsWithName(const QString& name) const {
+    TwoWayList<Patient> out;
+    for (unsigned pos = 0; pos < m_registredKeys.size(); pos++) {
+        Patient newPat;
+        if (TypeTable::get(m_registredKeys.at(pos), &newPat)) {
+            if (newPat.fullName() == name)
+                out.push_back(newPat);
+        }
+    }
+    return out;
+}
+
 StatusCodes PatientHashTable::addPatient(const Patient& patinet) {
     beginResetModel();
 
