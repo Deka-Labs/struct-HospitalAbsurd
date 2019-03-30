@@ -44,13 +44,7 @@ void DoctorSearchWindow::okButtonPressed() {
                 break;
             }
             case 1: {
-                auto list = g_DATABASE->getDoctorsModel().getAllDoctors();
-                for (unsigned pos = 0; pos < list.size(); pos++) {
-                    if (!QStringSearch(request, list.at(pos).post())) {
-                        list.remove(pos);
-                        pos--; //Возвращаемся назад, чтобы не проскачить элемент
-                    }
-                }
+                auto list = g_DATABASE->getDoctorsModel().getAllDoctorsWithPost(request);
                 if (list.size() > 0) {
                     SearchDoctorByPost model(std::move(list));
                     SearchResults resWindow("Результаты поиска доктора по фрагмента должности", &model);

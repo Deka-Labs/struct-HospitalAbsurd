@@ -31,6 +31,7 @@ class DoctorBinTree
 
     Doctor             getDoctor(const QModelIndex& index) const;
     TwoWayList<Doctor> getAllDoctors() const;
+    TwoWayList<Doctor> getAllDoctorsWithPost(const QString& post) const;
     bool               getDoctor(const QString& key, Doctor* structToFill = nullptr) const;
 
     friend class Database;

@@ -1,5 +1,7 @@
 #include "doctorbintree.hpp"
 
+#include "utils.hpp"
+
 DoctorBinTree::DoctorBinTree(QObject* parent)
     : QAbstractTableModel(parent)
     , TypeTree() {
@@ -70,6 +72,20 @@ Doctor DoctorBinTree::getDoctor(const QModelIndex& index) const {
 
 TwoWayList<Doctor> DoctorBinTree::getAllDoctors() const {
     return m_listToDisplay;
+}
+
+TwoWayList<Doctor> DoctorBinTree::getAllDoctorsWithPost(const QString& post) const {
+    TwoWayList<Doctor> list;
+
+    auto checkFun = [&list, post](const Doctor& doc) {
+        if (QStringSearch(post, doc.post())) {
+            list.push_back(doc);
+        }
+    };
+
+    TypeTree::processInOrder(checkFun);
+
+    return list;
 }
 
 bool DoctorBinTree::getDoctor(const QString& key, Doctor* structToFill) const {
