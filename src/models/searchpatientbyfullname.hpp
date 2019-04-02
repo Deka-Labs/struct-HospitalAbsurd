@@ -14,13 +14,13 @@ class SearchPatientByFullname : public QAbstractTableModel {
   public:
     SearchPatientByFullname(TwoWayList<Patient>&& results, QObject* parent = nullptr);
     SearchPatientByFullname(const SearchPatientByFullname&) = delete;
-    ~SearchPatientByFullname();
+    ~SearchPatientByFullname() override                     = default;
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
-    int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 };
 
 #endif // SEARCHPATIENTBYFULLNAME_HPP

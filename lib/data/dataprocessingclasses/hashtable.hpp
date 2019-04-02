@@ -7,8 +7,7 @@
 
 class IHashKey {
   public:
-    virtual ~IHashKey() {
-    }
+    virtual ~IHashKey() = default;
 
     virtual unsigned hash() const                            = 0;
     virtual unsigned dopHash() const                         = 0;

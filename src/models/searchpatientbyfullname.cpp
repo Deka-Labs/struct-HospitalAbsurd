@@ -5,8 +5,6 @@ SearchPatientByFullname::SearchPatientByFullname(TwoWayList<Patient>&& results, 
     , m_results(results) {
 }
 
-SearchPatientByFullname::~SearchPatientByFullname() = default;
-
 QVariant SearchPatientByFullname::headerData(int section, Qt::Orientation orientation, int role) const {
     if (role == Qt::DisplayRole) {
         if (orientation == Qt::Horizontal) {

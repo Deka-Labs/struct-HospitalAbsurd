@@ -11,8 +11,6 @@ SearchPatientByRegID::SearchPatientByRegID(const Patient& pat, QObject* parent)
     }
 }
 
-SearchPatientByRegID::~SearchPatientByRegID() = default;
-
 QVariant SearchPatientByRegID::headerData(int section, Qt::Orientation orientation, int role) const {
     if (role == Qt::DisplayRole) {
         if (orientation == Qt::Vertical) {

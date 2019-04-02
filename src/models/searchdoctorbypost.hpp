@@ -14,13 +14,13 @@ class SearchDoctorByPost : public QAbstractTableModel {
   public:
     SearchDoctorByPost(TwoWayList<Doctor>&& results, QObject* parent = nullptr);
     SearchDoctorByPost(const SearchDoctorByPost&) = delete;
-    ~SearchDoctorByPost();
+    ~SearchDoctorByPost() override                = default;
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
-    int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 };
 
 #endif // SEARCHDOCTORBYPOST_HPP
