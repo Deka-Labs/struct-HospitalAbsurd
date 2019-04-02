@@ -17,6 +17,8 @@ ReferralListWindow::ReferralListWindow(QWidget* parent)
 
     m_ui->tableView->setModel(&g_DATABASE->getReferralsModel());
     m_ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    m_ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
 
 ReferralListWindow::~ReferralListWindow() {

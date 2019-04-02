@@ -16,7 +16,8 @@ PatientListWindow::PatientListWindow(QWidget* parent)
 
     m_ui->tableView->setModel(&g_DATABASE->getPatientsModel());
     m_ui->tableView->setSelectionBehavior(QAbstractItemView::SelectionBehavior::SelectRows);
-    this->setWindowTitle("Список больных");
+    m_ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    m_ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     connect(m_ui->pushButton_add, &QPushButton::clicked, this, &PatientListWindow::addButtonPressed);
     connect(m_ui->pushButton_delete, &QPushButton::clicked, this, &PatientListWindow::deleteButtonPressed);

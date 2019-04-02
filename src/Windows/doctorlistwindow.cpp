@@ -20,6 +20,8 @@ DoctorListWindow::DoctorListWindow(QWidget* parent)
     this->setWindowTitle("Список врачей");
     m_ui->tableView->setModel(&g_DATABASE->getDoctorsModel());
     m_ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    m_ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
 
 DoctorListWindow::~DoctorListWindow() {

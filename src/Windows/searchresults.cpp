@@ -8,6 +8,8 @@ SearchResults::SearchResults(const QString& title, QAbstractTableModel* model, Q
 
     this->setWindowTitle(title);
     m_ui->tableView->setModel(model);
+    m_ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    m_ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
 
 SearchResults::~SearchResults() {
