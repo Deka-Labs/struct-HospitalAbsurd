@@ -67,7 +67,7 @@ bool NewPatientWindow::validate() {
     bool result = true;
     m_errMsg    = "";
     if (!m_toEdit.setRegID(m_ui->lineEdit_regID->text())) {
-        m_errMsg += "Неверно указан регестрационный номер.\n";
+        m_errMsg += "Неверно указан регистрационный номер.\n";
         result = false;
     }
 

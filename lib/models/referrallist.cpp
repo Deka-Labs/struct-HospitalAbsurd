@@ -9,7 +9,7 @@ QVariant ReferralList::headerData(int section, Qt::Orientation orientation, int 
         if (role == Qt::DisplayRole) {
             switch (section) {
                 case 0:
-                    return "Регестрационный номер";
+                    return "Рег. номер";
                 case 1:
                     return "ФИО врача";
                 case 2:

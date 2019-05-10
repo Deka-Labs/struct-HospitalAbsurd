@@ -63,7 +63,7 @@ bool NewReferralWindow::validate() {
 
     if (!m_toEdit.setRegID(m_ui->comboBox_regID->currentText())) {
         result = false;
-        m_errMsg += "Неверный ввод регестрационного номера\n";
+        m_errMsg += "Неверный ввод регистрационного номера\n";
     }
     if (!m_toEdit.setDoctorFullname(m_ui->comboBox->currentText())) {
         result = false;
