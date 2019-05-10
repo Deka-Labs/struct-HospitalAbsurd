@@ -8,6 +8,7 @@ SearchDoctorByFullname::SearchDoctorByFullname(const Doctor& doc, QObject* paren
     m_dataToDisplay.referralsDoctorsFullname = "";
     for (unsigned pos = 0; pos < list.size(); pos++) {
         m_dataToDisplay.referralsDoctorsFullname += list.at(pos).regID() + "\n";
+        list.removeAll(list.at(pos));
     }
 }
 

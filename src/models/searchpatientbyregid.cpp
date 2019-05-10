@@ -8,6 +8,7 @@ SearchPatientByRegID::SearchPatientByRegID(const Patient& pat, QObject* parent)
     m_dataToDisplay.referralsDoctorsFullname = "";
     for (unsigned pos = 0; pos < list.size(); pos++) {
         m_dataToDisplay.referralsDoctorsFullname += list.at(pos).doctorFullname() + "\n";
+        list.removeAll(list.at(pos));
     }
 }
 
