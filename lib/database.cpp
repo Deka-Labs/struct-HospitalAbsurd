@@ -107,7 +107,10 @@ void Database::delPatinet(const PatientHashKey& patientKey) {
 }
 
 void Database::delAllPatients() {
-    m_patients.delAll();
+    auto list = m_patients.getAllPatients();
+    for (unsigned pos = 0; pos < list.size(); pos++) {
+        delPatinet(list.at(pos).key());
+    }
 }
 
 StatusCodes Database::addDoctor(const Doctor& newDoc) {
@@ -125,7 +128,10 @@ void Database::delDoctor(const QString& docKey) {
 }
 
 void Database::delAllDoctors() {
-    m_doctors.removeAll();
+    auto list = m_doctors.getAllDoctors();
+    for (unsigned pos = 0; pos < list.size(); pos++) {
+        delDoctor(list.at(pos).key());
+    }
 }
 
 StatusCodes Database::addReferral(const Referral& newRef) {
